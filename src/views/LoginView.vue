@@ -12,7 +12,7 @@
         <form class="form">
           <div class="form__title">
             <h3>Регистрация</h3>
-            <p>Уже зарегистрированы? <a href="#">Войдите</a></p>
+            <p>Уже есть аккаунт? <a href="#">Войти</a></p>
           </div>
           <InputField
             label="Ваш E-mail"
@@ -33,7 +33,7 @@
             placeholder="Введите пароль"
           />
           <hr>
-          <ButtonUI text="Войти" @click="submitForm" />
+          <ButtonUI text="Зарегистрироваться" @click="submitForm" />
         </form>
       </div>
     </div>
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 import InputField from '@/components/InputField.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
 export default {
@@ -48,12 +49,21 @@ export default {
   components: {
     InputField,
     ButtonUI
+  },
+  setup () {
+    const router = useRouter()
+
+    const submitForm = () => {
+      router.push({ name: 'home' })
+    }
+
+    return { submitForm }
   }
 }
 </script>
 
 <style lang="scss">
-$primary-color: #75efb0;
+$primary-color: #13e66e;
 $text-color: #fff;
 $text-label: #6d6f74;
 
@@ -117,7 +127,7 @@ $text-label: #6d6f74;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
     }
   }
 
@@ -128,6 +138,7 @@ $text-label: #6d6f74;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background-color: #141414;
 
     &-forms{
       display: flex;
@@ -135,7 +146,7 @@ $text-label: #6d6f74;
       flex-direction: row;
 
       .form{
-        background: #293038;
+        background: #141414;
         height: auto;
         width: 100%;
         max-width: 420px;
@@ -152,7 +163,7 @@ $text-label: #6d6f74;
           gap: 12px;
 
           h3{
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 700;
           }
 

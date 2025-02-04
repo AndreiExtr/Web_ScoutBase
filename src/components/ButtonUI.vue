@@ -20,11 +20,11 @@ export default {
 </script>
 
 <style lang="scss">
-$primary-color: #75efb0;
+$primary-color: #13e66e;
 .button {
   width: 100%;
   padding: 12px;
-  background-color: #293038;
+  background-color: #141414;
   border: 1px solid $primary-color;
   border-radius: 8px;
   color: $primary-color;
@@ -41,8 +41,8 @@ $primary-color: #75efb0;
   }
 
   &:active {
-    background-color: #4fc288;
-    border: 1px solid #4fc288;
+    background-color: #218d30;
+    border: 1px solid #218d30;
     color: #293038;
   }
 }

@@ -41,7 +41,7 @@ $text-label: #6d6f74;
   }
 
   &__input {
-    background-color: #21262c;
+    background-color: #1F1F1F;
     border: 1px solid #3a4149;
     border-radius: 8px;
     padding: 12px;
