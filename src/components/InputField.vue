@@ -32,7 +32,6 @@ $text-label: #6d6f74;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 16px;
   width: 100%;
 
   &__label {

@@ -10,6 +10,10 @@
     <div class="home__login">
       <div class="home__login-forms">
         <form class="form">
+          <div class="form__title">
+            <h3>Регистрация</h3>
+            <p>Уже зарегистрированы? <a href="#">Войдите</a></p>
+          </div>
           <InputField
             label="Ваш E-mail"
             id="email"
@@ -28,6 +32,8 @@
             type="password"
             placeholder="Введите пароль"
           />
+          <hr>
+          <ButtonUI text="Войти" @click="submitForm" />
         </form>
       </div>
     </div>
@@ -36,10 +42,12 @@
 
 <script>
 import InputField from '@/components/InputField.vue'
+import ButtonUI from '@/components/ButtonUI.vue'
 export default {
   name: 'LoginView',
   components: {
-    InputField
+    InputField,
+    ButtonUI
   }
 }
 </script>
@@ -47,6 +55,7 @@ export default {
 <style lang="scss">
 $primary-color: #75efb0;
 $text-color: #fff;
+$text-label: #6d6f74;
 
 .home{
   height: 100vh;
@@ -77,7 +86,7 @@ $text-color: #fff;
       h1{
         font-weight: 700;
         letter-spacing: .24em;
-        font-size:48px;
+        font-size:52px;
         text-transform: uppercase;
         color: $text-color;
 
@@ -116,20 +125,52 @@ $text-color: #fff;
     width: 100%;
     height: 100vh;
     padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     &-forms{
       display: flex;
       justify-content: center;
       flex-direction: row;
-      height: 100%;
 
       .form{
         background: #293038;
+        height: auto;
         width: 100%;
         max-width: 420px;
         border-radius: 16px;
         padding: 48px;
         margin: 40px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &__title{
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          h3{
+            font-size: 24px;
+            font-weight: 700;
+          }
+
+          p{
+            font-size: 14px;
+            color: #b5b6b8;
+
+            a{
+              color: $primary-color;
+            }
+          }
+        }
+
+        hr{
+          background-color: #3a4149;
+          width: 100%;
+          height: 1px;
+        }
       }
     }
   }
