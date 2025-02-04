@@ -15,8 +15,9 @@ export default {
 </script>
 
 <style lang="scss">
+$bg-color: #1F1F1F;
 .home {
   width: 100%;
-  background-color: #1F1F1F;
+  background-color: $bg-color;
 }
 </style>

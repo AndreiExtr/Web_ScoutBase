@@ -64,6 +64,7 @@ export default {
 
 <style lang="scss">
 $primary-color: #13e66e;
+$bg-color: #141414;
 $text-color: #fff;
 $text-label: #6d6f74;
 
@@ -138,7 +139,7 @@ $text-label: #6d6f74;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background-color: #141414;
+    background-color: $bg-color;
 
     &-forms{
       display: flex;
@@ -146,7 +147,6 @@ $text-label: #6d6f74;
       flex-direction: row;
 
       .form{
-        background: #141414;
         height: auto;
         width: 100%;
         max-width: 420px;

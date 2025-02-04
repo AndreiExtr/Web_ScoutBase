@@ -43,9 +43,16 @@ export default {
       ]
     }
   },
+  created () {
+    const savedIndex = sessionStorage.getItem('activeIndex')
+    if (savedIndex !== null) {
+      this.activeIndex = parseInt(savedIndex, 10)
+    }
+  },
   methods: {
     setActive (index) {
       this.activeIndex = index
+      sessionStorage.setItem('activeIndex', index)
     }
   }
 }
@@ -54,9 +61,10 @@ export default {
 <style lang="scss">
 $primary-color: #13e66e;
 $text-color: #fff;
+$bg-sidebar-color: #141414;
 .sidebar{
   width: 250px;
-  background-color: #141414;
+  background-color: $bg-sidebar-color;
   padding: 24px 0;
 
   h1{
