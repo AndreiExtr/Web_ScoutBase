@@ -43,6 +43,7 @@ $text-color: #fff;
 
     p{
       text-align: left;
+      color: $text-color;
     }
 
     h3{
