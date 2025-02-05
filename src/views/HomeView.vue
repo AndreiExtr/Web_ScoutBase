@@ -9,7 +9,7 @@
       <h1>Ближайший матч</h1>
       <div class="wrapper__content-match"></div>
       <div class="wrapper__content-tabs">
-        <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">live</a>
+        <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">live<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
         <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">завершенные</a>
       </div>
@@ -225,15 +225,46 @@ $text-color: #fff;
     &-tabs {
       display: flex;
       flex-direction: row;
-      gap: 16px;
+      gap: 32px;
 
       a{
         text-decoration: none;
         color: #666;
         font-size: 16px;
+        position: relative;
 
         &.active {
           color: $primary-color;
+        }
+      }
+
+      .vibrate {
+        position: absolute;
+        top: -2px;
+        right: -10px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #ff6600;
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 0, 0, 1);
+        animation: anim-vibrate 2s cubic-bezier(0, 0, 0, 1.11) infinite;
+      }
+
+      @keyframes anim-vibrate {
+        0% {
+          transform: scale(0.65);
+          box-shadow: 0 0 0 0 #ff660042;
+        }
+
+        70% {
+          transform: scale(1);
+          box-shadow: 0 0 0 0.6rem rgba(0, 0, 0, 0);
+        }
+
+        100% {
+          transform: scale(0.65);
+          box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
         }
       }
     }
@@ -252,6 +283,10 @@ $text-color: #fff;
         gap: 16px;
         flex-grow: 1;
         height: 100%;
+
+        @media (max-width: 1024px) {
+          height: auto;
+        }
       }
     }
   }
