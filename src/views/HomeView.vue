@@ -1,7 +1,9 @@
 <template>
   <div class="wrapper">
-    <SidebarMenu />
-    <div class="wrapper__content">
+    <SidebarMenu
+      :activeTab="activeTab"
+      @update:activeTab="setActiveTab"/>
+    <div class="wrapper__content" v-if="activeTab === 0">
       <div class="wrapper__content-rows">
         <MatchCard v-for="match in displayedMatches" :key="match.id" />
       </div>
@@ -28,6 +30,7 @@ export default {
   data () {
     return {
       currentPage: 1,
+      activeTab: 0,
       matches: [
         { id: 1, name: 'Match 1' },
         { id: 2, name: 'Match 2' },
@@ -59,6 +62,9 @@ export default {
   methods: {
     changePage (page) {
       this.currentPage = page
+    },
+    setActiveTab (index) {
+      this.activeTab = index
     }
   }
 }

@@ -20,9 +20,12 @@ export default {
   components: {
     SectionMenu
   },
+  props: {
+    activeTab: Number
+  },
   data () {
     return {
-      activeIndex: null,
+      activeIndex: this.activeTab || 0,
       sections: [
         {
           icon: require('@/assets/icons/fire.svg'),
@@ -52,7 +55,7 @@ export default {
   methods: {
     setActive (index) {
       this.activeIndex = index
-      sessionStorage.setItem('activeIndex', index)
+      this.$emit('update:activeTab', index)
     }
   }
 }
