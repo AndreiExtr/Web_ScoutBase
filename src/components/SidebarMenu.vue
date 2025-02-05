@@ -66,6 +66,8 @@ $bg-sidebar-color: #141414;
   width: 250px;
   background-color: $bg-sidebar-color;
   padding: 24px 0;
+  position: fixed;
+  height: 100%;
 
   h1{
     font-weight: 700;

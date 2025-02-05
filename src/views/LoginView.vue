@@ -69,7 +69,6 @@ $text-color: #fff;
 $text-label: #6d6f74;
 
 .home{
-  height: 100vh;
   color: $text-color;
   display: flex;
   flex-direction: row;
