@@ -20,9 +20,11 @@ export default {
   components: {
     SectionMenu
   },
+  // props — это объект, который используется для определения свойств (или данных), которые компонент может принимать от родительского компонента
   props: {
     activeTab: Number
   },
+  // data() - метод, который возвращает объект данных
   data () {
     return {
       activeIndex: this.activeTab || 0,
@@ -52,6 +54,7 @@ export default {
       this.activeIndex = parseInt(savedIndex, 10)
     }
   },
+  // methods выполняются при вызове, например, при клике на элемент или событии
   methods: {
     setActive (index) {
       this.activeIndex = index

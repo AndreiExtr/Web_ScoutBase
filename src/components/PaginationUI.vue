@@ -1,5 +1,6 @@
 <template>
   <div class="pagination">
+    <!-- Директива v-for используется для рендеринга списка элементов путем итерации по массиву или объекту -->
     <button
       v-for="page in totalPages"
       :key="page"

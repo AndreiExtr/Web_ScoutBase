@@ -3,15 +3,80 @@
     <SidebarMenu
       :activeTab="activeTab"
       @update:activeTab="setActiveTab"/>
+
+    <!-- МАТЧИ -->
     <div class="wrapper__content" v-if="activeTab === 0">
-      <div class="wrapper__content-rows">
-        <MatchCard v-for="match in displayedMatches" :key="match.id" />
+      <h1>Ближайший матч</h1>
+      <div class="wrapper__content-match"></div>
+      <div class="wrapper__content-tabs">
+        <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">live</a>
+        <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
+        <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">завершенные</a>
       </div>
-      <PaginationUI
-        :total-pages="totalPages"
-        :current-page="currentPage"
-        @update:currentPage="changePage"
-      />
+      <div class="wrapper__content-list" v-if="activeTabs === 0">
+        <div class="rows">
+          <MatchCard
+            v-for="match in displayedMatches(0)"
+            :key="match.id"
+            :placeIcon="placeIcon"
+            :addressIcon="addressIcon"/>
+        </div>
+        <PaginationUI
+          v-if="totalPages(0) > 1"
+          :total-pages="totalPages(0)"
+          :current-page="currentPage"
+          @update:currentPage="changePage"
+        />
+      </div>
+      <div class="wrapper__content-list" v-if="activeTabs === 1">
+        <div class="rows">
+          <MatchCard
+            v-for="match in displayedMatches(1)"
+            :key="match.id"
+            :placeIcon="placeIcon"
+            :addressIcon="addressIcon" />
+        </div>
+        <PaginationUI
+          v-if="totalPages(1) > 1"
+          :total-pages="totalPages(1)"
+          :current-page="currentPage"
+          @update:currentPage="changePage"
+        />
+      </div>
+      <div class="wrapper__content-list" v-if="activeTabs === 2">
+        <div class="rows">
+          <MatchCard
+            v-for="match in displayedMatches(2)"
+            :key="match.id"
+            :placeIcon="placeIcon"
+            :addressIcon="addressIcon" />
+        </div>
+        <PaginationUI
+          v-if="totalPages(2) > 1"
+          :total-pages="totalPages(2)"
+          :current-page="currentPage"
+          @update:currentPage="changePage"
+        />
+      </div>
+    </div>
+
+    <!-- ИГРОКИ -->
+    <div class="wrapper__content" v-if="activeTab === 1">
+      <h1>Игроки</h1>
+      <div class="wrapper__content-list">
+        <div class="rows">
+          <MatchCard
+            v-for="match in displayedMatches(3)"
+            :key="match.id"
+            :placeIcon="placeIcon"
+            :addressIcon="addressIcon" />
+        </div>
+        <PaginationUI
+          :total-pages="totalPages(3) > 1"
+          :current-page="currentPage"
+          @update:currentPage="changePage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +94,7 @@ export default {
   },
   data () {
     return {
+      activeTabs: 0,
       currentPage: 1,
       activeTab: 0,
       matches: [
@@ -46,25 +112,74 @@ export default {
         { id: 12, name: 'Match 12' },
         { id: 13, name: 'Match 13' }
       ],
-      matchesPerPage: 8
+      matchesPerPage: 8,
+      placeIcon: require('@/assets/icons/users.svg'),
+      addressIcon: require('@/assets/icons/map.svg')
     }
   },
   computed: {
     totalPages () {
-      return Math.ceil(this.matches.length / this.matchesPerPage)
+      return (tab) => {
+        let filteredMatches = this.matches
+        if (tab === 0) {
+          filteredMatches = this.matches.slice(0, 5)
+        } else if (tab === 1) {
+          filteredMatches = this.matches.slice(0, 12)
+        } else if (tab === 2) {
+          filteredMatches = this.matches.slice(0, 3)
+        }
+        return Math.ceil(filteredMatches.length / this.matchesPerPage)
+      }
     },
     displayedMatches () {
-      const startIndex = (this.currentPage - 1) * this.matchesPerPage
-      const endIndex = startIndex + this.matchesPerPage
-      return this.matches.slice(startIndex, endIndex)
+      return (tab) => {
+        let filteredMatches = this.matches
+        if (tab === 0) {
+          filteredMatches = this.matches.slice(0, 5)
+        } else if (tab === 1) {
+          filteredMatches = this.matches.slice(0, 12)
+        } else if (tab === 2) {
+          filteredMatches = this.matches.slice(0, 3)
+        }
+
+        const startIndex = (this.currentPage - 1) * this.matchesPerPage
+        const endIndex = startIndex + this.matchesPerPage
+        return filteredMatches.slice(startIndex, endIndex)
+      }
+    }
+  },
+  created () {
+    const savedIndex = sessionStorage.getItem('activeIndex')
+    if (savedIndex !== null) {
+      this.activeTab = parseInt(savedIndex, 10)
+    }
+
+    const savedPage = sessionStorage.getItem('currentPage')
+    if (savedPage !== null) {
+      this.currentPage = parseInt(savedPage, 10)
+    }
+
+    const savedActiveTabs = sessionStorage.getItem('activeTabs')
+    if (savedActiveTabs !== null) {
+      this.activeTabs = parseInt(savedActiveTabs, 10)
     }
   },
   methods: {
     changePage (page) {
       this.currentPage = page
+      sessionStorage.setItem('currentPage', page)
     },
     setActiveTab (index) {
       this.activeTab = index
+      this.currentPage = 1
+      sessionStorage.setItem('activeIndex', index)
+      sessionStorage.setItem('currentPage', 1)
+    },
+    setActiveTabs (index) {
+      this.activeTabs = index
+      this.currentPage = 1
+      sessionStorage.setItem('activeTabs', index)
+      sessionStorage.setItem('currentPage', 1)
     }
   }
 }
@@ -72,11 +187,14 @@ export default {
 
 <style lang="scss">
 $bg-color: #1F1F1F;
+$primary-color: #13e66e;
+$text-color: #fff;
 .wrapper {
   width: 100%;
   background-color: $bg-color;
   display: flex;
   flex-direction: row;
+  height: 100%;
 
   &__content{
     width: calc(100% - 250px);
@@ -86,12 +204,55 @@ $bg-color: #1F1F1F;
     gap: 16px;
     margin-left: 250px;
 
-    &-rows{
+    h1{
+      text-align: left;
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-color;
+    }
+
+    &-match{
+      width: 100%;
+      min-height: 350px;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
+      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("@/assets/img/background.png");
+      background-repeat:no-repeat;
+      background-size: cover ;
+    }
+
+    &-tabs {
       display: flex;
       flex-direction: row;
-      justify-content: flex-start;
-      flex-flow: wrap;
       gap: 16px;
+
+      a{
+        text-decoration: none;
+        color: #666;
+        font-size: 16px;
+
+        &.active {
+          color: $primary-color;
+        }
+      }
+    }
+
+    &-list{
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+
+      .rows{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-content: flex-start;
+        flex-flow: wrap;
+        gap: 16px;
+        flex-grow: 1;
+        height: 100%;
+      }
     }
   }
 }

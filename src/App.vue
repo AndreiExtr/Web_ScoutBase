@@ -9,5 +9,6 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   background-color: #1F1F1F;
+  height: 100%;
 }
 </style>
