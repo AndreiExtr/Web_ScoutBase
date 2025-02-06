@@ -25,7 +25,7 @@ export default {
 </script>
 
 <style lang="scss">
-$primary-color: #75efb0;
+$primary-color: #13e66e;
 $text-color: #fff;
 $text-label: #6d6f74;
 .input-field {

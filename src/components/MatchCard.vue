@@ -73,6 +73,7 @@ $text-color: #fff;
     p{
       text-align: left;
       color: $text-color;
+      font-weight: 700;
     }
 
     h3{

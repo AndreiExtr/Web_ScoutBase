@@ -7,7 +7,23 @@
     <!-- МАТЧИ -->
     <div class="wrapper__content" v-if="activeTab === 0">
       <h1>Ближайший матч</h1>
-      <div class="wrapper__content-match"></div>
+      <div class="wrapper__content-match">
+        <div class="title">
+          <p> <span style="font-size: 20px;font-weight: 700;">Вт, 03 июля</span><br> 12:00 - 13:30</p>
+
+          <div class="user">
+            <p><span style="font-size: 20px;font-weight: 700;">Семенов Иван</span><br>Организатор</p>
+            <img class="avatar" alt="" src="@/assets/img/avatar.png">
+          </div>
+        </div>
+        <div class="title">
+          <p style="font-size: 20px;font-weight: 400;"> г.Москва<br>Центральный стадион "Локомотив"</p>
+
+          <div class="user">
+            <p style="font-size: 32px;font-weight: 700;">1300 ₽</p>
+          </div>
+        </div>
+      </div>
       <div class="wrapper__content-tabs">
         <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">live<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
@@ -220,6 +236,34 @@ $text-color: #fff;
       background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("@/assets/img/background.png");
       background-repeat:no-repeat;
       background-size: cover ;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .title{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        color: $text-color;
+        text-align: left;
+
+        .user{
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          gap: 16px;
+          text-align: right;
+
+          .avatar {
+            border-radius: 40px;
+            width: 46px;
+            height: 46px;
+            object-fit: cover;
+            mix-blend-mode: normal;
+          }
+        }
+      }
     }
 
     &-tabs {
