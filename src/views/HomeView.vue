@@ -419,5 +419,9 @@ $text-color: #fff;
       }
     }
   }
+
+  .match-view-container{
+    width: 100%;
+  }
 }
 </style>

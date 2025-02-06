@@ -1,6 +1,9 @@
 <template>
   <div class="main" >
-    <ButtonUI text="Назад" @click="closeMatchView" />
+    <div class="title">
+      <ButtonUI text="Назад" :style="{ width: 'auto' }" @click="closeMatchView" />
+      <h1>Матч</h1>
+    </div>
   </div>
 </template>
 
@@ -33,14 +36,20 @@ $text-label: #6d6f74;
   width: calc(100% - 250px);
   padding: 16px;
 
-  .back-button {
-    width: 200px;
-    padding: 10px 20px;
-    background: #13e66e;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
+  .title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    h1{
+      text-align: left;
+      width: 100%;
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-color;
+    }
   }
 }
 </style>
