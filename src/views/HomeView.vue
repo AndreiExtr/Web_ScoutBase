@@ -5,7 +5,7 @@
       @update:activeTab="setActiveTab"/>
 
     <!-- МАТЧИ -->
-    <div class="wrapper__content" v-if="activeTab === 0">
+    <div class="wrapper__content" v-if="activeTab === 0 && !showMatchView">
       <h1>Ближайший матч</h1>
       <div class="wrapper__content-match">
         <div class="title-top">
@@ -23,7 +23,7 @@
           </div>
           <div class="team">
             <p>10 VS 10</p>
-            <ButtonUI text="Перейти к матчу" />
+            <ButtonUI text="Перейти к матчу" @click="openMatchView"/>
           </div>
           <div class="shield-2-group">
             <img class="shield-2" alt="" src="@/assets/img/shield2.png">
@@ -49,7 +49,8 @@
             v-for="match in displayedMatches(0)"
             :key="match.id"
             :placeIcon="placeIcon"
-            :addressIcon="addressIcon"/>
+            :addressIcon="addressIcon"
+            @click="openMatchView"/>
         </div>
         <PaginationUI
           v-if="totalPages(0) > 1"
@@ -64,7 +65,8 @@
             v-for="match in displayedMatches(1)"
             :key="match.id"
             :placeIcon="placeIcon"
-            :addressIcon="addressIcon" />
+            :addressIcon="addressIcon"
+            @click="openMatchView" />
         </div>
         <PaginationUI
           v-if="totalPages(1) > 1"
@@ -79,7 +81,8 @@
             v-for="match in displayedMatches(2)"
             :key="match.id"
             :placeIcon="placeIcon"
-            :addressIcon="addressIcon" />
+            :addressIcon="addressIcon"
+            @click="openMatchView" />
         </div>
         <PaginationUI
           v-if="totalPages(2) > 1"
@@ -91,7 +94,7 @@
     </div>
 
     <!-- ИГРОКИ -->
-    <div class="wrapper__content" v-if="activeTab === 1">
+    <div class="wrapper__content" v-if="activeTab === 1 && !showMatchView">
       <h1>Игроки</h1>
       <div class="wrapper__content-list">
         <div class="rows">
@@ -108,10 +111,15 @@
         />
       </div>
     </div>
+    <!-- MatchView (появляется после клика) -->
+    <div class="match-view-container" v-if="showMatchView">
+      <MatchView @close="closeMatchView"/>
+    </div>
   </div>
 </template>
 
 <script>
+import MatchView from '@/views/MatchView.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
@@ -122,10 +130,12 @@ export default {
     SidebarMenu,
     MatchCard,
     PaginationUI,
-    ButtonUI
+    ButtonUI,
+    MatchView
   },
   data () {
     return {
+      showMatchView: false,
       activeTabs: 0,
       currentPage: 1,
       activeTab: 0,
@@ -195,6 +205,11 @@ export default {
     if (savedActiveTabs !== null) {
       this.activeTabs = parseInt(savedActiveTabs, 10)
     }
+
+    const savedMatchView = sessionStorage.getItem('showMatchView')
+    if (savedMatchView === 'true') {
+      this.showMatchView = true
+    }
   },
   methods: {
     changePage (page) {
@@ -206,12 +221,24 @@ export default {
       this.currentPage = 1
       sessionStorage.setItem('activeIndex', index)
       sessionStorage.setItem('currentPage', 1)
+
+      this.showMatchView = false
     },
     setActiveTabs (index) {
       this.activeTabs = index
       this.currentPage = 1
       sessionStorage.setItem('activeTabs', index)
       sessionStorage.setItem('currentPage', 1)
+
+      this.showMatchView = false
+    },
+    openMatchView () {
+      this.showMatchView = true
+      sessionStorage.setItem('showMatchView', 'true')
+    },
+    closeMatchView () {
+      this.showMatchView = false
+      sessionStorage.removeItem('showMatchView')
     }
   }
 }
@@ -249,9 +276,10 @@ $text-color: #fff;
       padding: 16px;
       border-radius: 8px;
       box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
-      background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("@/assets/img/background.png");
+      background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("@/assets/img/поле2.png");
       background-repeat:no-repeat;
       background-size: cover ;
+      background-position: center;
       display: flex;
       flex-direction: column;
       justify-content: space-between;

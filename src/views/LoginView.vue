@@ -54,7 +54,7 @@ export default {
     const router = useRouter()
 
     const submitForm = () => {
-      router.push({ name: 'home' })
+      router.push({ name: 'HomeView' })
     }
 
     return { submitForm }
