@@ -8,7 +8,7 @@
     <div class="wrapper__content" v-if="activeTab === 0">
       <h1>Ближайший матч</h1>
       <div class="wrapper__content-match">
-        <div class="title">
+        <div class="title-top">
           <p> <span style="font-size: 20px;font-weight: 700;">Вт, 03 июля</span><br> 12:00 - 13:30</p>
 
           <div class="user">
@@ -16,10 +16,24 @@
             <img class="avatar" alt="" src="@/assets/img/avatar.png">
           </div>
         </div>
-        <div class="title">
+        <div class="title-center">
+          <div class="shield-1-group">
+            <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+            <p>4 места</p>
+          </div>
+          <div class="team">
+            <p>10 VS 10</p>
+            <ButtonUI text="Перейти к матчу" />
+          </div>
+          <div class="shield-2-group">
+            <img class="shield-2" alt="" src="@/assets/img/shield2.png">
+            <p>1 место</p>
+          </div>
+        </div>
+        <div class="title-bottom">
           <p style="font-size: 20px;font-weight: 400;"> г.Москва<br>Центральный стадион "Локомотив"</p>
 
-          <div class="user">
+          <div class="price">
             <p style="font-size: 32px;font-weight: 700;">1300 ₽</p>
           </div>
         </div>
@@ -101,12 +115,14 @@
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
+import ButtonUI from '@/components/ButtonUI.vue'
 export default {
   name: 'HomeView',
   components: {
     SidebarMenu,
     MatchCard,
-    PaginationUI
+    PaginationUI,
+    ButtonUI
   },
   data () {
     return {
@@ -240,7 +256,7 @@ $text-color: #fff;
       flex-direction: column;
       justify-content: space-between;
 
-      .title{
+      .title-top{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -262,6 +278,47 @@ $text-color: #fff;
             object-fit: cover;
             mix-blend-mode: normal;
           }
+        }
+      }
+
+      .title-center{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: baseline;
+        color: $text-color;
+        gap: 32px;
+
+        .shield-1-group,
+        .shield-2-group{
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .team{
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          font-size: 40px;
+          font-weight: 700;
+        }
+      }
+
+      .title-bottom{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        color: $text-color;
+        text-align: left;
+
+        .price{
+          display: flex;
+          flex-direction: row;
+          align-items: flex-end;
+          gap: 16px;
+          text-align: right;
         }
       }
     }

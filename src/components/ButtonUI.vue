@@ -24,7 +24,6 @@ $primary-color: #13e66e;
 .button {
   width: 100%;
   padding: 12px;
-  background-color: #141414;
   border: 1px solid $primary-color;
   border-radius: 8px;
   color: $primary-color;
