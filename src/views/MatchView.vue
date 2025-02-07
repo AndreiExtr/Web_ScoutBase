@@ -32,6 +32,7 @@
             </div>
         </div>
         <div class="field"></div>
+        <div class="map"></div>
       </div>
       <div class="organizer"></div>
     </div>
@@ -100,7 +101,6 @@ $text-label: #6d6f74;
     width: 100%;
     height: 100%;
     margin-top: 76px;
-    align-items: flex-start;
 
     &-content{
       display: flex;
@@ -111,7 +111,7 @@ $text-label: #6d6f74;
 
       .info{
         width: 100%;
-        height: 350px;
+        min-height: 350px;
         padding: 16px;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
@@ -191,7 +191,15 @@ $text-label: #6d6f74;
       }
 
       .field{
-        height: 700px;
+        min-height: 700px;
+        width: 100%;
+        border-radius: 8px;
+        box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
+        background-color: #1f1f1f;
+      }
+
+      .map{
+        min-height: 400px;
         width: 100%;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
