@@ -27,7 +27,7 @@
           </div>
           <div class="shield-2-group">
             <img class="shield-2" alt="" src="@/assets/img/shield2.png">
-            <p>1 место</p>
+            <p>2 места</p>
           </div>
         </div>
         <div class="title-bottom">
