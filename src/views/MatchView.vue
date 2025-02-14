@@ -208,6 +208,10 @@ $text-label: #6d6f74;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
         background-color: #1f1f1f;
+        background-image:
+          linear-gradient(90deg, #2F6D55 50%, #437C5B 50%);
+        background-size: 50px 100%;
+        background-position: center;
         overflow: hidden;
 
         .circle-left-top{
