@@ -43,8 +43,21 @@
           <img :src="require('@/assets/icons/circle-left-bottom.svg')" class="circle-left-bottom" alt="circle-left-bottom" />
           <img :src="require('@/assets/icons/circle-right-top.svg')" class="circle-right-top" alt="circle-right-top" />
           <img :src="require('@/assets/icons/circle-right-bottom.svg')" class="circle-right-bottom" alt="circle-right-bottom" />
+
+          <div class="grid">
+            <div class="cell" style="grid-column: 1; grid-row: 4;">Игрок 1</div>
+            <div class="cell" style="grid-column: 2; grid-row: 3;">Игрок 2</div>
+            <div class="cell" style="grid-column: 2; grid-row: 5;">Игрок 3</div>
+            <div class="cell" style="grid-column: 2; grid-row: 1;">Игрок 4</div>
+            <div class="cell" style="grid-column: 2; grid-row: 7;">Игрок 5</div>
+            <div class="cell" style="grid-column: 4; grid-row: 1;">Игрок 6</div>
+            <div class="cell" style="grid-column: 4; grid-row: 7;">Игрок 7</div>
+            <div class="cell" style="grid-column: 4; grid-row: 3;">Игрок 8</div>
+            <div class="cell" style="grid-column: 4; grid-row: 5;">Игрок 9</div>
+            <div class="cell" style="grid-column: 6; grid-row: 3;">Игрок 10</div>
+            <div class="cell" style="grid-column: 6; grid-row: 5;">Игрок 11</div>
+          </div>
         </div>
-        <div class="map"></div>
       </div>
       <div class="organizer"></div>
     </div>
@@ -214,6 +227,24 @@ $text-label: #6d6f74;
         background-position: center;
         overflow: hidden;
 
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(12, 1fr);
+          grid-template-rows: repeat(7, 1fr);
+          gap: 2px;
+          width: 100%;
+          height: 100%;
+
+          .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            border-radius: 80px;
+          }
+        }
+
         .circle-left-top{
           position: absolute;
           left: -20px;
@@ -266,14 +297,6 @@ $text-label: #6d6f74;
           transform: translate(-50%, -50%);
           height: 100%;
         }
-      }
-
-      .map{
-        min-height: 400px;
-        width: 100%;
-        border-radius: 8px;
-        box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
-        background-color: #1f1f1f;
       }
     }
 
