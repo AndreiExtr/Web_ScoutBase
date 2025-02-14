@@ -1,7 +1,10 @@
 <template>
   <div class="main" >
     <div class="title">
-      <ButtonUI text="Назад" :style="{ width: 'auto' }" @click="closeMatchView" />
+      <ButtonUI
+        :icon="require('@/assets/icons/arrow-left.svg')"
+        :style="{ width: 'auto' }"
+        @click="closeMatchView" />
       <h1>Матч</h1>
     </div>
     <div class="main__match">
@@ -31,7 +34,16 @@
               </div>
             </div>
         </div>
-        <div class="field"></div>
+        <div class="field">
+          <img :src="require('@/assets/icons/gate-left.svg')" class="gate-left" alt="gate-left" />
+          <img :src="require('@/assets/icons/gate-right.svg')" class="gate-right" alt="gate-right" />
+          <img :src="require('@/assets/icons/center.svg')" class="center" alt="center" />
+          <img :src="require('@/assets/icons/line.svg')" class="line" alt="line" />
+          <img :src="require('@/assets/icons/circle-left-top.svg')" class="circle-left-top" alt="circle-left-top" />
+          <img :src="require('@/assets/icons/circle-left-bottom.svg')" class="circle-left-bottom" alt="circle-left-bottom" />
+          <img :src="require('@/assets/icons/circle-right-top.svg')" class="circle-right-top" alt="circle-right-top" />
+          <img :src="require('@/assets/icons/circle-right-bottom.svg')" class="circle-right-bottom" alt="circle-right-bottom" />
+        </div>
         <div class="map"></div>
       </div>
       <div class="organizer"></div>
@@ -78,11 +90,11 @@ $text-label: #6d6f74;
     align-items: center;
     gap: 16px;
     background-color: #1f1f1f;
-    height: 60px;
+    height: 80px;
     width: 100%;
     padding: 8px 0;
     box-shadow: 10px 5px 24px rgba(0, 0, 0, 0.315);
-    z-index: 1;
+    z-index: 2;
 
     h1{
       text-align: left;
@@ -100,14 +112,13 @@ $text-label: #6d6f74;
     gap: 16px;
     width: 100%;
     height: 100%;
-    margin-top: 76px;
+    margin-top: 100px;
 
     &-content{
       display: flex;
       flex-direction: column;
       width: 100%;
       gap: 16px;
-      margin-right: 366px;
 
       .info{
         width: 100%;
@@ -191,11 +202,66 @@ $text-label: #6d6f74;
       }
 
       .field{
+        position: relative;
         min-height: 700px;
         width: 100%;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
         background-color: #1f1f1f;
+        overflow: hidden;
+
+        .circle-left-top{
+          position: absolute;
+          left: -20px;
+          top: -20px;
+        }
+
+        .circle-right-top{
+          position: absolute;
+          right: -20px;
+          top: -20px;
+        }
+
+        .circle-left-bottom{
+          position: absolute;
+          left: -20px;
+          bottom: -20px;
+        }
+
+        .circle-right-bottom{
+          position: absolute;
+          right: -20px;
+          bottom: -20px;
+        }
+
+        .gate-left {
+          position: absolute;
+          left: -2px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .gate-right {
+          position: absolute;
+          right: -2px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+
+        .center{
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .line{
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          height: 100%;
+        }
       }
 
       .map{
@@ -208,19 +274,15 @@ $text-label: #6d6f74;
     }
 
     .organizer{
-      position: absolute;
-      top: 0;
-      right: 0;
       display: flex;
       flex-direction: row;
+      z-index: 1;
       width: 350px;
       height: 600px;
       border-radius: 8px;
       box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
-      background-color: #141414;
-      position: fixed;
-      top: 76px;
-      right: calc(16px + var(--scrollbar-width, 16px));
+      background-color: #1f1f1f;
+      top: 100px;
     }
   }
 }
