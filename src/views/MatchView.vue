@@ -55,9 +55,20 @@
               <img v-if="cell.player" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
 
               <!-- Если игрок не привязан -->
-              <button v-else @click="addPlayer(cell)" class="add-player-btn">+</button>
+              <button v-else @click="openModal(cell)" class="add-player-btn">+</button>
 
               <span class="badge">{{ cell.badge }}</span>
+            </div>
+
+            <!-- Модальное окно -->
+            <div v-if="showModal" class="modal-overlay">
+              <div class="modal-content">
+                <img :src="require(`@/assets/img/${selectedCell.img}`)" alt="shield" class="modal-icon" />
+                <h2>{{ selectedCell.badge }}</h2>
+
+                <button class="join-btn" @click="joinPlayer">Присоединиться и оплатить 1300 ₽</button>
+                <button class="cancel-btn" @click="closeModal">Отмена</button>
+              </div>
             </div>
           </div>
         </div>
@@ -105,15 +116,26 @@ export default {
         { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ', player: true },
         { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП', player: true },
         { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: true }
-      ]
+      ],
+      showModal: false,
+      selectedCell: {}
     }
   },
   methods: {
     closeMatchView () {
       this.$emit('close')
     },
-    addPlayer (cell) {
-      cell.player = true
+    openModal (cell) {
+      this.selectedCell = cell
+      this.showModal = true
+    },
+    closeModal () {
+      this.showModal = false
+      this.selectedCell = {}
+    },
+    joinPlayer () {
+      this.selectedCell.player = true
+      this.closeModal()
     }
   }
 }
@@ -124,6 +146,62 @@ $primary-color: #13e66e;
 $bg-color: #141414;
 $text-color: #fff;
 $text-label: #6d6f74;
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+
+  .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    width: 320px;
+    position: relative;
+
+    .modal-icon {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .join-btn {
+      background-color: #27ae60;
+      color: $text-color;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      width: 100%;
+      font-size: 16px;
+    }
+
+    .cancel-btn {
+      background-color: $text-color;
+      color: $text-label;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 16px;
+    }
+  }
+}
 
 .main {
   flex-grow: 1;
