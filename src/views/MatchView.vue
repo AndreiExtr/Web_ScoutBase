@@ -19,7 +19,7 @@
               <p>4 места</p>
             </div>
             <div class="team">
-              <p>10 VS 10</p>
+              <p>11 VS 11</p>
             </div>
             <div class="shield-2-group">
               <img class="shield-2" alt="" src="@/assets/img/shield2.png">
@@ -45,21 +45,48 @@
           <img :src="require('@/assets/icons/circle-right-bottom.svg')" class="circle-right-bottom" alt="circle-right-bottom" />
 
           <div class="grid">
-            <div class="cell" style="grid-column: 1; grid-row: 4;">Игрок 1</div>
-            <div class="cell" style="grid-column: 2; grid-row: 3;">Игрок 2</div>
-            <div class="cell" style="grid-column: 2; grid-row: 5;">Игрок 3</div>
-            <div class="cell" style="grid-column: 2; grid-row: 1;">Игрок 4</div>
-            <div class="cell" style="grid-column: 2; grid-row: 7;">Игрок 5</div>
-            <div class="cell" style="grid-column: 4; grid-row: 1;">Игрок 6</div>
-            <div class="cell" style="grid-column: 4; grid-row: 7;">Игрок 7</div>
-            <div class="cell" style="grid-column: 4; grid-row: 3;">Игрок 8</div>
-            <div class="cell" style="grid-column: 4; grid-row: 5;">Игрок 9</div>
-            <div class="cell" style="grid-column: 6; grid-row: 3;">Игрок 10</div>
-            <div class="cell" style="grid-column: 6; grid-row: 5;">Игрок 11</div>
+            <div class="cell" style="grid-column: 1; grid-row: 4;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 1
+            </div>
+            <div class="cell" style="grid-column: 2; grid-row: 3;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 2</div>
+            <div class="cell" style="grid-column: 2; grid-row: 5;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 3</div>
+            <div class="cell" style="grid-column: 2; grid-row: 1;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 4</div>
+            <div class="cell" style="grid-column: 2; grid-row: 7;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 5</div>
+            <div class="cell" style="grid-column: 4; grid-row: 1;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 6</div>
+            <div class="cell" style="grid-column: 4; grid-row: 7;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 7</div>
+            <div class="cell" style="grid-column: 4; grid-row: 3;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 8</div>
+            <div class="cell" style="grid-column: 4; grid-row: 5;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 9</div>
+            <div class="cell" style="grid-column: 6; grid-row: 3;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 10</div>
+            <div class="cell" style="grid-column: 6; grid-row: 5;">
+              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
+              Игрок 11</div>
           </div>
         </div>
       </div>
-      <div class="organizer"></div>
+      <div class="organizer">
+        <img class="organizer__img" alt="" src="@/assets/img/avatar.png">
+        <h1>Семенов <br> Иван</h1>
+        <p>Организатор</p>
+      </div>
     </div>
   </div>
 </template>
@@ -237,9 +264,12 @@ $text-label: #6d6f74;
 
           .cell {
             display: flex;
+            flex-direction: column;
             justify-content: center;
+            gap: 8px;
             align-items: center;
             color: white;
+            z-index: 2;
             font-size: 14px;
             border-radius: 80px;
           }
@@ -302,14 +332,32 @@ $text-label: #6d6f74;
 
     .organizer{
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
       z-index: 1;
-      width: 350px;
-      height: 600px;
+      min-width: 260px;
+      height: 500px;
       border-radius: 8px;
       box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
       background-color: #1f1f1f;
-      top: 100px;
+
+      &__img{
+        width: 150px;
+        height: 150px;
+      }
+
+      h1{
+        font-size: 20px;
+        color: $text-color;
+        font-weight: 700;
+      }
+
+      p{
+        font-size: 16px;
+        color: $text-color;
+      }
     }
   }
 }
