@@ -45,40 +45,15 @@
           <img :src="require('@/assets/icons/circle-right-bottom.svg')" class="circle-right-bottom" alt="circle-right-bottom" />
 
           <div class="grid">
-            <div class="cell" style="grid-column: 1; grid-row: 4;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 1
+            <div
+              v-for="(cell, index) in cells"
+              :key="index"
+              class="cell"
+              :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`"
+            >
+              <img class="shield-1" alt="" :src="require(`@/assets/img/${cell.img}`)">
+              <span class="badge">{{ cell.badge }}</span>
             </div>
-            <div class="cell" style="grid-column: 2; grid-row: 3;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 2</div>
-            <div class="cell" style="grid-column: 2; grid-row: 5;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 3</div>
-            <div class="cell" style="grid-column: 2; grid-row: 1;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 4</div>
-            <div class="cell" style="grid-column: 2; grid-row: 7;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 5</div>
-            <div class="cell" style="grid-column: 4; grid-row: 1;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 6</div>
-            <div class="cell" style="grid-column: 4; grid-row: 7;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 7</div>
-            <div class="cell" style="grid-column: 4; grid-row: 3;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 8</div>
-            <div class="cell" style="grid-column: 4; grid-row: 5;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 9</div>
-            <div class="cell" style="grid-column: 6; grid-row: 3;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 10</div>
-            <div class="cell" style="grid-column: 6; grid-row: 5;">
-              <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              Игрок 11</div>
           </div>
         </div>
       </div>
@@ -97,6 +72,36 @@ export default {
   name: 'MatchView',
   components: {
     ButtonUI
+  },
+  data () {
+    return {
+      cells: [
+        // Щиты 1
+        { col: 1, row: 4, img: 'shield1.png', badge: 'ГП' },
+        { col: 2, row: 3, img: 'shield1.png', badge: 'ЦЛЗ' },
+        { col: 2, row: 5, img: 'shield1.png', badge: 'ЦПЗ' },
+        { col: 2, row: 1, img: 'shield1.png', badge: 'ЛЗ' },
+        { col: 2, row: 7, img: 'shield1.png', badge: 'ПЗ' },
+        { col: 4, row: 1, img: 'shield1.png', badge: 'ЛПЗ' },
+        { col: 4, row: 7, img: 'shield1.png', badge: 'ППЗ' },
+        { col: 4, row: 3, img: 'shield1.png', badge: 'ЦЛПЗ' },
+        { col: 4, row: 5, img: 'shield1.png', badge: 'ЦППЗ' },
+        { col: 6, row: 3, img: 'shield1.png', badge: 'ЦНП' },
+        { col: 6, row: 5, img: 'shield1.png', badge: 'ЦНП' },
+        // Щиты 2
+        { col: 12, row: 4, img: 'shield2.png', badge: 'ГП' },
+        { col: 11, row: 3, img: 'shield2.png', badge: 'ЦЛЗ' },
+        { col: 11, row: 5, img: 'shield2.png', badge: 'ЦПЗ' },
+        { col: 11, row: 1, img: 'shield2.png', badge: 'ЛЗ' },
+        { col: 11, row: 7, img: 'shield2.png', badge: 'ПЗ' },
+        { col: 9, row: 1, img: 'shield2.png', badge: 'ЛПЗ' },
+        { col: 9, row: 7, img: 'shield2.png', badge: 'ППЗ' },
+        { col: 9, row: 3, img: 'shield2.png', badge: 'ЦЛПЗ' },
+        { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ' },
+        { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП' },
+        { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП' }
+      ]
+    }
   },
   methods: {
     closeMatchView () {
@@ -272,6 +277,15 @@ $text-label: #6d6f74;
             z-index: 2;
             font-size: 14px;
             border-radius: 80px;
+
+            .badge {
+              background-color: $text-color;
+              color: $bg-color;
+              padding: 2px 6px;
+              border-radius: 2px;
+              font-size: 14px;
+              font-weight: bold;
+            }
           }
         }
 
