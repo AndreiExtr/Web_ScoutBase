@@ -135,7 +135,15 @@ export default {
     },
     joinPlayer () {
       this.selectedCell.player = true
+
+      localStorage.setItem('cellsData', JSON.stringify(this.cells))
       this.closeModal()
+    }
+  },
+  mounted () {
+    const savedCells = localStorage.getItem('cellsData')
+    if (savedCells) {
+      this.cells = JSON.parse(savedCells)
     }
   }
 }
@@ -161,11 +169,11 @@ $text-label: #6d6f74;
   z-index: 10;
 
   .modal-content {
-    background: #fff;
+    background: $text-color;
     padding: 20px;
     border-radius: 12px;
     text-align: center;
-    width: 320px;
+    width: 400px;
     position: relative;
 
     .modal-icon {
@@ -188,17 +196,25 @@ $text-label: #6d6f74;
       margin-bottom: 10px;
       width: 100%;
       font-size: 16px;
+
+      &:hover{
+        background-color: #196d3c;
+      }
     }
 
     .cancel-btn {
-      background-color: $text-color;
-      color: $text-label;
+      color: $bg-color;
       border: none;
       padding: 12px 20px;
       border-radius: 8px;
       cursor: pointer;
       width: 100%;
       font-size: 16px;
+
+      &:hover{
+        background-color: $bg-color;
+        color: $text-color;
+      }
     }
   }
 }
@@ -373,7 +389,7 @@ $text-label: #6d6f74;
               padding: 2px 6px;
               border-radius: 2px;
               font-size: 14px;
-              font-weight: bold;
+              font-weight: 700;
             }
 
             .add-player-btn {
