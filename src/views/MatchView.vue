@@ -55,7 +55,8 @@
               <img v-if="cell.player" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
 
               <!-- Если игрок не привязан -->
-              <button v-else @click="openModal(cell)" class="add-player-btn">+</button>
+              <!-- <button v-else @click="openModal(cell)" class="add-player-btn">+</button> -->
+              <ButtonUI text="+" v-else @click="openModal(cell)" class="add-player-btn" />
 
               <span class="badge">{{ cell.badge }}</span>
             </div>
@@ -66,8 +67,8 @@
                 <img :src="require(`@/assets/img/${selectedCell.img}`)" alt="shield" class="modal-icon" />
                 <h2>{{ selectedCell.badge }}</h2>
 
-                <button class="join-btn" @click="joinPlayer">Присоединиться и оплатить 1300 ₽</button>
-                <button class="cancel-btn" @click="closeModal">Отмена</button>
+                <ButtonUI text="Присоединиться и оплатить 1300 ₽" class="join-btn" @click="joinPlayer" />
+                <ButtonUI text="Отмена" class="cancel-btn" @click="closeModal" />
               </div>
             </div>
           </div>
@@ -387,15 +388,16 @@ $text-label: #6d6f74;
               background-color: $text-color;
               color: $bg-color;
               padding: 2px 6px;
-              border-radius: 2px;
+              border-radius: 4px;
               font-size: 14px;
               font-weight: 700;
             }
 
             .add-player-btn {
               background-color: $text-color;
+              color: $bg-color;
               border: none;
-              border-radius: 50%;
+              border-radius: 8px;
               width: 45px;
               height: 45px;
               font-size: 24px;
@@ -403,6 +405,11 @@ $text-label: #6d6f74;
               display: flex;
               align-items: center;
               justify-content: center;
+
+              &:hover{
+                background-color: $bg-color;
+                color: $text-color;
+              }
             }
           }
         }
