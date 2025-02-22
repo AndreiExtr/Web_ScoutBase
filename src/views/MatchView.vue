@@ -51,7 +51,12 @@
               class="cell"
               :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`"
             >
-              <img class="shield-1" alt="" :src="require(`@/assets/img/${cell.img}`)">
+              <!-- Если игрок привязан -->
+              <img v-if="cell.player" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+
+              <!-- Если игрок не привязан -->
+              <button v-else @click="addPlayer(cell)" class="add-player-btn">+</button>
+
               <span class="badge">{{ cell.badge }}</span>
             </div>
           </div>
@@ -76,36 +81,39 @@ export default {
   data () {
     return {
       cells: [
-        // Щиты 1
-        { col: 1, row: 4, img: 'shield1.png', badge: 'ГП' },
-        { col: 2, row: 3, img: 'shield1.png', badge: 'ЦЛЗ' },
-        { col: 2, row: 5, img: 'shield1.png', badge: 'ЦПЗ' },
-        { col: 2, row: 1, img: 'shield1.png', badge: 'ЛЗ' },
-        { col: 2, row: 7, img: 'shield1.png', badge: 'ПЗ' },
-        { col: 4, row: 1, img: 'shield1.png', badge: 'ЛПЗ' },
-        { col: 4, row: 7, img: 'shield1.png', badge: 'ППЗ' },
-        { col: 4, row: 3, img: 'shield1.png', badge: 'ЦЛПЗ' },
-        { col: 4, row: 5, img: 'shield1.png', badge: 'ЦППЗ' },
-        { col: 6, row: 3, img: 'shield1.png', badge: 'ЦНП' },
-        { col: 6, row: 5, img: 'shield1.png', badge: 'ЦНП' },
-        // Щиты 2
-        { col: 12, row: 4, img: 'shield2.png', badge: 'ГП' },
-        { col: 11, row: 3, img: 'shield2.png', badge: 'ЦЛЗ' },
-        { col: 11, row: 5, img: 'shield2.png', badge: 'ЦПЗ' },
-        { col: 11, row: 1, img: 'shield2.png', badge: 'ЛЗ' },
-        { col: 11, row: 7, img: 'shield2.png', badge: 'ПЗ' },
-        { col: 9, row: 1, img: 'shield2.png', badge: 'ЛПЗ' },
-        { col: 9, row: 7, img: 'shield2.png', badge: 'ППЗ' },
-        { col: 9, row: 3, img: 'shield2.png', badge: 'ЦЛПЗ' },
-        { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ' },
-        { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП' },
-        { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП' }
+        // Игроки 1
+        { col: 1, row: 4, img: 'shield1.png', badge: 'ГП', player: true },
+        { col: 2, row: 3, img: 'shield1.png', badge: 'ЦЛЗ', player: false },
+        { col: 2, row: 5, img: 'shield1.png', badge: 'ЦПЗ', player: true },
+        { col: 2, row: 1, img: 'shield1.png', badge: 'ЛЗ', player: true },
+        { col: 2, row: 7, img: 'shield1.png', badge: 'ПЗ', player: false },
+        { col: 4, row: 1, img: 'shield1.png', badge: 'ЛПЗ', player: true },
+        { col: 4, row: 7, img: 'shield1.png', badge: 'ППЗ', player: false },
+        { col: 4, row: 3, img: 'shield1.png', badge: 'ЦЛПЗ', player: true },
+        { col: 4, row: 5, img: 'shield1.png', badge: 'ЦППЗ', player: false },
+        { col: 6, row: 3, img: 'shield1.png', badge: 'ЦНП', player: true },
+        { col: 6, row: 5, img: 'shield1.png', badge: 'ЦНП', player: true },
+        // Игроки 2
+        { col: 12, row: 4, img: 'shield2.png', badge: 'ГП', player: true },
+        { col: 11, row: 3, img: 'shield2.png', badge: 'ЦЛЗ', player: true },
+        { col: 11, row: 5, img: 'shield2.png', badge: 'ЦПЗ', player: true },
+        { col: 11, row: 1, img: 'shield2.png', badge: 'ЛЗ', player: true },
+        { col: 11, row: 7, img: 'shield2.png', badge: 'ПЗ', player: true },
+        { col: 9, row: 1, img: 'shield2.png', badge: 'ЛПЗ', player: false },
+        { col: 9, row: 7, img: 'shield2.png', badge: 'ППЗ', player: true },
+        { col: 9, row: 3, img: 'shield2.png', badge: 'ЦЛПЗ', player: false },
+        { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ', player: true },
+        { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП', player: true },
+        { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: true }
       ]
     }
   },
   methods: {
     closeMatchView () {
       this.$emit('close')
+    },
+    addPlayer (cell) {
+      cell.player = true
     }
   }
 }
@@ -273,10 +281,13 @@ $text-label: #6d6f74;
             justify-content: center;
             gap: 8px;
             align-items: center;
-            color: white;
             z-index: 2;
             font-size: 14px;
             border-radius: 80px;
+
+            img{
+              height: 45px;
+            }
 
             .badge {
               background-color: $text-color;
@@ -285,6 +296,19 @@ $text-label: #6d6f74;
               border-radius: 2px;
               font-size: 14px;
               font-weight: bold;
+            }
+
+            .add-player-btn {
+              background-color: $text-color;
+              border: none;
+              border-radius: 50%;
+              width: 45px;
+              height: 45px;
+              font-size: 24px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
           }
         }
