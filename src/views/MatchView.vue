@@ -226,7 +226,6 @@ $text-label: #6d6f74;
   flex-direction: column;
   margin-left: 250px;
   width: calc(100% - 250px);
-  padding: 0 16px 16px 16px;
   gap: 16px;
   height: 100%;
 
@@ -237,10 +236,10 @@ $text-label: #6d6f74;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
+    padding: 16px;
     background-color: #1f1f1f;
     height: 80px;
     width: 100%;
-    padding: 8px 0;
     box-shadow: 10px 5px 24px rgba(0, 0, 0, 0.315);
     z-index: 2;
 
@@ -260,6 +259,7 @@ $text-label: #6d6f74;
     gap: 16px;
     width: 100%;
     height: 100%;
+    padding: 0 16px;
     margin-top: 100px;
 
     &-content{
