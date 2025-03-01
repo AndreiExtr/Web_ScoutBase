@@ -25,7 +25,13 @@
           <div class="team">
             <p>{{ liveMatch.team1 }} VS {{ liveMatch.team2 }}</p>
             <ButtonUI
-              text="Перейти к матчу" />
+              text="Перейти к матчу"
+              :date="liveMatch.date"
+              :price="liveMatch.price"
+              :time="liveMatch.time"
+              :team1="liveMatch.team1"
+              :team2="liveMatch.team2"
+              @click="goToMatch(liveMatch)" />
           </div>
           <div class="shield-2-group">
             <img class="shield-2" alt="" src="@/assets/img/shield2.png">
@@ -177,6 +183,24 @@ export default {
     },
     changePage (page) {
       this.currentPage = page
+    },
+    goToMatch (liveMatch) {
+      // Переход на страницу матча с передачей данных через query параметры
+      this.$router.push({
+        name: 'MatchView',
+        state: {
+          date: liveMatch.date,
+          price: liveMatch.price,
+          organizer: { name: liveMatch.organizer.name, position: liveMatch.organizer.position },
+          team1: liveMatch.team1,
+          team2: liveMatch.team2,
+          time: liveMatch.time,
+          placesLeft1: liveMatch.placesLeft1,
+          placesLeft2: liveMatch.placesLeft2,
+          location: liveMatch.location
+        },
+        params: { matchId: liveMatch.id }
+      })
     },
     totalPages (tab) {
       const totalMatches = this.matches.filter(match => {
