@@ -45,7 +45,6 @@
       <div class="wrapper__content-tabs">
         <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">сегодня<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
-        <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">завершенные</a>
       </div>
       <div class="wrapper__content-list" v-if="activeTabs === 0">
         <div class="rows">
@@ -95,32 +94,6 @@
         <PaginationUI
           v-if="totalPages(1) > 1"
           :total-pages="totalPages(1)"
-          :current-page="currentPage"
-          @update:currentPage="changePage"
-        />
-      </div>
-      <div class="wrapper__content-list" v-if="activeTabs === 2">
-        <div class="rows">
-          <MatchCard
-            v-for="match in displayedMatches(2)"
-            :key="match.id"
-            :matchId="match.id"
-            :date="match.date"
-            :price="match.price"
-            :time="match.time"
-            :team1="match.team1"
-            :team2="match.team2"
-            :placesLeft1="match.placesLeft1"
-            :placesLeft2="match.placesLeft2"
-            :location="match.location"
-            :organizer="match.organizer"
-            :placeIcon="placeIcon"
-            :addressIcon="addressIcon"
-            @match-card-click="openMatchView(match)"/>
-        </div>
-        <PaginationUI
-          v-if="totalPages(2) > 1"
-          :total-pages="totalPages(2)"
           :current-page="currentPage"
           @update:currentPage="changePage"
         />
@@ -178,6 +151,7 @@ export default {
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
+      this.currentPage = 1
     },
     openMatchView (match) {
       this.showMatchView = true
@@ -207,7 +181,6 @@ export default {
       const totalMatches = this.matches.filter(match => {
         if (tab === 0) return match.status === 'сегодня' && match.id !== this.liveMatch?.id
         if (tab === 1) return match.status === 'предстоящие'
-        if (tab === 2) return match.status === 'завершенные'
         return false
       }).length
       return Math.ceil(totalMatches / this.matchesPerPage)
@@ -219,8 +192,6 @@ export default {
         filteredMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id)
       } else if (tab === 1) {
         filteredMatches = this.matches.filter(match => match.status === 'предстоящие')
-      } else if (tab === 2) {
-        filteredMatches = this.matches.filter(match => match.status === 'завершенные')
       }
 
       const startIndex = (this.currentPage - 1) * this.matchesPerPage

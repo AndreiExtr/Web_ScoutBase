@@ -30,7 +30,7 @@
             </div>
             </div>
             <div class="title-bottom">
-              <p v-if="matchLocation" style="font-size: 20px; font-weight: 400;">
+              <p v-if="matchLocation" style="font-size: 16px; font-weight: 400;">
                 {{ matchLocation.split(',')[0] }}<br>
                 {{ matchLocation.split(',').slice(1).join(',') }}
               </p>
@@ -86,7 +86,7 @@
       <div class="organizer">
         <img class="organizer__img" alt="" src="@/assets/img/avatar.png">
         <p><strong style="font-size: 20px;">Организатор:</strong></p>
-        <p v-if="organizerName">
+        <p v-if="organizerName" style="margin-bottom: 24px;">
           {{ organizerName.split(' ')[0] }}<br> <!-- Фамилия -->
           <span>{{ organizerName.split(' ')[1] }} {{ organizerName.split(' ')[2] }}</span><!-- Имя и Отчество -->
         </p>
@@ -558,6 +558,7 @@ $text-label: #6d6f74;
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: left;
       gap: 16px;
       padding: 16px;
       z-index: 1;
@@ -586,6 +587,7 @@ $text-label: #6d6f74;
       p{
         font-size: 16px;
         color: $text-color;
+        width: 100%;
       }
     }
   }
