@@ -15,7 +15,7 @@ const routes = [
     component: HomeView
   },
   {
-    path: '/match/:id',
+    path: '/match/:matchId',
     name: 'MatchView',
     component: MatchView
   }

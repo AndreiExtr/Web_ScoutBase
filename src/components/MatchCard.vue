@@ -1,17 +1,20 @@
 <template>
-  <div class="match-card">
+  <div class="match-card" @click="goToMatchPage">
     <div class="match-card__title">
-      <p>03 июля <br>  12:00 - 13:30</p>
-      <h3>1200 ₽</h3>
+      <p>{{ date }} <br> {{ time }}</p>
+      <h3>{{ price }} ₽</h3>
     </div>
     <div class="match-card__info">
       <div class="place">
         <img :src="placeIcon" alt="place-icon" />
-        <p>6 из 12 мест</p>
+        {{ placesLeft1 + placesLeft2 === 0 ? 'Мест нет' : 'Свободно позиции: ' + (placesLeft1 + placesLeft2) }}
       </div>
       <div class="address">
-        <img :src="addressIcon" alt="adress-icon" />
-        <p>г.Москва<br />Центральный стадион "Локомотив"</p>
+        <img :src="addressIcon" alt="address-icon" />
+        <p>
+          {{ location.split(',')[0] }}<br>
+          {{ location.split(',').slice(1).join(',') }}
+        </p>
       </div>
     </div>
   </div>
@@ -21,6 +24,17 @@
 export default {
   name: 'MatchCard',
   props: {
+    id: Number,
+    matchId: Number,
+    location: String,
+    date: String,
+    time: String,
+    team1: String,
+    team2: String,
+    placesLeft1: Number,
+    placesLeft2: Number,
+    price: Number,
+    organizer: Object,
     placeIcon: {
       type: String,
       required: true
@@ -28,6 +42,11 @@ export default {
     addressIcon: {
       type: String,
       required: true
+    }
+  },
+  methods: {
+    goToMatchPage () {
+      this.$emit('match-card-click', this.matchId)
     }
   }
 }

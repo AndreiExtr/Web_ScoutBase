@@ -1,5 +1,8 @@
 <template>
-  <div class="main" >
+  <SidebarMenu
+      :activeTab="activeTab"
+      @update:activeTab="setActiveTab"/>
+  <div class="main">
     <div class="title">
       <ButtonUI
         :icon="require('@/assets/icons/arrow-left.svg')"
@@ -11,26 +14,31 @@
       <div class="main__match-content">
         <div class="info">
           <div class="title-top">
-            <p> <span style="font-size: 20px;font-weight: 700;">Вт, 03 июля</span><br> 12:00 - 13:30</p>
+            <p> <span style="font-size: 20px;font-weight: 700;">{{ matchDate }}</span><br> {{ matchTime }}</p>
           </div>
           <div class="title-center">
             <div class="shield-1-group">
               <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              <p>4 места</p>
+              <p>{{ matchPlacesLeft1 }}</p>
             </div>
             <div class="team">
-              <p>11 VS 11</p>
+              <p>{{ matchTeam1 }} VS {{ matchTeam2 }}</p>
             </div>
             <div class="shield-2-group">
               <img class="shield-2" alt="" src="@/assets/img/shield2.png">
-              <p>2 места</p>
+              <p>{{ matchPlacesLeft2 }}</p>
             </div>
             </div>
             <div class="title-bottom">
-              <p style="font-size: 20px;font-weight: 400;"> г.Москва<br>Центральный стадион "Локомотив"</p>
-
+              <p v-if="matchLocation" style="font-size: 20px; font-weight: 400;">
+                {{ matchLocation.split(',')[0] }}<br>
+                {{ matchLocation.split(',').slice(1).join(',') }}
+              </p>
+              <p v-else style="font-size: 20px; font-weight: 400;">
+                Данные загружаются...
+              </p>
               <div class="price">
-                <p style="font-size: 32px;font-weight: 700;">1300 ₽</p>
+                <p style="font-size: 32px;font-weight: 700;">{{ matchPrice }} ₽</p>
               </div>
             </div>
         </div>
@@ -49,6 +57,7 @@
               v-for="(cell, index) in cells"
               :key="index"
               class="cell"
+              :class="{ 'disabled-cell': userHasJoined || cell.player }"
               :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`"
             >
               <!-- Если игрок привязан -->
@@ -76,8 +85,16 @@
       </div>
       <div class="organizer">
         <img class="organizer__img" alt="" src="@/assets/img/avatar.png">
-        <h1>Семенов <br> Иван</h1>
-        <p>Организатор</p>
+        <p><strong style="font-size: 20px;">Организатор:</strong></p>
+        <p v-if="organizerName">
+          {{ organizerName.split(' ')[0] }}<br> <!-- Фамилия -->
+          {{ organizerName.split(' ')[1] }} {{ organizerName.split(' ')[1] }}<!-- Имя и Отчество -->
+        </p>
+        <p v-else>
+          Данные загружаются...
+        </p>
+        <p><strong style="font-size: 20px;">Должность:</strong></p>
+        <p class="position">{{ organizerPosition }}</p>
       </div>
     </div>
   </div>
@@ -85,13 +102,54 @@
 
 <script>
 import ButtonUI from '@/components/ButtonUI.vue'
+import SidebarMenu from '@/components/SidebarMenu.vue'
 export default {
   name: 'MatchView',
   components: {
-    ButtonUI
+    ButtonUI,
+    SidebarMenu
+  },
+  computed: {
+    organizer () {
+      return window.history.state?.organizer || { name: 'Неизвестный организатор', position: 'Должность не указана' }
+    },
+    organizerName () {
+      return this.organizer.name
+    },
+    organizerPosition () {
+      return this.organizer.position
+    },
+    matchTime () {
+      return window.history.state?.time
+    },
+    matchDate () {
+      return window.history.state?.date
+    },
+    matchTeam1 () {
+      return window.history.state?.team1
+    },
+    matchTeam2 () {
+      return window.history.state?.team2
+    },
+    matchPlacesLeft1 () {
+      return window.history.state?.placesLeft1
+    },
+    matchPlacesLeft2 () {
+      return window.history.state?.placesLeft2
+    },
+    matchLocation () {
+      return window.history.state?.location
+    },
+    matchPrice () {
+      return window.history.state?.price
+    },
+    matchId () {
+      return window.history.state?.id
+    }
   },
   data () {
     return {
+      activeTab: 0,
       cells: [
         // Игроки 1
         { col: 1, row: 4, img: 'shield1.png', badge: 'ГП', player: true },
@@ -119,14 +177,22 @@ export default {
         { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: true }
       ],
       showModal: false,
-      selectedCell: {}
+      selectedCell: {},
+      userHasJoined: false
     }
   },
   methods: {
+    setActiveTab (tab) {
+      this.activeTab = tab
+    },
+    setActiveTabs (tab) {
+      this.activeTabs = tab
+    },
     closeMatchView () {
-      this.$emit('close')
+      this.$router.push({ name: 'HomeView' })
     },
     openModal (cell) {
+      if (this.userHasJoined || cell.player) return // Если место уже занято или пользователь уже выбрал место — не открывается модалка
       this.selectedCell = cell
       this.showModal = true
     },
@@ -136,15 +202,23 @@ export default {
     },
     joinPlayer () {
       this.selectedCell.player = true
+      this.userHasJoined = true
 
-      localStorage.setItem('cellsData', JSON.stringify(this.cells))
+      // Сохранение данных для конкретного матча
+      localStorage.setItem(`cellsData_${this.matchId}`, JSON.stringify(this.cells))
+      localStorage.setItem(`userHasJoined_${this.matchId}`, JSON.stringify(this.userHasJoined)) // Привязка к matchId
       this.closeModal()
     }
   },
   mounted () {
-    const savedCells = localStorage.getItem('cellsData')
+    const savedCells = localStorage.getItem(`cellsData_${this.matchId}`)
     if (savedCells) {
       this.cells = JSON.parse(savedCells)
+    }
+
+    const savedUserHasJoined = localStorage.getItem(`userHasJoined_${this.matchId}`) // Привязка к matchId
+    if (savedUserHasJoined) {
+      this.userHasJoined = JSON.parse(savedUserHasJoined)
     }
   }
 }
@@ -227,7 +301,6 @@ $text-label: #6d6f74;
   margin-left: 250px;
   width: calc(100% - 250px);
   gap: 16px;
-  height: 100%;
 
   .title{
     position: fixed;
@@ -258,8 +331,7 @@ $text-label: #6d6f74;
     flex-direction: row;
     gap: 16px;
     width: 100%;
-    height: 100%;
-    padding: 0 16px;
+    padding: 0 16px 16px 16px;
     margin-top: 100px;
 
     &-content{
@@ -412,6 +484,15 @@ $text-label: #6d6f74;
               }
             }
           }
+
+          .disabled-cell {
+            pointer-events: none;
+
+            .add-player-btn {
+              background-color: #bebebe;
+              color: $text-label;
+            }
+          }
         }
 
         .circle-left-top{
@@ -477,10 +558,15 @@ $text-label: #6d6f74;
       padding: 16px;
       z-index: 1;
       min-width: 260px;
-      height: 500px;
+      height: 400px;
       border-radius: 8px;
       box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
       background-color: #1f1f1f;
+
+      .position{
+        color: #FF5353;
+        text-transform: uppercase;
+      }
 
       &__img{
         width: 150px;

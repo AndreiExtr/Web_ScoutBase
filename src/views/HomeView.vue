@@ -9,7 +9,7 @@
       <h1>Ближайший матч</h1>
       <div class="wrapper__content-match">
         <div class="title-top">
-          <p> <span style="font-size: 20px;font-weight: 700;">Вт, 03 июля</span><br> 12:00 - 13:30</p>
+          <p> <span style="font-size: 20px;font-weight: 700;">{{ date }}</span><br> {{ time }}</p>
 
           <div class="user">
             <p><span style="font-size: 20px;font-weight: 700;">Семенов Иван</span><br>Организатор</p>
@@ -19,22 +19,23 @@
         <div class="title-center">
           <div class="shield-1-group">
             <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-            <p>4 места</p>
+            <p>{{ placesLeft1 }}</p>
           </div>
           <div class="team">
-            <p>10 VS 10</p>
-            <ButtonUI text="Перейти к матчу" @click="openMatchView"/>
+            <p>{{ team1 }} VS {{ team2 }}</p>
+            <ButtonUI
+              text="Перейти к матчу" />
           </div>
           <div class="shield-2-group">
             <img class="shield-2" alt="" src="@/assets/img/shield2.png">
-            <p>2 места</p>
+            <p>{{ placesLeft2 }}</p>
           </div>
         </div>
         <div class="title-bottom">
-          <p style="font-size: 20px;font-weight: 400;"> г.Москва<br>Центральный стадион "Локомотив"</p>
+          <p style="font-size: 20px;font-weight: 400;"> {{ location }}</p>
 
           <div class="price">
-            <p style="font-size: 32px;font-weight: 700;">1300 ₽</p>
+            <p style="font-size: 32px;font-weight: 700;">{{ price }} ₽</p>
           </div>
         </div>
       </div>
@@ -48,9 +49,19 @@
           <MatchCard
             v-for="match in displayedMatches(0)"
             :key="match.id"
+            :matchId="match.id"
+            :date="match.date"
+            :price="match.price"
+            :time="match.time"
+            :team1="match.team1"
+            :team2="match.team2"
+            :placesLeft1="match.placesLeft1"
+            :placesLeft2="match.placesLeft2"
+            :location="match.location"
+            :organizer="match.organizer"
             :placeIcon="placeIcon"
             :addressIcon="addressIcon"
-            @click="openMatchView"/>
+            @match-card-click="openMatchView(match)"/>
         </div>
         <PaginationUI
           v-if="totalPages(0) > 1"
@@ -64,9 +75,19 @@
           <MatchCard
             v-for="match in displayedMatches(1)"
             :key="match.id"
+            :matchId="match.id"
+            :date="match.date"
+            :price="match.price"
+            :time="match.time"
+            :team1="match.team1"
+            :team2="match.team2"
+            :placesLeft1="match.placesLeft1"
+            :placesLeft2="match.placesLeft2"
+            :location="match.location"
+            :organizer="match.organizer"
             :placeIcon="placeIcon"
             :addressIcon="addressIcon"
-            @click="openMatchView" />
+            @match-card-click="openMatchView(match)"/>
         </div>
         <PaginationUI
           v-if="totalPages(1) > 1"
@@ -80,9 +101,19 @@
           <MatchCard
             v-for="match in displayedMatches(2)"
             :key="match.id"
+            :matchId="match.id"
+            :date="match.date"
+            :price="match.price"
+            :time="match.time"
+            :team1="match.team1"
+            :team2="match.team2"
+            :placesLeft1="match.placesLeft1"
+            :placesLeft2="match.placesLeft2"
+            :location="match.location"
+            :organizer="match.organizer"
             :placeIcon="placeIcon"
             :addressIcon="addressIcon"
-            @click="openMatchView" />
+            @match-card-click="openMatchView(match)"/>
         </div>
         <PaginationUI
           v-if="totalPages(2) > 1"
@@ -93,24 +124,6 @@
       </div>
     </div>
 
-    <!-- ИГРОКИ -->
-    <div class="wrapper__content" v-if="activeTab === 1 && !showMatchView">
-      <h1>Игроки</h1>
-      <div class="wrapper__content-list">
-        <div class="rows">
-          <MatchCard
-            v-for="match in displayedMatches(3)"
-            :key="match.id"
-            :placeIcon="placeIcon"
-            :addressIcon="addressIcon" />
-        </div>
-        <PaginationUI
-          :total-pages="totalPages(3) > 1"
-          :current-page="currentPage"
-          @update:currentPage="changePage"
-        />
-      </div>
-    </div>
     <!-- MatchView (появляется после клика) -->
     <div class="match-view-container" v-if="showMatchView">
       <MatchView @close="closeMatchView"/>
@@ -119,11 +132,13 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import MatchView from '@/views/MatchView.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
+
 export default {
   name: 'HomeView',
   components: {
@@ -133,112 +148,56 @@ export default {
     ButtonUI,
     MatchView
   },
+  computed: {
+    ...mapGetters(['getMatches']),
+    matches () {
+      return this.getMatches
+    }
+  },
   data () {
     return {
       showMatchView: false,
       activeTabs: 0,
       currentPage: 1,
       activeTab: 0,
-      matches: [
-        { id: 1, name: 'Match 1' },
-        { id: 2, name: 'Match 2' },
-        { id: 3, name: 'Match 3' },
-        { id: 4, name: 'Match 4' },
-        { id: 5, name: 'Match 5' },
-        { id: 6, name: 'Match 6' },
-        { id: 7, name: 'Match 7' },
-        { id: 8, name: 'Match 8' },
-        { id: 9, name: 'Match 9' },
-        { id: 10, name: 'Match 10' },
-        { id: 11, name: 'Match 11' },
-        { id: 12, name: 'Match 12' },
-        { id: 13, name: 'Match 13' }
-      ],
-      matchesPerPage: 8,
       placeIcon: require('@/assets/icons/users.svg'),
-      addressIcon: require('@/assets/icons/map.svg')
-    }
-  },
-  computed: {
-    totalPages () {
-      return (tab) => {
-        let filteredMatches = this.matches
-        if (tab === 0) {
-          filteredMatches = this.matches.slice(0, 5)
-        } else if (tab === 1) {
-          filteredMatches = this.matches.slice(0, 12)
-        } else if (tab === 2) {
-          filteredMatches = this.matches.slice(0, 3)
-        }
-        return Math.ceil(filteredMatches.length / this.matchesPerPage)
-      }
-    },
-    displayedMatches () {
-      return (tab) => {
-        let filteredMatches = this.matches
-        if (tab === 0) {
-          filteredMatches = this.matches.slice(0, 5)
-        } else if (tab === 1) {
-          filteredMatches = this.matches.slice(0, 12)
-        } else if (tab === 2) {
-          filteredMatches = this.matches.slice(0, 3)
-        }
-
-        const startIndex = (this.currentPage - 1) * this.matchesPerPage
-        const endIndex = startIndex + this.matchesPerPage
-        return filteredMatches.slice(startIndex, endIndex)
-      }
-    }
-  },
-  created () {
-    const savedIndex = sessionStorage.getItem('activeIndex')
-    if (savedIndex !== null) {
-      this.activeTab = parseInt(savedIndex, 10)
-    }
-
-    const savedPage = sessionStorage.getItem('currentPage')
-    if (savedPage !== null) {
-      this.currentPage = parseInt(savedPage, 10)
-    }
-
-    const savedActiveTabs = sessionStorage.getItem('activeTabs')
-    if (savedActiveTabs !== null) {
-      this.activeTabs = parseInt(savedActiveTabs, 10)
-    }
-
-    const savedMatchView = sessionStorage.getItem('showMatchView')
-    if (savedMatchView === 'true') {
-      this.showMatchView = true
+      addressIcon: require('@/assets/icons/location.svg')
     }
   },
   methods: {
-    changePage (page) {
-      this.currentPage = page
-      sessionStorage.setItem('currentPage', page)
+    setActiveTab (tab) {
+      this.activeTab = tab
     },
-    setActiveTab (index) {
-      this.activeTab = index
-      this.currentPage = 1
-      sessionStorage.setItem('activeIndex', index)
-      sessionStorage.setItem('currentPage', 1)
-
-      this.showMatchView = false
+    setActiveTabs (tab) {
+      this.activeTabs = tab
     },
-    setActiveTabs (index) {
-      this.activeTabs = index
-      this.currentPage = 1
-      sessionStorage.setItem('activeTabs', index)
-      sessionStorage.setItem('currentPage', 1)
-
-      this.showMatchView = false
-    },
-    openMatchView () {
+    openMatchView (match) {
       this.showMatchView = true
-      sessionStorage.setItem('showMatchView', 'true')
+      this.$router.push({
+        name: 'MatchView',
+        state: { date: match.date, price: match.price, organizer: { name: match.organizer.name, position: match.organizer.position }, team1: match.team1, team2: match.team2, time: match.time, placesLeft1: match.placesLeft1, placesLeft2: match.placesLeft2, location: match.location },
+        params: { matchId: match.id }
+      })
     },
     closeMatchView () {
       this.showMatchView = false
-      sessionStorage.removeItem('showMatchView')
+    },
+    changePage (page) {
+      this.currentPage = page
+    },
+    totalPages (tab) {
+      const matches = this.displayedMatches(tab)
+      return Math.ceil(matches.length / this.matchesPerPage)
+    },
+    displayedMatches (tab) {
+      if (tab === 0) {
+        return this.matches.filter(match => match.status === 'live')
+      } else if (tab === 1) {
+        return this.matches.filter(match => match.status === 'предстоящие')
+      } else if (tab === 2) {
+        return this.matches.filter(match => match.status === 'завершенные')
+      }
+      return []
     }
   }
 }
