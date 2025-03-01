@@ -19,14 +19,14 @@
           <div class="title-center">
             <div class="shield-1-group">
               <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-              <p>{{ matchPlacesLeft1 }}</p>
+              <p style="font-size: 24px;">{{ matchPlacesLeft1 }}</p>
             </div>
             <div class="team">
               <p>{{ matchTeam1 }} VS {{ matchTeam2 }}</p>
             </div>
             <div class="shield-2-group">
               <img class="shield-2" alt="" src="@/assets/img/shield2.png">
-              <p>{{ matchPlacesLeft2 }}</p>
+              <p style="font-size: 24px;">{{ matchPlacesLeft2 }}</p>
             </div>
             </div>
             <div class="title-bottom">
@@ -392,6 +392,10 @@ $text-label: #6d6f74;
             display: flex;
             flex-direction: column;
             gap: 12px;
+
+            p{
+              font-size: 16px;
+            }
           }
 
           .team{

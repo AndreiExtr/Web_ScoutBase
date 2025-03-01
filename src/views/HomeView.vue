@@ -7,40 +7,43 @@
     <!-- МАТЧИ -->
     <div class="wrapper__content" v-if="activeTab === 0 && !showMatchView">
       <h1>Ближайший матч</h1>
-      <div class="wrapper__content-match">
+      <div class="wrapper__content-match" v-if="liveMatch">
         <div class="title-top">
-          <p> <span style="font-size: 20px;font-weight: 700;">{{ date }}</span><br> {{ time }}</p>
+          <p> <span style="font-size: 20px;font-weight: 700;">{{ liveMatch.date }}</span><br> {{ liveMatch.time }}</p>
 
           <div class="user">
-            <p><span style="font-size: 20px;font-weight: 700;">Семенов Иван</span><br>Организатор</p>
+            <p><span style="font-size: 20px;font-weight: 700;">{{ liveMatch.organizer.name }}</span><br>Организатор</p>
             <img class="avatar" alt="" src="@/assets/img/avatar.png">
           </div>
         </div>
         <div class="title-center">
           <div class="shield-1-group">
             <img class="shield-1" alt="" src="@/assets/img/shield1.png">
-            <p>{{ placesLeft1 }}</p>
+            <p style="font-size: 24px;">{{ liveMatch.placesLeft1 }}</p>
           </div>
           <div class="team">
-            <p>{{ team1 }} VS {{ team2 }}</p>
+            <p>{{ liveMatch.team1 }} VS {{ liveMatch.team2 }}</p>
             <ButtonUI
               text="Перейти к матчу" />
           </div>
           <div class="shield-2-group">
             <img class="shield-2" alt="" src="@/assets/img/shield2.png">
-            <p>{{ placesLeft2 }}</p>
+            <p style="font-size: 24px;">{{ liveMatch.placesLeft2 }}</p>
           </div>
         </div>
         <div class="title-bottom">
-          <p style="font-size: 20px;font-weight: 400;"> {{ location }}</p>
+          <p style="font-size: 20px;font-weight: 400;">
+            {{ liveMatch.location.split(',')[0] }}<br>
+            {{ liveMatch.location.split(',').slice(1).join(',') }}
+          </p>
 
           <div class="price">
-            <p style="font-size: 32px;font-weight: 700;">{{ price }} ₽</p>
+            <p style="font-size: 32px;font-weight: 700;">{{ liveMatch.price }} ₽</p>
           </div>
         </div>
       </div>
       <div class="wrapper__content-tabs">
-        <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">live<div class="vibrate"></div></a>
+        <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">сегодня<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
         <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">завершенные</a>
       </div>
@@ -64,8 +67,8 @@
             @match-card-click="openMatchView(match)"/>
         </div>
         <PaginationUI
-          v-if="totalPages(0) > 1"
-          :total-pages="totalPages(0)"
+          v-if="totalPages(activeTabs) > 1"
+          :total-pages="totalPages(activeTabs)"
           :current-page="currentPage"
           @update:currentPage="changePage"
         />
@@ -150,6 +153,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getMatches']),
+    liveMatch () {
+      // Поиск первого матча "сегодня"
+      return this.getMatches.find(match => match.status === 'сегодня')
+    },
     matches () {
       return this.getMatches
     }
@@ -160,6 +167,7 @@ export default {
       activeTabs: 0,
       currentPage: 1,
       activeTab: 0,
+      matchesPerPage: 8,
       placeIcon: require('@/assets/icons/users.svg'),
       addressIcon: require('@/assets/icons/location.svg')
     }
@@ -175,7 +183,17 @@ export default {
       this.showMatchView = true
       this.$router.push({
         name: 'MatchView',
-        state: { date: match.date, price: match.price, organizer: { name: match.organizer.name, position: match.organizer.position }, team1: match.team1, team2: match.team2, time: match.time, placesLeft1: match.placesLeft1, placesLeft2: match.placesLeft2, location: match.location },
+        state: {
+          date: match.date,
+          price: match.price,
+          organizer: { name: match.organizer.name, position: match.organizer.position },
+          team1: match.team1,
+          team2: match.team2,
+          time: match.time,
+          placesLeft1: match.placesLeft1,
+          placesLeft2: match.placesLeft2,
+          location: match.location
+        },
         params: { matchId: match.id }
       })
     },
@@ -186,18 +204,28 @@ export default {
       this.currentPage = page
     },
     totalPages (tab) {
-      const matches = this.displayedMatches(tab)
-      return Math.ceil(matches.length / this.matchesPerPage)
+      const totalMatches = this.matches.filter(match => {
+        if (tab === 0) return match.status === 'сегодня' && match.id !== this.liveMatch?.id
+        if (tab === 1) return match.status === 'предстоящие'
+        if (tab === 2) return match.status === 'завершенные'
+        return false
+      }).length
+      return Math.ceil(totalMatches / this.matchesPerPage)
     },
     displayedMatches (tab) {
+      let filteredMatches = []
+
       if (tab === 0) {
-        return this.matches.filter(match => match.status === 'live')
+        filteredMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id)
       } else if (tab === 1) {
-        return this.matches.filter(match => match.status === 'предстоящие')
+        filteredMatches = this.matches.filter(match => match.status === 'предстоящие')
       } else if (tab === 2) {
-        return this.matches.filter(match => match.status === 'завершенные')
+        filteredMatches = this.matches.filter(match => match.status === 'завершенные')
       }
-      return []
+
+      const startIndex = (this.currentPage - 1) * this.matchesPerPage
+      const endIndex = startIndex + this.matchesPerPage
+      return filteredMatches.slice(startIndex, endIndex)
     }
   }
 }
