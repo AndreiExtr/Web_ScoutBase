@@ -1,6 +1,7 @@
 <template>
   <div class="wrapper">
     <SidebarMenu
+      :key="activeTab"
       :activeTab="activeTab"
       @update:activeTab="setActiveTab"/>
 

@@ -1,8 +1,9 @@
 <template>
   <SidebarMenu
+      :key="activeTab"
       :activeTab="activeTab"
       @update:activeTab="setActiveTab"/>
-  <div class="main">
+  <div class="main" v-if="activeTab === 0 && showMatchView">
     <div class="title">
       <ButtonUI
         :icon="require('@/assets/icons/arrow-left.svg')"
@@ -176,6 +177,7 @@ export default {
         { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП', player: true },
         { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: true }
       ],
+      showMatchView: true,
       showModal: false,
       selectedCell: {},
       userHasJoined: false
@@ -184,6 +186,10 @@ export default {
   methods: {
     setActiveTab (tab) {
       this.activeTab = tab
+      if (tab === 0) { // когда активируется вкладка с индексом 0 (список матчей)
+        this.$router.push({ name: 'HomeView' })
+        this.showMatchView = false // скрыть страницу матча
+      }
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
@@ -569,7 +575,7 @@ $text-label: #6d6f74;
       background-color: #1f1f1f;
 
       .position{
-        color: #FF5353;
+        color: #ff6600;
         text-transform: uppercase;
       }
 
