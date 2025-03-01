@@ -88,7 +88,7 @@
         <p><strong style="font-size: 20px;">Организатор:</strong></p>
         <p v-if="organizerName">
           {{ organizerName.split(' ')[0] }}<br> <!-- Фамилия -->
-          {{ organizerName.split(' ')[1] }} {{ organizerName.split(' ')[1] }}<!-- Имя и Отчество -->
+          <span>{{ organizerName.split(' ')[1] }} {{ organizerName.split(' ')[2] }}</span><!-- Имя и Отчество -->
         </p>
         <p v-else>
           Данные загружаются...
