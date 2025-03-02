@@ -23,14 +23,12 @@
             <p style="font-size: 24px;">{{ liveMatch.placesLeft1 }}</p>
           </div>
           <div class="team">
-            <p>{{ liveMatch.team1 }} VS {{ liveMatch.team2 }}</p>
+            <p>VS</p>
             <ButtonUI
               text="Перейти к матчу"
               :date="liveMatch.date"
               :price="liveMatch.price"
               :time="liveMatch.time"
-              :team1="liveMatch.team1"
-              :team2="liveMatch.team2"
               @click="goToMatch(liveMatch)" />
           </div>
           <div class="shield-2-group">
@@ -62,8 +60,6 @@
             :date="match.date"
             :price="match.price"
             :time="match.time"
-            :team1="match.team1"
-            :team2="match.team2"
             :placesLeft1="match.placesLeft1"
             :placesLeft2="match.placesLeft2"
             :location="match.location"
@@ -88,8 +84,6 @@
             :date="match.date"
             :price="match.price"
             :time="match.time"
-            :team1="match.team1"
-            :team2="match.team2"
             :placesLeft1="match.placesLeft1"
             :placesLeft2="match.placesLeft2"
             :location="match.location"
@@ -168,8 +162,6 @@ export default {
           date: match.date,
           price: match.price,
           organizer: { name: match.organizer.name, position: match.organizer.position },
-          team1: match.team1,
-          team2: match.team2,
           time: match.time,
           placesLeft1: match.placesLeft1,
           placesLeft2: match.placesLeft2,
@@ -192,8 +184,6 @@ export default {
           date: liveMatch.date,
           price: liveMatch.price,
           organizer: { name: liveMatch.organizer.name, position: liveMatch.organizer.position },
-          team1: liveMatch.team1,
-          team2: liveMatch.team2,
           time: liveMatch.time,
           placesLeft1: liveMatch.placesLeft1,
           placesLeft2: liveMatch.placesLeft2,

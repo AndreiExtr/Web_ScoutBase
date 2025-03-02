@@ -29,8 +29,6 @@ export default {
     location: String,
     date: String,
     time: String,
-    team1: String,
-    team2: String,
     placesLeft1: Number,
     placesLeft2: Number,
     price: Number,

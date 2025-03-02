@@ -23,7 +23,7 @@
               <p style="font-size: 24px;">{{ matchPlacesLeft1 }}</p>
             </div>
             <div class="team">
-              <p>{{ matchTeam1 }} VS {{ matchTeam2 }}</p>
+              <p>VS</p>
             </div>
             <div class="shield-2-group">
               <img class="shield-2" alt="" src="@/assets/img/shield2.png">
@@ -54,23 +54,38 @@
           <img :src="require('@/assets/icons/circle-right-bottom.svg')" class="circle-right-bottom" alt="circle-right-bottom" />
 
           <div class="grid">
-            <div
-              v-for="(cell, index) in cells"
-              :key="index"
-              class="cell"
-              :class="{ 'disabled-cell': userHasJoined || cell.player }"
-              :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`"
-            >
-              <!-- Если игрок привязан -->
-              <img v-if="cell.player" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+            <div v-for="(cell, index) in getTeam1Cells"
+                :key="cell.col + '-' + cell.row"
+                class="cell"
+                :class="{ 'disabled-cell': userHasJoined || cell.player }"
+                :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
 
-              <!-- Если игрок не привязан -->
-              <!-- <button v-else @click="openModal(cell)" class="add-player-btn">+</button> -->
-              <ButtonUI text="+" v-else @click="openModal(cell)" class="add-player-btn" />
+              <img v-if="cell.img" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+
+              <ButtonUI
+                v-if="!cell.player && index < matchPlacesLeft1"
+                text="+"
+                @click="openModal(cell)"
+                class="add-player-btn" />
 
               <span class="badge">{{ cell.badge }}</span>
             </div>
 
+            <div v-for="(cell, index) in getTeam2Cells"
+                :key="cell.col + '-' + cell.row"
+                class="cell"
+                :class="{ 'disabled-cell': userHasJoined || cell.player }"
+                :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
+
+              <img v-if="cell.img" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+
+              <ButtonUI
+                v-if="!cell.player && index < matchPlacesLeft2"
+                text="+"
+                @click="openModal(cell)"
+                class="add-player-btn" />
+              <span class="badge">{{ cell.badge }}</span>
+            </div>
             <!-- Модальное окно -->
             <div v-if="showModal" class="modal-overlay">
               <div class="modal-content">
@@ -110,6 +125,41 @@ export default {
     ButtonUI,
     SidebarMenu
   },
+  data () {
+    return {
+      activeTab: 0,
+      cells: [
+        // Игроки 1
+        { col: 1, row: 4, img: 'shield1.png', badge: 'ГП', player: false },
+        { col: 2, row: 3, img: 'shield1.png', badge: 'ЦЛЗ', player: false },
+        { col: 2, row: 5, img: 'shield1.png', badge: 'ЦПЗ', player: false },
+        { col: 2, row: 1, img: 'shield1.png', badge: 'ЛЗ', player: false },
+        { col: 2, row: 7, img: 'shield1.png', badge: 'ПЗ', player: false },
+        { col: 4, row: 1, img: 'shield1.png', badge: 'ЛПЗ', player: false },
+        { col: 4, row: 7, img: 'shield1.png', badge: 'ППЗ', player: false },
+        { col: 4, row: 3, img: 'shield1.png', badge: 'ЦЛПЗ', player: false },
+        { col: 4, row: 5, img: 'shield1.png', badge: 'ЦППЗ', player: false },
+        { col: 6, row: 3, img: 'shield1.png', badge: 'ЦНП', player: false },
+        { col: 6, row: 5, img: 'shield1.png', badge: 'ЦНП', player: false },
+        // Игроки 2
+        { col: 12, row: 4, img: 'shield2.png', badge: 'ГП', player: false },
+        { col: 11, row: 3, img: 'shield2.png', badge: 'ЦЛЗ', player: false },
+        { col: 11, row: 5, img: 'shield2.png', badge: 'ЦПЗ', player: false },
+        { col: 11, row: 1, img: 'shield2.png', badge: 'ЛЗ', player: false },
+        { col: 11, row: 7, img: 'shield2.png', badge: 'ПЗ', player: false },
+        { col: 9, row: 1, img: 'shield2.png', badge: 'ЛПЗ', player: false },
+        { col: 9, row: 7, img: 'shield2.png', badge: 'ППЗ', player: false },
+        { col: 9, row: 3, img: 'shield2.png', badge: 'ЦЛПЗ', player: false },
+        { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ', player: false },
+        { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП', player: false },
+        { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: false }
+      ],
+      showMatchView: true,
+      showModal: false,
+      selectedCell: {},
+      userHasJoined: false
+    }
+  },
   computed: {
     organizer () {
       return window.history.state?.organizer || { name: 'Неизвестный организатор', position: 'Должность не указана' }
@@ -126,17 +176,11 @@ export default {
     matchDate () {
       return window.history.state?.date
     },
-    matchTeam1 () {
-      return window.history.state?.team1
-    },
-    matchTeam2 () {
-      return window.history.state?.team2
-    },
     matchPlacesLeft1 () {
-      return window.history.state?.placesLeft1
+      return window.history.state?.placesLeft1 || 0
     },
     matchPlacesLeft2 () {
-      return window.history.state?.placesLeft2
+      return window.history.state?.placesLeft2 || 0
     },
     matchLocation () {
       return window.history.state?.location
@@ -146,41 +190,14 @@ export default {
     },
     matchId () {
       return window.history.state?.id
-    }
-  },
-  data () {
-    return {
-      activeTab: 0,
-      cells: [
-        // Игроки 1
-        { col: 1, row: 4, img: 'shield1.png', badge: 'ГП', player: true },
-        { col: 2, row: 3, img: 'shield1.png', badge: 'ЦЛЗ', player: false },
-        { col: 2, row: 5, img: 'shield1.png', badge: 'ЦПЗ', player: true },
-        { col: 2, row: 1, img: 'shield1.png', badge: 'ЛЗ', player: true },
-        { col: 2, row: 7, img: 'shield1.png', badge: 'ПЗ', player: false },
-        { col: 4, row: 1, img: 'shield1.png', badge: 'ЛПЗ', player: true },
-        { col: 4, row: 7, img: 'shield1.png', badge: 'ППЗ', player: false },
-        { col: 4, row: 3, img: 'shield1.png', badge: 'ЦЛПЗ', player: true },
-        { col: 4, row: 5, img: 'shield1.png', badge: 'ЦППЗ', player: false },
-        { col: 6, row: 3, img: 'shield1.png', badge: 'ЦНП', player: true },
-        { col: 6, row: 5, img: 'shield1.png', badge: 'ЦНП', player: true },
-        // Игроки 2
-        { col: 12, row: 4, img: 'shield2.png', badge: 'ГП', player: true },
-        { col: 11, row: 3, img: 'shield2.png', badge: 'ЦЛЗ', player: true },
-        { col: 11, row: 5, img: 'shield2.png', badge: 'ЦПЗ', player: true },
-        { col: 11, row: 1, img: 'shield2.png', badge: 'ЛЗ', player: true },
-        { col: 11, row: 7, img: 'shield2.png', badge: 'ПЗ', player: true },
-        { col: 9, row: 1, img: 'shield2.png', badge: 'ЛПЗ', player: false },
-        { col: 9, row: 7, img: 'shield2.png', badge: 'ППЗ', player: true },
-        { col: 9, row: 3, img: 'shield2.png', badge: 'ЦЛПЗ', player: false },
-        { col: 9, row: 5, img: 'shield2.png', badge: 'ЦППЗ', player: true },
-        { col: 7, row: 3, img: 'shield2.png', badge: 'ЦНП', player: true },
-        { col: 7, row: 5, img: 'shield2.png', badge: 'ЦНП', player: true }
-      ],
-      showMatchView: true,
-      showModal: false,
-      selectedCell: {},
-      userHasJoined: false
+    },
+    getTeam1Cells () {
+      const team1Cells = this.cells.filter(cell => cell.img.includes('shield1'))
+      return team1Cells
+    },
+    getTeam2Cells () {
+      const team2Cells = this.cells.filter(cell => cell.img.includes('shield2'))
+      return team2Cells
     }
   },
   methods: {
@@ -207,12 +224,18 @@ export default {
       this.selectedCell = {}
     },
     joinPlayer () {
+      if (this.selectedCell.img.includes('shield1')) {
+        window.history.state.placesLeft1 = this.matchPlacesLeft1 - 1
+      } else if (this.selectedCell.img.includes('shield2')) {
+        window.history.state.placesLeft2 = this.matchPlacesLeft2 - 1
+      }
+
       this.selectedCell.player = true
       this.userHasJoined = true
 
       // Сохранение данных для конкретного матча
       localStorage.setItem(`cellsData_${this.matchId}`, JSON.stringify(this.cells))
-      localStorage.setItem(`userHasJoined_${this.matchId}`, JSON.stringify(this.userHasJoined)) // Привязка к matchId
+      localStorage.setItem(`userHasJoined_${this.matchId}`, JSON.stringify(this.userHasJoined))
       this.closeModal()
     }
   },
@@ -226,6 +249,9 @@ export default {
     if (savedUserHasJoined) {
       this.userHasJoined = JSON.parse(savedUserHasJoined)
     }
+
+    this.matchPlacesLeft1 = window.history.state?.placesLeft1 || 0
+    this.matchPlacesLeft2 = window.history.state?.placesLeft2 || 0
   }
 }
 </script>
