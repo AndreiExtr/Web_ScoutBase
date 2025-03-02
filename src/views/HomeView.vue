@@ -125,6 +125,19 @@ export default {
     ButtonUI,
     MatchView
   },
+  mounted () {
+    // Восстановление значения activeTabs из sessionStorage
+    const savedTab = sessionStorage.getItem('activeTabs')
+    if (savedTab !== null) {
+      this.activeTabs = parseInt(savedTab)
+    }
+
+    // Восстановление текущей страницы из sessionStorage
+    const savedPage = sessionStorage.getItem('currentPage')
+    if (savedPage !== null) {
+      this.currentPage = parseInt(savedPage)
+    }
+  },
   computed: {
     ...mapGetters(['getMatches']),
     liveMatch () {
@@ -153,6 +166,8 @@ export default {
     setActiveTabs (tab) {
       this.activeTabs = tab
       this.currentPage = 1
+      sessionStorage.setItem('activeTabs', tab) // Сохранение вкладки в sessionStorage
+      sessionStorage.setItem('currentPage', 1)
     },
     openMatchView (match) {
       this.showMatchView = true
@@ -169,12 +184,14 @@ export default {
         },
         params: { matchId: match.id }
       })
+      sessionStorage.setItem('showMatchView', 'true')
     },
     closeMatchView () {
       this.showMatchView = false
     },
     changePage (page) {
       this.currentPage = page
+      sessionStorage.setItem('currentPage', page)
     },
     goToMatch (liveMatch) {
       // Переход на страницу матча с передачей данных через query параметры
