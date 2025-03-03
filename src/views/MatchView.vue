@@ -60,7 +60,7 @@
                 :class="{ 'disabled-cell': userHasJoined || cell.player }"
                 :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
 
-              <img v-if="cell.img" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+              <img  v-if="cell.player || index >= matchPlacesLeft1" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
 
               <ButtonUI
                 v-if="!cell.player && index < matchPlacesLeft1"
@@ -77,7 +77,7 @@
                 :class="{ 'disabled-cell': userHasJoined || cell.player }"
                 :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
 
-              <img v-if="cell.img" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
+              <img v-if="cell.player || index >= matchPlacesLeft2" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
 
               <ButtonUI
                 v-if="!cell.player && index < matchPlacesLeft2"
@@ -92,7 +92,7 @@
                 <img :src="require(`@/assets/img/${selectedCell.img}`)" alt="shield" class="modal-icon" />
                 <h2>{{ selectedCell.badge }}</h2>
 
-                <ButtonUI text="Присоединиться и оплатить 1300 ₽" class="join-btn" @click="joinPlayer" />
+                <ButtonUI text="Присоединиться и оплатить" class="join-btn" @click="joinPlayer" />
                 <ButtonUI text="Отмена" class="cancel-btn" @click="closeModal" />
               </div>
             </div>
@@ -346,7 +346,7 @@ $text-label: #6d6f74;
     height: 80px;
     width: 100%;
     box-shadow: 10px 5px 24px rgba(0, 0, 0, 0.315);
-    z-index: 2;
+    z-index: 5;
 
     h1{
       text-align: left;
@@ -459,7 +459,7 @@ $text-label: #6d6f74;
 
       .field{
         position: relative;
-        min-height: 700px;
+        min-height: 650px;
         width: 100%;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
