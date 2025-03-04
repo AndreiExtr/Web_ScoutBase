@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ButtonUI from '@/components/ButtonUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 export default {
@@ -203,6 +203,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['updatePlacesLeft']),
     setActiveTab (tab) {
       this.activeTab = tab
       if (tab === 0) { // когда активируется вкладка с индексом 0 (список матчей)
@@ -217,7 +218,6 @@ export default {
       // Удаляем данные о текущем матче из sessionStorage
       sessionStorage.removeItem('selectedMatch')
       this.$router.push({ name: 'HomeView' })
-      // this.showMatchView = false
     },
     openModal (cell) {
       if (this.userHasJoined || cell.player) return // Если место уже занято или пользователь уже выбрал место — не открывается модалка
@@ -229,11 +229,10 @@ export default {
       this.selectedCell = {}
     },
     joinPlayer () {
-      if (this.selectedCell.img.includes('shield1')) {
-        window.history.state.placesLeft1 = this.matchPlacesLeft1 - 1
-      } else if (this.selectedCell.img.includes('shield2')) {
-        window.history.state.placesLeft2 = this.matchPlacesLeft2 - 1
-      }
+      const team = this.selectedCell.img.includes('shield1') ? 1 : 2
+
+      // Обновляем счетчики через мутацию
+      this.updatePlacesLeft({ matchId: this.matchId, team })
 
       this.selectedCell.player = true
       this.userHasJoined = true

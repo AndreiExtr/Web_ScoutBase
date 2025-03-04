@@ -205,7 +205,7 @@ export default {
     goToMatch (liveMatch) {
       sessionStorage.setItem('selectedMatchId', liveMatch.id)
       sessionStorage.setItem('selectedMatch', JSON.stringify(liveMatch))
-      // this.setSelectedMatch(liveMatch) // Сохраняем данные о матче в хранилище
+
       this.showMatchView = true
       this.$router.push({
         name: 'MatchView',
