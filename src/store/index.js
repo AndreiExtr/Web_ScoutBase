@@ -44,7 +44,8 @@ export default createStore({
       { id: 17, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 18, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } }
     ],
-    selectedMatch: null // Добавляем выбранный матч
+    selectedMatch: null, // Добавляем выбранный матч
+    joinedMatches: []
   },
   getters: {
     getMatches: (state) => state.matches,
@@ -57,7 +58,8 @@ export default createStore({
       location: '',
       price: 0,
       organizer: { name: 'Неизвестный организатор', position: 'Должность не указана' }
-    }
+    },
+    getJoinedMatches: (state) => state.joinedMatches
   },
   mutations: {
     SET_MATCHES (state, matches) {
@@ -73,16 +75,30 @@ export default createStore({
       if (match) {
         if (team === 1 && match.placesLeft1 > 0) {
           match.placesLeft1--
+          // Добавляем команду в joinedMatches
+          state.joinedMatches.push({ matchId, team })
         } else if (team === 2 && match.placesLeft2 > 0) {
           match.placesLeft2--
+          // Добавляем команду в joinedMatches
+          state.joinedMatches.push({ matchId, team })
         }
-        saveState(state) // Сохраняем обновленное состояние в localStorage
+        saveState(state)
+      }
+    },
+    JOIN_MATCH (state, { matchId, team }) {
+      if (!state.joinedMatches.some(m => m.matchId === matchId)) {
+        state.joinedMatches.push({ matchId, team })
+        saveState(state)
       }
     }
   },
   actions: {
     loadMatches ({ commit }, matches) {
       commit('SET_MATCHES', matches)
+    },
+    joinMatch ({ commit }, { matchId, team }) {
+      commit('updatePlacesLeft', { matchId, team })
+      commit('JOIN_MATCH', { matchId, team }) // Можно использовать для обновления joinedMatches
     }
   }
 })

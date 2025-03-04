@@ -50,6 +50,7 @@
       <div class="wrapper__content-tabs">
         <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">сегодня<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
+        <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">мои матчи</a>
       </div>
       <div class="wrapper__content-list" v-if="activeTabs === 0">
         <div class="rows">
@@ -95,6 +96,31 @@
         <PaginationUI
           v-if="totalPages(1) > 1"
           :total-pages="totalPages(1)"
+          :current-page="currentPage"
+          @update:currentPage="changePage"
+        />
+      </div>
+      <div class="wrapper__content-list" v-if="activeTabs === 2">
+        <div class="rows">
+          <MatchCard
+            v-for="match in myMatches"
+            :key="match.id"
+            :matchId="match.id"
+            :date="match.date"
+            :price="match.price"
+            :time="match.time"
+            :placesLeft1="match.placesLeft1"
+            :placesLeft2="match.placesLeft2"
+            :location="match.location"
+            :organizer="match.organizer"
+            :placeIcon="placeIcon"
+            :addressIcon="addressIcon"
+            @match-card-click="openMatchView(match)"
+          />
+        </div>
+        <PaginationUI
+          v-if="totalPages(2) > 1"
+          :total-pages="totalPages(2)"
           :current-page="currentPage"
           @update:currentPage="changePage"
         />
@@ -146,7 +172,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getMatches']),
+    ...mapGetters(['getMatches', 'getJoinedMatches']),
     liveMatch () {
       // Поиск первого матча "сегодня"
       return this.getMatches.find(match => match.status === 'сегодня')
@@ -156,10 +182,15 @@ export default {
     },
     selectedMatch () {
       return this.$store.state.selectedMatch // Получаем выбранный матч из Vuex
+    },
+    myMatches () {
+      const joinedMatchIds = this.getJoinedMatches.map(m => m.matchId)
+      return this.getMatches.filter(match => joinedMatchIds.includes(match.id))
     }
   },
   data () {
     return {
+      joinedMatches: [], // Массив с ID матчей, в которых вы участвуете
       showMatchView: false,
       activeTabs: 0,
       currentPage: 1,
@@ -213,12 +244,18 @@ export default {
       })
       sessionStorage.setItem('showMatchView', 'true')
     },
+    joinMatch (matchId, team) {
+      this.$store.commit('updatePlacesLeft', { matchId, team })
+    },
     totalPages (tab) {
-      const totalMatches = this.matches.filter(match => {
-        if (tab === 0) return match.status === 'сегодня' && match.id !== this.liveMatch?.id
-        if (tab === 1) return match.status === 'предстоящие'
-        return false
-      }).length
+      let totalMatches = 0
+      if (tab === 0) {
+        totalMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id).length
+      } else if (tab === 1) {
+        totalMatches = this.matches.filter(match => match.status === 'предстоящие').length
+      } else if (tab === 2) {
+        totalMatches = this.myMatches.length
+      }
       return Math.ceil(totalMatches / this.matchesPerPage)
     },
     displayedMatches (tab) {
@@ -228,6 +265,8 @@ export default {
         filteredMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id)
       } else if (tab === 1) {
         filteredMatches = this.matches.filter(match => match.status === 'предстоящие')
+      } else if (tab === 2) {
+        filteredMatches = this.myMatches
       }
 
       const startIndex = (this.currentPage - 1) * this.matchesPerPage

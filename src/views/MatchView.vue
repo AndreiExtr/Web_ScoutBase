@@ -128,6 +128,7 @@ export default {
   },
   data () {
     return {
+      joinedMatches: JSON.parse(localStorage.getItem('joinedMatches')) || [],
       activeTab: 0,
       cells: [
         // Игроки 1
@@ -201,9 +202,12 @@ export default {
       const team2Cells = this.cells.filter(cell => cell.img.includes('shield2'))
       return team2Cells
     }
+    // joinedMatches () {
+    //   return this.$store.getters.getJoinedMatches
+    // }
   },
   methods: {
-    ...mapMutations(['updatePlacesLeft']),
+    ...mapMutations(['updatePlacesLeft', 'JOIN_MATCH']),
     setActiveTab (tab) {
       this.activeTab = tab
       if (tab === 0) { // когда активируется вкладка с индексом 0 (список матчей)
@@ -228,8 +232,11 @@ export default {
       this.showModal = false
       this.selectedCell = {}
     },
-    joinPlayer () {
+    joinPlayer (matchId) {
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
+
+      // Добавляем матч в список joinedMatches
+      this.JOIN_MATCH({ matchId: this.matchId, team })
 
       // Обновляем счетчики через мутацию
       this.updatePlacesLeft({ matchId: this.matchId, team })
@@ -250,6 +257,11 @@ export default {
       this.$router.push({ name: 'HomeView' })
     } else {
       this.$store.commit('setSelectedMatch', JSON.parse(savedMatch))
+    }
+
+    const savedMatches = JSON.parse(localStorage.getItem('joinedMatches'))
+    if (Array.isArray(savedMatches)) {
+      this.joinedMatches = savedMatches
     }
 
     const savedCells = localStorage.getItem(`cellsData_${this.matchId}`)
