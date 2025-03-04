@@ -232,14 +232,11 @@ export default {
       this.showModal = false
       this.selectedCell = {}
     },
-    joinPlayer (matchId) {
+    joinPlayer () {
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
 
       // Добавляем матч в список joinedMatches
       this.JOIN_MATCH({ matchId: this.matchId, team })
-
-      // Обновляем счетчики через мутацию
-      this.updatePlacesLeft({ matchId: this.matchId, team })
 
       this.selectedCell.player = true
       this.userHasJoined = true
@@ -253,23 +250,22 @@ export default {
   mounted () {
     const savedMatch = sessionStorage.getItem('selectedMatch')
     if (!savedMatch) {
-      // sessionStorage.clear() // Очистить все данные из sessionStorage
       this.$router.push({ name: 'HomeView' })
     } else {
       this.$store.commit('setSelectedMatch', JSON.parse(savedMatch))
     }
 
-    const savedMatches = JSON.parse(localStorage.getItem('joinedMatches'))
-    if (Array.isArray(savedMatches)) {
-      this.joinedMatches = savedMatches
-    }
+    // const savedMatches = JSON.parse(localStorage.getItem('joinedMatches'))
+    // if (Array.isArray(savedMatches)) {
+    //   this.joinedMatches = savedMatches
+    // }
 
     const savedCells = localStorage.getItem(`cellsData_${this.matchId}`)
     if (savedCells) {
       this.cells = JSON.parse(savedCells)
     }
 
-    const savedUserHasJoined = localStorage.getItem(`userHasJoined_${this.matchId}`) // Привязка к matchId
+    const savedUserHasJoined = localStorage.getItem(`userHasJoined_${this.matchId}`)
     if (savedUserHasJoined) {
       this.userHasJoined = JSON.parse(savedUserHasJoined)
     }

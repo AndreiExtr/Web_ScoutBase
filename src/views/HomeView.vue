@@ -190,7 +190,6 @@ export default {
   },
   data () {
     return {
-      joinedMatches: [], // Массив с ID матчей, в которых вы участвуете
       showMatchView: false,
       activeTabs: 0,
       currentPage: 1,
@@ -243,9 +242,6 @@ export default {
         params: { matchId: liveMatch.id }
       })
       sessionStorage.setItem('showMatchView', 'true')
-    },
-    joinMatch (matchId, team) {
-      this.$store.commit('updatePlacesLeft', { matchId, team })
     },
     totalPages (tab) {
       let totalMatches = 0
