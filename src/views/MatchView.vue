@@ -92,7 +92,7 @@
                 <img :src="require(`@/assets/img/${selectedCell.img}`)" alt="shield" class="modal-icon" />
                 <h2>{{ selectedCell.badge }}</h2>
 
-                <ButtonUI text="Присоединиться и оплатить" class="join-btn" @click="joinPlayer" />
+                <ButtonUI text="Присоединиться и оплатить" class="join-btn" @click="joinPlayer()" />
                 <ButtonUI text="Отмена" class="cancel-btn" @click="closeModal" />
               </div>
             </div>
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import ButtonUI from '@/components/ButtonUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 export default {
@@ -161,8 +162,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['selectedMatch']),
     organizer () {
-      return window.history.state?.organizer || { name: 'Неизвестный организатор', position: 'Должность не указана' }
+      return this.selectedMatch.organizer || { name: 'Неизвестный организатор', position: 'Должность не указана' }
     },
     organizerName () {
       return this.organizer.name
@@ -171,25 +173,25 @@ export default {
       return this.organizer.position
     },
     matchTime () {
-      return window.history.state?.time
+      return this.selectedMatch.time
     },
     matchDate () {
-      return window.history.state?.date
+      return this.selectedMatch.date
     },
     matchPlacesLeft1 () {
-      return window.history.state?.placesLeft1 || 0
+      return this.selectedMatch.placesLeft1 || 0
     },
     matchPlacesLeft2 () {
-      return window.history.state?.placesLeft2 || 0
+      return this.selectedMatch.placesLeft2 || 0
     },
     matchLocation () {
-      return window.history.state?.location
+      return this.selectedMatch.location
     },
     matchPrice () {
-      return window.history.state?.price
+      return this.selectedMatch.price
     },
     matchId () {
-      return window.history.state?.id
+      return this.selectedMatch.id
     },
     getTeam1Cells () {
       const team1Cells = this.cells.filter(cell => cell.img.includes('shield1'))
@@ -212,7 +214,10 @@ export default {
       this.activeTabs = tab
     },
     closeMatchView () {
+      // Удаляем данные о текущем матче из sessionStorage
+      sessionStorage.removeItem('selectedMatch')
       this.$router.push({ name: 'HomeView' })
+      // this.showMatchView = false
     },
     openModal (cell) {
       if (this.userHasJoined || cell.player) return // Если место уже занято или пользователь уже выбрал место — не открывается модалка
@@ -240,6 +245,14 @@ export default {
     }
   },
   mounted () {
+    const savedMatch = sessionStorage.getItem('selectedMatch')
+    if (!savedMatch) {
+      // sessionStorage.clear() // Очистить все данные из sessionStorage
+      this.$router.push({ name: 'HomeView' })
+    } else {
+      this.$store.commit('setSelectedMatch', JSON.parse(savedMatch))
+    }
+
     const savedCells = localStorage.getItem(`cellsData_${this.matchId}`)
     if (savedCells) {
       this.cells = JSON.parse(savedCells)
@@ -250,8 +263,8 @@ export default {
       this.userHasJoined = JSON.parse(savedUserHasJoined)
     }
 
-    this.matchPlacesLeft1 = window.history.state?.placesLeft1 || 0
-    this.matchPlacesLeft2 = window.history.state?.placesLeft2 || 0
+    this.matchPlacesLeft1 = this.selectedMatch.placesLeft1 || 0
+    this.matchPlacesLeft2 = this.selectedMatch.placesLeft2 || 0
   }
 }
 </script>

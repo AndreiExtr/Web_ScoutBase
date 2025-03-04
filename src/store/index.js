@@ -43,15 +43,30 @@ export default createStore({
       { id: 16, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 4, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 17, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 4, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 18, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 4, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } }
-    ]
+    ],
+    selectedMatch: null // Добавляем выбранный матч
   },
   getters: {
-    getMatches: (state) => state.matches
+    getMatches: (state) => state.matches,
+    selectedMatch: (state) => state.selectedMatch || {
+      id: null,
+      date: '',
+      time: '',
+      placesLeft1: 0,
+      placesLeft2: 0,
+      location: '',
+      price: 0,
+      organizer: { name: 'Неизвестный организатор', position: 'Должность не указана' }
+    }
   },
   mutations: {
     SET_MATCHES (state, matches) {
       state.matches = matches
       saveState(state) // Сохраняем обновленное состояние в localStorage
+    },
+    setSelectedMatch (state, match) {
+      state.selectedMatch = match // Сохраняем выбранный матч
+      saveState(state) // Сохраняем состояние в localStorage
     }
   },
   actions: {

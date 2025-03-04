@@ -24,7 +24,6 @@
 export default {
   name: 'MatchCard',
   props: {
-    id: Number,
     matchId: Number,
     location: String,
     date: String,

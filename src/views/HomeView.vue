@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import MatchView from '@/views/MatchView.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
@@ -137,6 +137,13 @@ export default {
     if (savedPage !== null) {
       this.currentPage = parseInt(savedPage)
     }
+
+    // Загружаем данные о ближайшем матче из sessionStorage
+    const savedLiveMatch = sessionStorage.getItem('liveMatch')
+    if (savedLiveMatch) {
+      const liveMatch = JSON.parse(savedLiveMatch)
+      this.setSelectedMatch(liveMatch) // Сохраняем данные в хранилище Vuex
+    }
   },
   computed: {
     ...mapGetters(['getMatches']),
@@ -146,6 +153,9 @@ export default {
     },
     matches () {
       return this.getMatches
+    },
+    selectedMatch () {
+      return this.$store.state.selectedMatch // Получаем выбранный матч из Vuex
     }
   },
   data () {
@@ -160,6 +170,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setSelectedMatch']), // Подключаем мутацию
+
+    selectMatch (match) {
+      this.setSelectedMatch(match)
+    },
     setActiveTab (tab) {
       this.activeTab = tab
     },
@@ -170,21 +185,15 @@ export default {
       sessionStorage.setItem('currentPage', 1)
     },
     openMatchView (match) {
-      this.showMatchView = true
+      // Сохраняем ID матча и дополнительные данные в sessionStorage
+      sessionStorage.setItem('selectedMatchId', match.id)
+      sessionStorage.setItem('selectedMatch', JSON.stringify(match))
+
+      this.setSelectedMatch(match) // Сохраняем выбранный матч в хранилище
       this.$router.push({
         name: 'MatchView',
-        state: {
-          date: match.date,
-          price: match.price,
-          organizer: { name: match.organizer.name, position: match.organizer.position },
-          time: match.time,
-          placesLeft1: match.placesLeft1,
-          placesLeft2: match.placesLeft2,
-          location: match.location
-        },
         params: { matchId: match.id }
       })
-      sessionStorage.setItem('showMatchView', 'true')
     },
     closeMatchView () {
       this.showMatchView = false
@@ -194,20 +203,15 @@ export default {
       sessionStorage.setItem('currentPage', page)
     },
     goToMatch (liveMatch) {
-      // Переход на страницу матча с передачей данных через query параметры
+      sessionStorage.setItem('selectedMatchId', liveMatch.id)
+      sessionStorage.setItem('selectedMatch', JSON.stringify(liveMatch))
+      // this.setSelectedMatch(liveMatch) // Сохраняем данные о матче в хранилище
+      this.showMatchView = true
       this.$router.push({
         name: 'MatchView',
-        state: {
-          date: liveMatch.date,
-          price: liveMatch.price,
-          organizer: { name: liveMatch.organizer.name, position: liveMatch.organizer.position },
-          time: liveMatch.time,
-          placesLeft1: liveMatch.placesLeft1,
-          placesLeft2: liveMatch.placesLeft2,
-          location: liveMatch.location
-        },
         params: { matchId: liveMatch.id }
       })
+      sessionStorage.setItem('showMatchView', 'true')
     },
     totalPages (tab) {
       const totalMatches = this.matches.filter(match => {
