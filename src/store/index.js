@@ -75,14 +75,10 @@ export default createStore({
       if (match) {
         if (team === 1 && match.placesLeft1 > 0) {
           match.placesLeft1--
-          // Добавляем команду в joinedMatches
-          state.joinedMatches.push({ matchId, team })
         } else if (team === 2 && match.placesLeft2 > 0) {
           match.placesLeft2--
-          // Добавляем команду в joinedMatches
-          state.joinedMatches.push({ matchId, team })
         }
-        saveState(state)
+        saveState(state) // Сохраняем обновленное состояние в localStorage
       }
     },
     JOIN_MATCH (state, { matchId, team }) {

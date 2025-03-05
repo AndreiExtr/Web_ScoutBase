@@ -235,6 +235,9 @@ export default {
     joinPlayer () {
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
 
+      // Обновляем счетчики через мутацию
+      this.updatePlacesLeft({ matchId: this.matchId, team })
+
       // Добавляем матч в список joinedMatches
       this.JOIN_MATCH({ matchId: this.matchId, team })
 
@@ -254,11 +257,6 @@ export default {
     } else {
       this.$store.commit('setSelectedMatch', JSON.parse(savedMatch))
     }
-
-    // const savedMatches = JSON.parse(localStorage.getItem('joinedMatches'))
-    // if (Array.isArray(savedMatches)) {
-    //   this.joinedMatches = savedMatches
-    // }
 
     const savedCells = localStorage.getItem(`cellsData_${this.matchId}`)
     if (savedCells) {
