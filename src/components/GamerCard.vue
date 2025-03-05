@@ -27,7 +27,12 @@ export default {
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
   gap: 16px;
+
+  &:hover{
+    box-shadow: 10px 10px 32px rgba(0, 255, 98, 0.089);
+  }
 
   &__item1{
     flex: 1;
