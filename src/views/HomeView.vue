@@ -50,7 +50,7 @@
       <div class="wrapper__content-tabs">
         <a href="#" :class="{ active: activeTabs === 0 }" @click.prevent="setActiveTabs(0)">сегодня<div class="vibrate"></div></a>
         <a href="#" :class="{ active: activeTabs === 1 }" @click.prevent="setActiveTabs(1)">предстоящие</a>
-        <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">мои матчи</a>
+        <a href="#" :class="{ active: activeTabs === 2 }" @click.prevent="setActiveTabs(2)">мои заявки</a>
       </div>
       <div class="wrapper__content-list" v-if="activeTabs === 0">
         <div class="rows">
@@ -131,6 +131,12 @@
     <div class="match-view-container" v-if="showMatchView">
       <MatchView @close="closeMatchView"/>
     </div>
+
+    <!-- ИГРОКИ -->
+    <div class="wrapper__content" v-if="activeTab === 1">
+      <GamerView />
+    </div>
+
   </div>
 </template>
 
@@ -141,6 +147,7 @@ import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
+import GamerView from '@/views/GamerView.vue'
 
 export default {
   name: 'HomeView',
@@ -149,7 +156,8 @@ export default {
     MatchCard,
     PaginationUI,
     ButtonUI,
-    MatchView
+    MatchView,
+    GamerView
   },
   mounted () {
     // Восстановление значения activeTabs из sessionStorage
