@@ -77,6 +77,7 @@ export default {
       text-align: left;
       font-size: 14px;
       color: white;
+      width: 100%;
 
       span{
         font-size: 16px;
