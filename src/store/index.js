@@ -23,7 +23,7 @@ const loadState = () => {
 }
 
 export default createStore({
-  state: loadState() && {
+  state: loadState() || {
     players: [
       { id: 1, lastName: 'Семенов', firstName: 'Алексей', middleName: 'Иванович', age: 26, position: 'ЦАП', goals: 3 },
       { id: 2, lastName: 'Иванов', firstName: 'Сергей', middleName: 'Петрович', age: 24, position: 'ЦНП', goals: 5 },
@@ -37,13 +37,13 @@ export default createStore({
       { id: 10, lastName: 'Егоров', firstName: 'Павел', middleName: 'Николаевич', age: 31, position: 'ЛП', goals: 3 },
       { id: 11, lastName: 'Захаров', firstName: 'Николай', middleName: 'Иванович', age: 24, position: 'ПП', goals: 2 },
       { id: 12, lastName: 'Романов', firstName: 'Сергей', middleName: 'Викторович', age: 22, position: 'ЦН', goals: 6 },
-      { id: 13, lastName: 'Лебедев', firstName: 'Алексей', middleName: 'Аркадьевич', age: 27, position: 'ЦППЗ', goals: 1 },
+      { id: 13, lastName: 'Лебедев', firstName: 'Алексей', middleName: 'Аркадьевич', age: 27, position: 'ГП', goals: 1 },
       { id: 14, lastName: 'Борисов', firstName: 'Михаил', middleName: 'Дмитриевич', age: 25, position: 'РВ', goals: 5 },
       { id: 15, lastName: 'Григорьев', firstName: 'Юрий', middleName: 'Павлович', age: 28, position: 'ЛВ', goals: 4 },
       { id: 16, lastName: 'Михайлов', firstName: 'Виктор', middleName: 'Степанович', age: 26, position: 'ПЗ', goals: 2 },
       { id: 17, lastName: 'Александров', firstName: 'Денис', middleName: 'Юрьевич', age: 23, position: 'ЦЗ', goals: 1 },
       { id: 18, lastName: 'Королев', firstName: 'Аркадий', middleName: 'Владимирович', age: 29, position: 'ЦП', goals: 3 },
-      { id: 19, lastName: 'Тимофеев', firstName: 'Олег', middleName: 'Геннадьевич', age: 31, position: 'ЦЛПЗ', goals: 6 },
+      { id: 19, lastName: 'Тимофеев', firstName: 'Олег', middleName: 'Геннадьевич', age: 31, position: 'ЦППЗ', goals: 6 },
       { id: 20, lastName: 'Смирнов', firstName: 'Василий', middleName: 'Викторович', age: 27, position: 'ГП', goals: 0 }
     ],
     matches: [
