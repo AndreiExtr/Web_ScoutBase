@@ -69,7 +69,7 @@ $primary-color: #13e66e;
 $text-color: #fff;
 $bg-sidebar-color: #141414;
 .sidebar{
-  width: 250px;
+  width: 200px;
   background-color: $bg-sidebar-color;
   padding: 24px 0;
   position: fixed;

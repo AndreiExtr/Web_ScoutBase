@@ -293,12 +293,12 @@ $text-color: #fff;
   height: 100%;
 
   &__content{
-    width: calc(100% - 250px);
+    width: calc(100% - 200px);
     padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-left: 250px;
+    margin-left: 200px;
 
     h1{
       text-align: left;
