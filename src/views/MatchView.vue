@@ -348,8 +348,8 @@ $text-label: #6d6f74;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  margin-left: 250px;
-  width: calc(100% - 250px);
+  margin-left: 200px;
+  width: calc(100% - 200px);
   gap: 16px;
 
   .title{

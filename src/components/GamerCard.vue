@@ -2,19 +2,29 @@
   <div class="gamer-card">
     <div class="gamer-card__item1">
       <img alt="" src="@/assets/img/avatar.png">
-      <p><span>Семенов</span> <br> Алексей Иванович</p>
+      <p><span>{{ lastName }}</span> <br>
+        {{ firstName }} {{ middleName }}</p>
     </div>
     <div class="gamer-card__item2">
-      <p>возраст <br> <span>26</span></p>
-      <p>позиция <br> <span>ЦАП</span></p>
-      <p>матчи <br> <span>3</span></p>
+      <p>возраст <br> <span>{{ age }}</span></p>
+      <p>позиция <br> <span>{{ position }}</span></p>
+      <p>голы <br> <span>{{ goals }}</span></p>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'GamerCard'
+  name: 'GamerCard',
+  props: {
+    player: Object,
+    lastName: String,
+    firstName: String,
+    middleName: String,
+    age: Number,
+    position: String,
+    goals: Number
+  }
 }
 </script>
 

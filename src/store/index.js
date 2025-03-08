@@ -23,7 +23,29 @@ const loadState = () => {
 }
 
 export default createStore({
-  state: loadState() || {
+  state: loadState() && {
+    players: [
+      { id: 1, lastName: 'Семенов', firstName: 'Алексей', middleName: 'Иванович', age: 26, position: 'ЦАП', goals: 3 },
+      { id: 2, lastName: 'Иванов', firstName: 'Сергей', middleName: 'Петрович', age: 24, position: 'ЦНП', goals: 5 },
+      { id: 3, lastName: 'Петров', firstName: 'Александр', middleName: 'Викторович', age: 28, position: 'ЛПЗ', goals: 2 },
+      { id: 4, lastName: 'Сидоров', firstName: 'Максим', middleName: 'Анатольевич', age: 27, position: 'ЛЗ', goals: 1 },
+      { id: 5, lastName: 'Козлов', firstName: 'Андрей', middleName: 'Владимирович', age: 30, position: 'ГП', goals: 0 },
+      { id: 6, lastName: 'Федоров', firstName: 'Дмитрий', middleName: 'Евгеньевич', age: 25, position: 'ЦЗ', goals: 2 },
+      { id: 7, lastName: 'Васильев', firstName: 'Олег', middleName: 'Сергеевич', age: 23, position: 'ЛФА', goals: 4 },
+      { id: 8, lastName: 'Новиков', firstName: 'Артем', middleName: 'Валерьевич', age: 26, position: 'ПФА', goals: 3 },
+      { id: 9, lastName: 'Денисов', firstName: 'Виктор', middleName: 'Олегович', age: 29, position: 'ЦОП', goals: 1 },
+      { id: 10, lastName: 'Егоров', firstName: 'Павел', middleName: 'Николаевич', age: 31, position: 'ЛП', goals: 3 },
+      { id: 11, lastName: 'Захаров', firstName: 'Николай', middleName: 'Иванович', age: 24, position: 'ПП', goals: 2 },
+      { id: 12, lastName: 'Романов', firstName: 'Сергей', middleName: 'Викторович', age: 22, position: 'ЦН', goals: 6 },
+      { id: 13, lastName: 'Лебедев', firstName: 'Алексей', middleName: 'Аркадьевич', age: 27, position: 'ЦППЗ', goals: 1 },
+      { id: 14, lastName: 'Борисов', firstName: 'Михаил', middleName: 'Дмитриевич', age: 25, position: 'РВ', goals: 5 },
+      { id: 15, lastName: 'Григорьев', firstName: 'Юрий', middleName: 'Павлович', age: 28, position: 'ЛВ', goals: 4 },
+      { id: 16, lastName: 'Михайлов', firstName: 'Виктор', middleName: 'Степанович', age: 26, position: 'ПЗ', goals: 2 },
+      { id: 17, lastName: 'Александров', firstName: 'Денис', middleName: 'Юрьевич', age: 23, position: 'ЦЗ', goals: 1 },
+      { id: 18, lastName: 'Королев', firstName: 'Аркадий', middleName: 'Владимирович', age: 29, position: 'ЦП', goals: 3 },
+      { id: 19, lastName: 'Тимофеев', firstName: 'Олег', middleName: 'Геннадьевич', age: 31, position: 'ЦЛПЗ', goals: 6 },
+      { id: 20, lastName: 'Смирнов', firstName: 'Василий', middleName: 'Викторович', age: 27, position: 'ГП', goals: 0 }
+    ],
     matches: [
       { id: 1, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 2, date: 'Пт, 05 июля', time: '14:00 - 15:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Спартак", ул. Волоколамское шоссе, 69, Москва', price: 1500, status: 'предстоящие', organizer: { name: 'Петров Александр Викторович', position: 'Директор турнира' } },
@@ -48,6 +70,7 @@ export default createStore({
     joinedMatches: []
   },
   getters: {
+    getPlayers: (state) => state.players,
     getMatches: (state) => state.matches,
     selectedMatch: (state) => state.selectedMatch || {
       id: null,
@@ -62,6 +85,10 @@ export default createStore({
     getJoinedMatches: (state) => state.joinedMatches
   },
   mutations: {
+    SET_PLAYERS (state, players) {
+      state.players = players
+      saveState(state)
+    },
     SET_MATCHES (state, matches) {
       state.matches = matches
       saveState(state) // Сохраняем обновленное состояние в localStorage
@@ -92,9 +119,12 @@ export default createStore({
     loadMatches ({ commit }, matches) {
       commit('SET_MATCHES', matches)
     },
+    loadPlayers ({ commit }, players) {
+      commit('SET_PLAYERS', players)
+    },
     joinMatch ({ commit }, { matchId, team }) {
       commit('updatePlacesLeft', { matchId, team })
-      commit('JOIN_MATCH', { matchId, team }) // Можно использовать для обновления joinedMatches
+      commit('JOIN_MATCH', { matchId, team })
     }
   }
 })
