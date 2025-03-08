@@ -78,7 +78,7 @@ $bg-sidebar-color: #141414;
   h1{
     font-weight: 700;
     letter-spacing: .24em;
-    font-size:24px;
+    font-size:20px;
     text-transform: uppercase;
     color: $text-color;
     margin-bottom: 24px;

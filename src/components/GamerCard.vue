@@ -69,8 +69,9 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     padding: 12px;
+    gap: 32px;
 
     p{
       text-align: left;
