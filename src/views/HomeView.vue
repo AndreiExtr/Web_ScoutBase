@@ -164,6 +164,8 @@ export default {
     const savedTab = sessionStorage.getItem('activeTabs')
     if (savedTab !== null) {
       this.activeTabs = parseInt(savedTab)
+    } else {
+      this.activeTabs = 0 // По умолчанию можно установить на вкладку Матчи
     }
 
     // Восстановление текущей страницы из sessionStorage
@@ -299,6 +301,7 @@ $text-color: #fff;
     flex-direction: column;
     gap: 16px;
     margin-left: 200px;
+    height: 100%;
 
     h1{
       text-align: left;
