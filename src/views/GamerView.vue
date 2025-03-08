@@ -81,27 +81,27 @@ export default {
     height: 100%;
 
     & > * {
-      flex: 1 1 calc(25% - 12px); /* 4 плитки в ряд с учетом отступов */
+      flex: 1 1 calc(25% - 12px); /* 4 плитки в ряд*/
       max-width: calc(25% - 12px);
     }
 
     @media (max-width: 1400px) {
       & > * {
-        flex: 1 1 calc(33% - 8px); /* 3 плитки в ряд на средних экранах */
+        flex: 1 1 calc(33% - 8px); /* 3 плитки в ряд */
         max-width: calc(33% - 8px);
       }
     }
 
     @media (max-width: 1024px) {
       & > * {
-        flex: 1 1 calc(50% - 8px); /* 2 плитки в ряд на средних экранах */
+        flex: 1 1 calc(50% - 8px); /* 2 плитки в ряд*/
         max-width: calc(50% - 8px);
       }
     }
 
     @media (max-width: 768px) {
       & > * {
-        flex: 1 1 100%; /* 1 плитка в ряд на маленьких экранах */
+        flex: 1 1 100%; /* 1 плитка в ряд*/
         max-width: 100%;
       }
     }

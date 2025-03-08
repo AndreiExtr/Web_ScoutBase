@@ -160,12 +160,20 @@ export default {
     GamerView
   },
   mounted () {
-    // Восстановление значения activeTabs из sessionStorage
-    const savedTab = sessionStorage.getItem('activeTabs')
-    if (savedTab !== null) {
-      this.activeTabs = parseInt(savedTab)
+    // Восстановление значения activeTab из sessionStorage
+    const savedActiveTab = sessionStorage.getItem('activeTab')
+    if (savedActiveTab !== null) {
+      this.activeTab = parseInt(savedActiveTab)
     } else {
-      this.activeTabs = 0 // По умолчанию можно установить на вкладку Матчи
+      this.activeTab = 0 // По умолчанию вкладка "Матчи"
+    }
+
+    // Восстановление значения activeTabs из sessionStorage
+    const savedActiveTabs = sessionStorage.getItem('activeTabs')
+    if (savedActiveTabs !== null) {
+      this.activeTabs = parseInt(savedActiveTabs)
+    } else {
+      this.activeTabs = 0 // По умолчанию вкладка "сегодня"
     }
 
     // Восстановление текущей страницы из sessionStorage
@@ -217,6 +225,7 @@ export default {
     },
     setActiveTab (tab) {
       this.activeTab = tab
+      sessionStorage.setItem('activeTab', tab)
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
