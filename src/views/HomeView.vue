@@ -182,7 +182,7 @@ export default {
       this.currentPage = parseInt(savedPage)
     }
 
-    // Загружаем данные о ближайшем матче из sessionStorage
+    // Загружка данные о ближайшем матче из sessionStorage
     const savedLiveMatch = sessionStorage.getItem('liveMatch')
     if (savedLiveMatch) {
       const liveMatch = JSON.parse(savedLiveMatch)
@@ -199,7 +199,7 @@ export default {
       return this.getMatches
     },
     selectedMatch () {
-      return this.$store.state.selectedMatch // Получаем выбранный матч из Vuex
+      return this.$store.state.selectedMatch // Выбранный матч из Vuex
     },
     myMatches () {
       const joinedMatchIds = this.getJoinedMatches.map(m => m.matchId)
@@ -218,7 +218,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setSelectedMatch']), // Подключаем мутацию
+    ...mapMutations(['setSelectedMatch']),
 
     selectMatch (match) {
       this.setSelectedMatch(match)
@@ -234,11 +234,11 @@ export default {
       sessionStorage.setItem('currentPage', 1)
     },
     openMatchView (match) {
-      // Сохраняем ID матча и дополнительные данные в sessionStorage
+      // Сохранение ID матча и дополнительные данные в sessionStorage
       sessionStorage.setItem('selectedMatchId', match.id)
       sessionStorage.setItem('selectedMatch', JSON.stringify(match))
 
-      this.setSelectedMatch(match) // Сохраняем выбранный матч в хранилище
+      this.setSelectedMatch(match) // Сохранение выбранный матч в хранилище
       this.$router.push({
         name: 'MatchView',
         params: { matchId: match.id }
@@ -265,7 +265,7 @@ export default {
     totalPages (tab) {
       let totalMatches = 0
       if (tab === 0) {
-        totalMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id).length
+        totalMatches = this.matches.filter(match => match.status === 'сегодня' && match.id !== this.liveMatch?.id).length // фильтрация всех матчей во вкладке "Сегодня" кроме "Ближайший матч" (liveMatch)
       } else if (tab === 1) {
         totalMatches = this.matches.filter(match => match.status === 'предстоящие').length
       } else if (tab === 2) {

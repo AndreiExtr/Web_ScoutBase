@@ -202,9 +202,6 @@ export default {
       const team2Cells = this.cells.filter(cell => cell.img.includes('shield2'))
       return team2Cells
     }
-    // joinedMatches () {
-    //   return this.$store.getters.getJoinedMatches
-    // }
   },
   methods: {
     ...mapMutations(['updatePlacesLeft', 'JOIN_MATCH']),
@@ -212,14 +209,14 @@ export default {
       this.activeTab = tab
       if (tab === 0) { // когда активируется вкладка с индексом 0 (список матчей)
         this.$router.push({ name: 'HomeView' })
-        this.showMatchView = false // скрыть страницу матча
+        this.showMatchView = false // скрывает страницу матча
       }
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
     },
     closeMatchView () {
-      // Удаляем данные о текущем матче из sessionStorage
+      // Удаление данных о текущем матче из sessionStorage
       sessionStorage.removeItem('selectedMatch')
       this.$router.push({ name: 'HomeView' })
     },
@@ -235,10 +232,10 @@ export default {
     joinPlayer () {
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
 
-      // Обновляем счетчики через мутацию
+      // Обновление счетчика через мутацию
       this.updatePlacesLeft({ matchId: this.matchId, team })
 
-      // Добавляем матч в список joinedMatches
+      // Добавление матчи в список joinedMatches
       this.JOIN_MATCH({ matchId: this.matchId, team })
 
       this.selectedCell.player = true
