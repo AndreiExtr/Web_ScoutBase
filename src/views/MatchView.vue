@@ -1,8 +1,4 @@
 <template>
-  <SidebarMenu
-      :key="activeTab"
-      :activeTab="activeTab"
-      @update:activeTab="setActiveTab"/>
   <div class="main" v-if="activeTab === 0 && showMatchView">
     <div class="title">
       <ButtonUI
@@ -119,12 +115,10 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import ButtonUI from '@/components/ButtonUI.vue'
-import SidebarMenu from '@/components/SidebarMenu.vue'
 export default {
   name: 'MatchView',
   components: {
-    ButtonUI,
-    SidebarMenu
+    ButtonUI
   },
   data () {
     return {
@@ -206,11 +200,7 @@ export default {
   methods: {
     ...mapMutations(['updatePlacesLeft', 'JOIN_MATCH']),
     setActiveTab (tab) {
-      this.activeTab = tab
-      if (tab === 0) { // когда активируется вкладка с индексом 0 (список матчей)
-        this.$router.push({ name: 'HomeView' })
-        this.showMatchView = false // скрывает страницу матча
-      }
+      this.$emit('update:activeTab', tab) // Передача события в App.vue
     },
     setActiveTabs (tab) {
       this.activeTabs = tab

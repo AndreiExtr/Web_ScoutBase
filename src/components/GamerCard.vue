@@ -1,5 +1,5 @@
 <template>
-  <div class="gamer-card">
+  <div class="gamer-card" @click="goToPlayerPage">
     <div class="gamer-card__item1">
       <img alt="" src="@/assets/img/avatar.png">
       <p><span>{{ lastName }}</span> <br>
@@ -24,6 +24,11 @@ export default {
     age: Number,
     position: String,
     goals: Number
+  },
+  methods: {
+    goToPlayerPage () {
+      this.$emit('player-card-click', this.playerId)
+    }
   }
 }
 </script>

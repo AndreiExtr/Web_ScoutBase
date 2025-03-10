@@ -3,13 +3,14 @@
     <div class="rows">
       <GamerCard v-for="player in paginatedPlayers"
         :key="player.id"
-        :player="player"
+        :playerId="player.id"
         :lastName="player.lastName"
         :firstName="player.firstName"
         :middleName="player.middleName"
         :age="player.age"
         :position="player.position"
-        :goals="player.goals" />
+        :goals="player.goals"
+        @player-card-click="openPlayerView(player)"/>
     </div>
     <PaginationUI
       v-if="totalPages > 1"
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import GamerCard from '@/components/GamerCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 
@@ -33,6 +34,7 @@ export default {
   },
   data () {
     return {
+      showGamerView: false,
       currentPage: 1,
       perPage: 16 // Количество карточек на странице
     }
@@ -44,9 +46,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getPlayers']), // Список игроков из Vuex
+    ...mapGetters(['getPlayers']),
     players () {
       return this.getPlayers
+    },
+    selectedPlayer () {
+      return this.$store.state.selectedPlayer // Выбранный игрок из Vuex
     },
     totalPages () {
       return Math.ceil(this.players.length / this.perPage)
@@ -57,9 +62,27 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setSelectedPlayer']), // Список игроков из Vuex
+    selectPlayer (player) {
+      this.setSelectedPlayer(player)
+    },
     changePage (page) {
       this.currentPage = page
       sessionStorage.setItem('currentPage', page)
+    },
+    setActiveTab (tab) {
+      this.$emit('update:activeTab', tab) // Передача события в App.vue
+    },
+    openPlayerView (player) {
+      // Сохранение ID матча и дополнительные данные в sessionStorage
+      sessionStorage.setItem('selectedPlayerId', player.id)
+      sessionStorage.setItem('selectedPlayer', JSON.stringify(player))
+
+      this.setSelectedPlayer(player) // Сохранение выбранного игрока в хранилище
+      this.$router.push({
+        name: 'PlayerView',
+        params: { playerId: player.id }
+      })
     }
   }
 }
@@ -69,8 +92,13 @@ export default {
 .content-list{
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 16px;
   gap: 16px;
   flex-grow: 1;
+  margin-left: 200px;
+  width: calc(100% - 200px);
 
   .rows {
     display: flex;
@@ -78,7 +106,6 @@ export default {
     gap: 16px;
     justify-content: space-between;
     align-content: flex-start;
-    height: 100%;
 
     & > * {
       flex: 1 1 calc(25% - 12px); /* 4 плитки в ряд*/

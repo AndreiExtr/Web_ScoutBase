@@ -4,7 +4,7 @@
       <img src="@/assets/img/auth-bg.png">
       <div class="home__bg-description">
         <h1>SCOUT<span>BASE</span></h1>
-        <p>ScoutBase – это современная платформа для взаимодействия футбольных скаутов, игроков и команд.</p>
+        <p>ScoutBase – это современная платформа для взаимодействия футбольных организаторов, игроков и команд.</p>
       </div>
     </div>
     <div class="home__login">

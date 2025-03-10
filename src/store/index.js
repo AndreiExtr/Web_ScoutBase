@@ -51,7 +51,7 @@ export default createStore({
       { id: 2, date: 'Пт, 05 июля', time: '14:00 - 15:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Спартак", ул. Волоколамское шоссе, 69, Москва', price: 1500, status: 'предстоящие', organizer: { name: 'Петров Александр Викторович', position: 'Директор турнира' } },
       { id: 3, date: 'Сб, 21 июня', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Динамо", Ленинградский проспект, 36, Москва', price: 1200, status: 'предстоящие', organizer: { name: 'Сидоров Максим Анатольевич', position: 'Координатор' } },
       { id: 4, date: 'Вт, 03 июля', time: '16:00 - 17:30', placesLeft1: 0, placesLeft2: 0, location: 'Стадион "Зенит", Футбольная аллея, 1, Санкт-Петербург', price: 1400, status: 'сегодня', organizer: { name: 'Козлов Андрей Владимирович', position: 'Спортивный менеджер' } },
-      { id: 5, date: 'Вт, 09 июля', time: '18:00 - 19:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', price: 1100, status: 'предстоящие', organizer: { name: 'Федоров Дмитрий Евгеньевич', position: 'Ответственный за матч' } },
+      { id: 5, date: 'Вт, 09 июля', time: '18:00 - 19:30', placesLeft1: 8, placesLeft2: 8, location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', price: 1100, status: 'предстоящие', organizer: { name: 'Федоров Дмитрий Евгеньевич', position: 'Ответственный за матч' } },
       { id: 6, date: 'Ср, 27 июня', time: '13:00 - 14:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "ЦСКА", 3-я Песчаная ул., 2А, Москва', price: 1350, status: 'предстоящие', organizer: { name: 'Васильев Олег Сергеевич', position: 'Рефери' } },
       { id: 7, date: 'Вт, 03 июля', time: '12:00 - 13:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Торпедо", Восточная ул., 4, Москва', price: 1250, status: 'сегодня', organizer: { name: 'Новиков Артем Валерьевич', position: 'Спортивный координатор' } },
       { id: 8, date: 'Пт, 12 июля', time: '15:00 - 16:30', placesLeft1: 12, placesLeft2: 12, location: 'Стадион "Рубин", пр. Ямашева, 3, Казань', price: 1600, status: 'предстоящие', organizer: { name: 'Денисов Виктор Олегович', position: 'Главный организатор' } },
@@ -66,7 +66,8 @@ export default createStore({
       { id: 17, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 18, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } }
     ],
-    selectedMatch: null, // Добавляем выбранный матч
+    selectedMatch: null, // Выбранный матч
+    selectedPlayer: null, // Выбранный игрок
     joinedMatches: []
   },
   getters: {
@@ -82,6 +83,9 @@ export default createStore({
       price: 0,
       organizer: { name: 'Неизвестный организатор', position: 'Должность не указана' }
     },
+    selectedPlayer: (state) => state.selectedPlayer || {
+      id: null
+    },
     getJoinedMatches: (state) => state.joinedMatches
   },
   mutations: {
@@ -91,11 +95,15 @@ export default createStore({
     },
     SET_MATCHES (state, matches) {
       state.matches = matches
-      saveState(state) // Сохраняем обновленное состояние в localStorage
+      saveState(state) // Сохранение обновленного состояния в localStorage
     },
     setSelectedMatch (state, match) {
-      state.selectedMatch = match // Сохраняем выбранный матч
-      saveState(state) // Сохраняем состояние в localStorage
+      state.selectedMatch = match // Сохранение выбранного матча
+      saveState(state)
+    },
+    setSelectedPlayer (state, player) {
+      state.selectedPlayer = player // Сохранение выбранного игрока
+      saveState(state)
     },
     updatePlacesLeft (state, { matchId, team }) {
       const match = state.matches.find(m => m.id === matchId)
@@ -105,7 +113,7 @@ export default createStore({
         } else if (team === 2 && match.placesLeft2 > 0) {
           match.placesLeft2--
         }
-        saveState(state) // Сохраняем обновленное состояние в localStorage
+        saveState(state)
       }
     },
     JOIN_MATCH (state, { matchId, team }) {

@@ -48,17 +48,27 @@ export default {
       ]
     }
   },
-  created () {
-    const savedIndex = sessionStorage.getItem('activeIndex')
-    if (savedIndex !== null) {
-      this.activeIndex = parseInt(savedIndex, 10)
+  watch: {
+    // Отслеживание изменений activeTab
+    activeTab: {
+      handler (newTab) {
+        this.activeIndex = newTab // Обновление activeIndex при изменении activeTab
+      },
+      immediate: true // Выполнение сразу при создании компонента
     }
   },
+  // created () {
+  //   const savedIndex = sessionStorage.getItem('activeIndex')
+  //   if (savedIndex !== null) {
+  //     this.activeIndex = parseInt(savedIndex, 10)
+  //   }
+  // },
   // methods выполняются при вызове, например, при клике на элемент или событии
   methods: {
     setActive (index) {
       this.activeIndex = index
       this.$emit('update:activeTab', index)
+      localStorage.setItem('activeTab', index)
     }
   }
 }

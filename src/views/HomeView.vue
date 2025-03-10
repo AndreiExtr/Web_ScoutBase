@@ -1,9 +1,5 @@
 <template>
   <div class="wrapper">
-    <SidebarMenu
-      :key="activeTab"
-      :activeTab="activeTab"
-      @update:activeTab="setActiveTab"/>
 
     <!-- МАТЧИ -->
     <div class="wrapper__content" v-if="activeTab === 0 && !showMatchView">
@@ -127,14 +123,14 @@
       </div>
     </div>
 
-    <!-- MatchView (появляется после клика) -->
-    <div class="match-view-container" v-if="showMatchView">
+    <!-- СТРАНИЦА ПРОСМОТРА МАТЧА -->
+    <div v-if="activeTab === 0 && showMatchView">
       <MatchView @close="closeMatchView"/>
     </div>
 
     <!-- ИГРОКИ -->
-    <div class="wrapper__content" v-if="activeTab === 1">
-      <GamerView />
+    <div  v-if="activeTab === 1 && showPlayerView">
+      <GamerView @close="closeGamerView"/>
     </div>
 
   </div>
@@ -145,14 +141,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import MatchView from '@/views/MatchView.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
-import SidebarMenu from '@/components/SidebarMenu.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
 import GamerView from '@/views/GamerView.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    SidebarMenu,
     MatchCard,
     PaginationUI,
     ButtonUI,
@@ -160,14 +154,6 @@ export default {
     GamerView
   },
   mounted () {
-    // Восстановление значения activeTab из sessionStorage
-    const savedActiveTab = sessionStorage.getItem('activeTab')
-    if (savedActiveTab !== null) {
-      this.activeTab = parseInt(savedActiveTab)
-    } else {
-      this.activeTab = 0 // По умолчанию вкладка "Матчи"
-    }
-
     // Восстановление значения activeTabs из sessionStorage
     const savedActiveTabs = sessionStorage.getItem('activeTabs')
     if (savedActiveTabs !== null) {
@@ -208,7 +194,7 @@ export default {
   },
   data () {
     return {
-      showMatchView: false,
+      showPlayerView: false,
       activeTabs: 0,
       currentPage: 1,
       activeTab: 0,
@@ -219,13 +205,11 @@ export default {
   },
   methods: {
     ...mapMutations(['setSelectedMatch']),
-
     selectMatch (match) {
       this.setSelectedMatch(match)
     },
     setActiveTab (tab) {
-      this.activeTab = tab
-      sessionStorage.setItem('activeTab', tab)
+      this.$emit('update:activeTab', tab) // Передача событие в App.vue
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
