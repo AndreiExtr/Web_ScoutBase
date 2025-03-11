@@ -10,6 +10,7 @@
     <div class="main__match">
       <div class="main__match-content">
         <div class="info">
+          <img :src="matchField" alt="Поле" class="info__field">
           <div class="title-top">
             <p> <span style="font-size: 20px;font-weight: 700;">{{ matchDate }}</span><br> {{ matchTime }}</p>
           </div>
@@ -175,6 +176,9 @@ export default {
     },
     matchPlacesLeft1 () {
       return this.selectedMatch.placesLeft1 || 0
+    },
+    matchField () {
+      return this.selectedMatch.field
     },
     matchPlacesLeft2 () {
       return this.selectedMatch.placesLeft2 || 0
@@ -378,18 +382,29 @@ $text-label: #6d6f74;
       gap: 16px;
 
       .info{
+        position: relative;
         width: 100%;
         min-height: 350px;
         padding: 16px;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
-        background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("@/assets/img/поле2.png");
-        background-repeat:no-repeat;
-        background-size: cover ;
-        background-position: center;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        overflow: hidden;
+
+        &__field {
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          min-height: 350px;
+          background-repeat: no-repeat;
+          background-size: cover;
+          background-position: center;
+          filter: brightness(40%);
+          transform: translateY(-50%);
+        }
 
         .title-top{
           display: flex;
@@ -398,6 +413,7 @@ $text-label: #6d6f74;
           align-items: center;
           color: $text-color;
           text-align: left;
+          z-index: 2;
 
           .user{
             display: flex;
@@ -423,6 +439,7 @@ $text-label: #6d6f74;
           align-items: baseline;
           color: $text-color;
           gap: 32px;
+          z-index: 2;
 
           .shield-1-group,
           .shield-2-group{
@@ -451,6 +468,7 @@ $text-label: #6d6f74;
           align-items: center;
           color: $text-color;
           text-align: left;
+          z-index: 2;
 
           .price{
             display: flex;

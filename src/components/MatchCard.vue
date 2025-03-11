@@ -1,5 +1,9 @@
 <template>
-  <div class="match-card" @click="goToMatchPage">
+  <div class="match-card"
+    @click="goToMatchPage">
+
+    <!-- Изображение поля -->
+    <img :src="field" alt="Field Image" class="field-image" />
     <div class="match-card__title">
       <p>{{ date }} <br> {{ time }}</p>
       <h3>{{ price }} ₽</h3>
@@ -32,6 +36,10 @@ export default {
     placesLeft2: Number,
     price: Number,
     organizer: Object,
+    field: {
+      type: String,
+      required: true
+    },
     placeIcon: {
       type: String,
       required: true
@@ -54,12 +62,10 @@ $primary-color: #13e66e;
 $text-color: #fff;
 .match-card {
   flex: 0 0 calc(25% - 12px);
+  position: relative;
   padding: 16px;
   font-size: 16px;
   object-fit: cover;
-  background-image: url(@/assets/icons/rectangle.svg);
-  background-repeat: no-repeat;
-  background-position: right;
   border-radius: 8px;
   background-color: #2b2b2b;
   box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
@@ -68,6 +74,22 @@ $text-color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
+
+  .field-image {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0%, -50%);
+    width: 350px;
+    height: auto;
+
+    mask-image: url('@/assets/icons/rectangle.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 350px auto;
+    filter: brightness(40%); /* Затемнение изображения на 20% */
+  }
 
   &:hover{
     box-shadow: 10px 10px 32px rgba(0, 255, 98, 0.089);
@@ -85,6 +107,7 @@ $text-color: #fff;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 1;
 
     p{
       text-align: left;
@@ -105,6 +128,7 @@ $text-color: #fff;
     align-items: flex-start;
     color: $text-color;
     gap: 12px;
+    z-index: 1;
 
     .place{
       display: flex;

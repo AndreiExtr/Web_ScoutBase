@@ -5,6 +5,7 @@
     <div class="wrapper__content" v-if="activeTab === 0 && !showMatchView">
       <h1>Ближайший матч</h1>
       <div class="wrapper__content-match" v-if="liveMatch">
+        <img :src="matchField" alt="Поле" class="field">
         <div class="title-top">
           <p> <span style="font-size: 20px;font-weight: 700;">{{ liveMatch.date }}</span><br> {{ liveMatch.time }}</p>
 
@@ -55,6 +56,7 @@
             :key="match.id"
             :matchId="match.id"
             :date="match.date"
+            :field="match.field"
             :price="match.price"
             :time="match.time"
             :placesLeft1="match.placesLeft1"
@@ -79,6 +81,7 @@
             :key="match.id"
             :matchId="match.id"
             :date="match.date"
+            :field="match.field"
             :price="match.price"
             :time="match.time"
             :placesLeft1="match.placesLeft1"
@@ -103,6 +106,7 @@
             :key="match.id"
             :matchId="match.id"
             :date="match.date"
+            :field="match.field"
             :price="match.price"
             :time="match.time"
             :placesLeft1="match.placesLeft1"
@@ -183,6 +187,9 @@ export default {
     },
     matches () {
       return this.getMatches
+    },
+    matchField () {
+      return this.selectedMatch.field
     },
     selectedMatch () {
       return this.$store.state.selectedMatch // Выбранный матч из Vuex
@@ -304,6 +311,7 @@ $text-color: #fff;
     }
 
     &-match{
+      position: relative;
       width: 100%;
       min-height: 350px;
       padding: 16px;
@@ -316,6 +324,20 @@ $text-color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: hidden;
+
+      .field {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        min-height: 350px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        filter: brightness(40%);
+        transform: translateY(-50%);
+      }
 
       .title-top{
         display: flex;
@@ -324,6 +346,7 @@ $text-color: #fff;
         align-items: center;
         color: $text-color;
         text-align: left;
+        z-index: 1;
 
         .user{
           display: flex;
@@ -349,6 +372,7 @@ $text-color: #fff;
         align-items: baseline;
         color: $text-color;
         gap: 32px;
+        z-index: 1;
 
         .shield-1-group,
         .shield-2-group{
@@ -373,6 +397,7 @@ $text-color: #fff;
         align-items: center;
         color: $text-color;
         text-align: left;
+        z-index: 1;
 
         .price{
           display: flex;
