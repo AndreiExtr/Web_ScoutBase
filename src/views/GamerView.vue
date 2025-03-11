@@ -4,6 +4,7 @@
       <GamerCard v-for="player in paginatedPlayers"
         :key="player.id"
         :playerId="player.id"
+        :avatar="player.avatar"
         :lastName="player.lastName"
         :firstName="player.firstName"
         :middleName="player.middleName"

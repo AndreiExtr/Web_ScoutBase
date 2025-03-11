@@ -25,26 +25,26 @@ const loadState = () => {
 export default createStore({
   state: loadState() || {
     players: [
-      { id: 1, lastName: 'Семенов', firstName: 'Алексей', middleName: 'Иванович', age: 26, position: 'ЦАП', goals: 3 },
-      { id: 2, lastName: 'Иванов', firstName: 'Сергей', middleName: 'Петрович', age: 24, position: 'ЦНП', goals: 5 },
-      { id: 3, lastName: 'Петров', firstName: 'Александр', middleName: 'Викторович', age: 28, position: 'ЛПЗ', goals: 2 },
-      { id: 4, lastName: 'Сидоров', firstName: 'Максим', middleName: 'Анатольевич', age: 27, position: 'ЛЗ', goals: 1 },
-      { id: 5, lastName: 'Козлов', firstName: 'Андрей', middleName: 'Владимирович', age: 30, position: 'ГП', goals: 0 },
-      { id: 6, lastName: 'Федоров', firstName: 'Дмитрий', middleName: 'Евгеньевич', age: 25, position: 'ЦЗ', goals: 2 },
-      { id: 7, lastName: 'Васильев', firstName: 'Олег', middleName: 'Сергеевич', age: 23, position: 'ЛФА', goals: 4 },
-      { id: 8, lastName: 'Новиков', firstName: 'Артем', middleName: 'Валерьевич', age: 26, position: 'ПФА', goals: 3 },
-      { id: 9, lastName: 'Денисов', firstName: 'Виктор', middleName: 'Олегович', age: 29, position: 'ЦОП', goals: 1 },
-      { id: 10, lastName: 'Егоров', firstName: 'Павел', middleName: 'Николаевич', age: 31, position: 'ЛП', goals: 3 },
-      { id: 11, lastName: 'Захаров', firstName: 'Николай', middleName: 'Иванович', age: 24, position: 'ПП', goals: 2 },
-      { id: 12, lastName: 'Романов', firstName: 'Сергей', middleName: 'Викторович', age: 22, position: 'ЦН', goals: 6 },
-      { id: 13, lastName: 'Лебедев', firstName: 'Алексей', middleName: 'Аркадьевич', age: 27, position: 'ГП', goals: 1 },
-      { id: 14, lastName: 'Борисов', firstName: 'Михаил', middleName: 'Дмитриевич', age: 25, position: 'РВ', goals: 5 },
-      { id: 15, lastName: 'Григорьев', firstName: 'Юрий', middleName: 'Павлович', age: 28, position: 'ЛВ', goals: 4 },
-      { id: 16, lastName: 'Михайлов', firstName: 'Виктор', middleName: 'Степанович', age: 26, position: 'ПЗ', goals: 2 },
-      { id: 17, lastName: 'Александров', firstName: 'Денис', middleName: 'Юрьевич', age: 23, position: 'ЦЗ', goals: 1 },
-      { id: 18, lastName: 'Королев', firstName: 'Аркадий', middleName: 'Владимирович', age: 29, position: 'ЦП', goals: 3 },
-      { id: 19, lastName: 'Тимофеев', firstName: 'Олег', middleName: 'Геннадьевич', age: 31, position: 'ЦППЗ', goals: 6 },
-      { id: 20, lastName: 'Смирнов', firstName: 'Василий', middleName: 'Викторович', age: 27, position: 'ГП', goals: 0 }
+      { id: 1, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Семенов', firstName: 'Алексей', middleName: 'Иванович', age: 26, position: 'ЦАП', goals: 3 },
+      { id: 2, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Иванов', firstName: 'Сергей', middleName: 'Петрович', age: 24, position: 'ЦНП', goals: 5 },
+      { id: 3, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Петров', firstName: 'Александр', middleName: 'Викторович', age: 28, position: 'ЛПЗ', goals: 2 },
+      { id: 4, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Сидоров', firstName: 'Максим', middleName: 'Анатольевич', age: 27, position: 'ЛЗ', goals: 1 },
+      { id: 5, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Козлов', firstName: 'Андрей', middleName: 'Владимирович', age: 30, position: 'ГП', goals: 0 },
+      { id: 6, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Федоров', firstName: 'Дмитрий', middleName: 'Евгеньевич', age: 25, position: 'ЦЗ', goals: 2 },
+      { id: 7, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Васильев', firstName: 'Олег', middleName: 'Сергеевич', age: 23, position: 'ЛФА', goals: 4 },
+      { id: 8, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Новиков', firstName: 'Артем', middleName: 'Валерьевич', age: 26, position: 'ПФА', goals: 3 },
+      { id: 9, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Денисов', firstName: 'Виктор', middleName: 'Олегович', age: 29, position: 'ЦОП', goals: 1 },
+      { id: 10, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Егоров', firstName: 'Павел', middleName: 'Николаевич', age: 31, position: 'ЛП', goals: 3 },
+      { id: 11, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Захаров', firstName: 'Николай', middleName: 'Иванович', age: 24, position: 'ПП', goals: 2 },
+      { id: 12, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Романов', firstName: 'Сергей', middleName: 'Викторович', age: 22, position: 'ЦН', goals: 6 },
+      { id: 13, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Лебедев', firstName: 'Алексей', middleName: 'Аркадьевич', age: 27, position: 'ГП', goals: 1 },
+      { id: 14, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Борисов', firstName: 'Михаил', middleName: 'Дмитриевич', age: 25, position: 'РВ', goals: 5 },
+      { id: 15, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Григорьев', firstName: 'Юрий', middleName: 'Павлович', age: 28, position: 'ЛВ', goals: 4 },
+      { id: 16, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Михайлов', firstName: 'Виктор', middleName: 'Степанович', age: 26, position: 'ПЗ', goals: 2 },
+      { id: 17, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Александров', firstName: 'Денис', middleName: 'Юрьевич', age: 23, position: 'ЦЗ', goals: 1 },
+      { id: 18, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Королев', firstName: 'Аркадий', middleName: 'Владимирович', age: 29, position: 'ЦП', goals: 3 },
+      { id: 19, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Тимофеев', firstName: 'Олег', middleName: 'Геннадьевич', age: 31, position: 'ЦППЗ', goals: 6 },
+      { id: 20, avatar: require('@/assets/img/player/avatar1.jpg'), lastName: 'Смирнов', firstName: 'Василий', middleName: 'Викторович', age: 27, position: 'ГП', goals: 0 }
     ],
     matches: [
       { id: 1, date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
@@ -84,7 +84,14 @@ export default createStore({
       organizer: { name: 'Неизвестный организатор', position: 'Должность не указана' }
     },
     selectedPlayer: (state) => state.selectedPlayer || {
-      id: null
+      id: null,
+      lastName: '',
+      firstName: '',
+      middleName: '',
+      age: 0,
+      position: '',
+      avatar: '',
+      goals: 0
     },
     getJoinedMatches: (state) => state.joinedMatches
   },

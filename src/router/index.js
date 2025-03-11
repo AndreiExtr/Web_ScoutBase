@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
 import MatchView from '../views/MatchView.vue'
 import GamerView from '../views/GamerView.vue'
-import ScoutView from '../views/ScoutView.vue'
+import FieldView from '../views/FieldView.vue'
 import PlayerView from '../views/PlayerView.vue'
 
 const routes = [
@@ -33,9 +33,9 @@ const routes = [
     component: PlayerView
   },
   {
-    path: '/scouts',
-    name: 'ScoutView',
-    component: ScoutView
+    path: '/fields',
+    name: 'FieldView',
+    component: FieldView
   }
 ]
 

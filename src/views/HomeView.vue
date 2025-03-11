@@ -209,7 +209,7 @@ export default {
       this.setSelectedMatch(match)
     },
     setActiveTab (tab) {
-      this.$emit('update:activeTab', tab) // Передача событие в App.vue
+      this.$emit('update:activeTab', tab) // Передача события в App.vue
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
@@ -222,7 +222,7 @@ export default {
       sessionStorage.setItem('selectedMatchId', match.id)
       sessionStorage.setItem('selectedMatch', JSON.stringify(match))
 
-      this.setSelectedMatch(match) // Сохранение выбранный матч в хранилище
+      this.setSelectedMatch(match) // Сохранение выбранного матча в хранилище
       this.$router.push({
         name: 'MatchView',
         params: { matchId: match.id }

@@ -1,7 +1,7 @@
 <template>
   <div class="gamer-card" @click="goToPlayerPage">
     <div class="gamer-card__item1">
-      <img alt="" src="@/assets/img/avatar.png">
+      <img :src="avatar" alt="Аватар игрока">
       <p><span>{{ lastName }}</span> <br>
         {{ firstName }} {{ middleName }}</p>
     </div>
@@ -23,7 +23,11 @@ export default {
     middleName: String,
     age: Number,
     position: String,
-    goals: Number
+    goals: Number,
+    avatar: {
+      type: String,
+      required: true
+    }
   },
   methods: {
     goToPlayerPage () {
@@ -63,6 +67,7 @@ export default {
     img{
       width: 70px;
       height: 70px;
+      border-radius: 50px;
     }
 
     p{

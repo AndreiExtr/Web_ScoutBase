@@ -38,10 +38,6 @@ export default {
           description: 'Игроки'
         },
         {
-          icon: require('@/assets/icons/rocket.svg'),
-          description: 'Скауты'
-        },
-        {
           icon: require('@/assets/icons/location.svg'),
           description: 'Площадки'
         }

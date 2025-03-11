@@ -1,6 +1,6 @@
 <template>
   <div class="main" v-if="activeTab === 0 && showMatchView">
-    <div class="title">
+    <div class="main__header">
       <ButtonUI
         :icon="require('@/assets/icons/arrow-left.svg')"
         :style="{ width: 'auto' }"
@@ -339,7 +339,7 @@ $text-label: #6d6f74;
   width: calc(100% - 200px);
   gap: 16px;
 
-  .title{
+  &__header{
     position: fixed;
     display: flex;
     flex-direction: row;

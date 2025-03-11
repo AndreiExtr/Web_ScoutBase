@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'ScoutView',
+  name: 'FieldView',
   components: {
   }
 }
