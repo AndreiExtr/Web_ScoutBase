@@ -135,6 +135,7 @@ $text-label: #6d6f74;
         width: 140px;
         height: 140px;
         border-radius: 100px;
+        object-fit: cover;
       }
 
       p{

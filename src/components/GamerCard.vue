@@ -68,6 +68,7 @@ export default {
       width: 70px;
       height: 70px;
       border-radius: 50px;
+      object-fit: cover;
     }
 
     p{
