@@ -37,12 +37,6 @@
             </div>
           </div>
           <div class="parameters__block2">
-            <!-- <apexchart
-              type="radialBar"
-              height="220"
-              :options="chartOptions"
-              :series="chartSeries">
-            </apexchart> -->
             <apexchart
               width="100%"
               height="290"
@@ -53,7 +47,35 @@
           </div>
         </div>
         <div class="matches">
-
+          <div class="matches__tabs">
+            <a href="#" :class="{ active: activTabs === 0 }" @click.prevent="setActive(0)">История матчей</a>
+            <a href="#" :class="{ active: activTabs === 1 }" @click.prevent="setActive(1)">Достижения</a>
+          </div>
+          <div class="matches__table" v-if="activTabs === 0">
+            <table class="match-history">
+              <thead>
+                <tr>
+                  <th>Дата</th>
+                  <th>Результат</th>
+                  <th>Голы</th>
+                  <th>Ассисты</th>
+                  <th>Очки</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="match in playerMatchHistory" :key="match.date">
+                  <td>{{ match.matchDate }}</td>
+                  <td>{{ match.result }}</td>
+                  <td>{{ match.goalsScored }}</td>
+                  <td>{{ match.assists }}</td>
+                  <td>{{ match.glasses }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div v-if="activTabs === 1">
+            <p>Здесь будут достижения...</p>
+          </div>
         </div>
       </div>
     </div>
@@ -72,40 +94,9 @@ export default {
   },
   data () {
     return {
+      activTabs: 0,
       activeTab: 1,
       showPlayerView: true,
-      // chartSeries: [67, 84, 97, 61],
-      // chartOptions: {
-      //   chart: {
-      //     height: 220,
-      //     type: 'radialBar'
-      //   },
-      //   plotOptions: {
-      //     radialBar: {
-      //       track: {
-      //         background: '#141414'
-      //       },
-      //       dataLabels: {
-      //         total: {
-      //           show: true,
-      //           label: 'Рейтинг',
-      //           color: '#DDDDDD'
-      //         },
-      //         name: {
-      //           fontSize: '12px'
-      //         },
-      //         value: {
-      //           fontSize: '12px',
-      //           color: '#DDDDDD'
-      //         }
-      //       }
-      //     }
-      //   },
-      //   stroke: {
-      //     lineCap: 'round'
-      //   },
-      //   labels: ['Скорость', 'Точность', 'Ловкость', 'Сила']
-      // }
       chartOptions: {
         chart: {
           type: 'radar',
@@ -121,10 +112,6 @@ export default {
               fontFamily: 'Arial'
             }
           }
-        },
-        stroke: {
-          show: true,
-          width: 2
         },
         fill: {
           opacity: 0.6
@@ -180,6 +167,10 @@ export default {
     },
     playerStats () {
       return this.selectedPlayer.stats || {}
+    },
+    playerMatchHistory () {
+      console.log('История матчей:', this.selectedPlayer.matchHistory)
+      return this.selectedPlayer.matchHistory || []
     }
   },
   watch: {
@@ -190,9 +181,12 @@ export default {
   },
   methods: {
     closeGamerView () {
-      // Удаление данных о текущем игроке из sessionStorage
       sessionStorage.removeItem('selectedPlayer')
       this.$router.push({ name: 'GamerView' })
+    },
+    setActive (tab) {
+      this.activTabs = tab
+      sessionStorage.setItem('activTabs', tab)
     }
   },
   mounted () {
@@ -381,6 +375,90 @@ $text-label: #6d6f74;
         padding: 16px;
         border-radius: 8px;
         box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        &__tabs {
+          display: flex;
+          flex-direction: row;
+          gap: 32px;
+
+          a{
+            text-decoration: none;
+            color: #666;
+            font-size: 16px;
+            position: relative;
+
+            &.active {
+              color: $primary-color;
+            }
+          }
+        }
+
+        &__table{
+          height: 300px;
+          overflow-y: auto;
+          flex-grow: 1;
+          border: 1px solid #313131;
+
+          /* Стили для скроллбара */
+          &::-webkit-scrollbar {
+            width: 8px; /* Ширина скроллбара */
+          }
+
+          &::-webkit-scrollbar-track {
+            background: #1f1f1f; /* Цвет трека */
+            border-radius: 4px;
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background: #666; /* Цвет ползунка */
+            border-radius: 4px;
+
+            &:hover {
+              background: #888; /* Цвет ползунка при наведении */
+            }
+          }
+
+          .match-history {
+            width: 100%;
+            border-collapse: collapse;
+
+            tr:first-child th {
+              border-top: none; /* Убираем верхний бордер для ячеек первой строки */
+            }
+
+            th, td {
+              border-top: 1px solid #313131;
+              border-bottom: 1px solid #313131;
+              border-right: 1px solid #313131;
+              padding: 8px;
+              text-align: center;
+              font-size: 14px;
+              color: #666;
+              font-weight: 300;
+            }
+
+            td{
+              color: #ffffff;
+            }
+
+            tr{
+              height: 48px;
+              &:hover{
+                background-color: #1f1f1f;
+              }
+            }
+
+            th {
+              position: sticky;
+              top: 0;
+              z-index: 1;
+              background-color: #1f1f1f;
+            }
+          }
+        }
       }
     }
   }

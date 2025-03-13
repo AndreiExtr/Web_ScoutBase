@@ -26,6 +26,7 @@ export default {
     position: String,
     goals: Number,
     stats: Object,
+    matchHistory: Object,
     avatar: {
       type: String,
       required: true

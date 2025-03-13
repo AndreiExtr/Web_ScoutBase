@@ -13,6 +13,7 @@
         :age="player.age"
         :position="player.position"
         :goals="player.goals"
+        :matchHistory="player.matchHistory"
         @player-card-click="openPlayerView(player)"/>
     </div>
     <PaginationUI
