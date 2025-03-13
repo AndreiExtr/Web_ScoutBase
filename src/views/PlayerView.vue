@@ -16,6 +16,11 @@
         </div>
       </div>
       <div class="content">
+        <!-- <div class="contacts">
+          <h3>Контакты</h3>
+          <div class="contacts__info">
+          </div>
+        </div> -->
         <div class="parameters">
           <h3>Параметры</h3>
           <div class="parameters__block1">
@@ -71,6 +76,14 @@
                   <td>{{ match.glasses }}</td>
                 </tr>
               </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2">ИТОГО</td>
+                  <td>{{ totalGoals }}</td>
+                  <td>{{ totalAssists }}</td>
+                  <td>{{ totalPoints }}</td>
+                </tr>
+              </tfoot>
             </table>
           </div>
           <div v-if="activTabs === 1">
@@ -171,6 +184,16 @@ export default {
     playerMatchHistory () {
       console.log('История матчей:', this.selectedPlayer.matchHistory)
       return this.selectedPlayer.matchHistory || []
+    },
+    totalGoals () {
+      return this.playerMatchHistory.reduce((sum, match) => sum + (match.goalsScored || 0), 0)
+    },
+    totalAssists () {
+      return this.playerMatchHistory.reduce((sum, match) => sum + (match.assists || 0), 0)
+    },
+    totalPoints () {
+      const sum = this.playerMatchHistory.reduce((sum, match) => sum + (match.glasses || 0), 0)
+      return parseFloat(sum.toFixed(1))
     }
   },
   watch: {
@@ -255,7 +278,6 @@ $text-label: #6d6f74;
       min-height: 250px;
       padding: 24px;
       border-radius: 8px;
-      box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
       background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("@/assets/img/player/background.png");
       background-repeat:no-repeat;
       background-size: cover ;
@@ -288,7 +310,6 @@ $text-label: #6d6f74;
     }
 
     .content{
-      background-color: #1a1a1a;
       flex-grow: 1;
       display: flex;
       flex-direction: row;
@@ -374,7 +395,6 @@ $text-label: #6d6f74;
         background-color: #141414;
         padding: 16px;
         border-radius: 8px;
-        box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -457,7 +477,40 @@ $text-label: #6d6f74;
               z-index: 1;
               background-color: #1f1f1f;
             }
+
+            tfoot {
+              position: sticky;
+              bottom: 0;
+              z-index: 1;
+            }
+
+            tfoot td {
+              font-weight: 600;
+              background-color: #222;
+              color: #13e66e;
+            }
           }
+        }
+      }
+
+      .contacts{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 16px;
+        background-color: #141414;
+        border-radius: 8px;
+
+        h3 {
+          font-size: 20px;
+          color: #fff;
+          font-weight: 700;
+          text-align: left;
+          width: 100%;
         }
       }
     }
