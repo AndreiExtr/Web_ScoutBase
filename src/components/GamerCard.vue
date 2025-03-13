@@ -22,8 +22,10 @@ export default {
     firstName: String,
     middleName: String,
     age: Number,
+    parameters: String,
     position: String,
     goals: Number,
+    stats: Object,
     avatar: {
       type: String,
       required: true

@@ -189,7 +189,7 @@ export default {
       return this.getMatches
     },
     matchField () {
-      return this.selectedMatch.field
+      return this.liveMatch.field
     },
     selectedMatch () {
       return this.$store.state.selectedMatch // Выбранный матч из Vuex
@@ -317,7 +317,7 @@ $text-color: #fff;
       padding: 16px;
       border-radius: 8px;
       box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
-      background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("@/assets/img/поле2.png");
+      background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
       background-repeat:no-repeat;
       background-size: cover ;
       background-position: center;
@@ -460,6 +460,8 @@ $text-color: #fff;
       display: flex;
       flex-direction: column;
       height: 100%;
+      justify-content: space-between;
+      gap: 16px;
 
       .rows{
         display: flex;

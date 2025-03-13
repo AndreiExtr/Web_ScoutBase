@@ -8,6 +8,8 @@
         :lastName="player.lastName"
         :firstName="player.firstName"
         :middleName="player.middleName"
+        :parameters="player.parameters"
+        :stats="player.stats"
         :age="player.age"
         :position="player.position"
         :goals="player.goals"
@@ -94,10 +96,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
+  height: 100vh;
   padding: 16px;
   gap: 16px;
-  flex-grow: 1;
   margin-left: 200px;
   width: calc(100% - 200px);
 

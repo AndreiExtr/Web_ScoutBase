@@ -67,7 +67,7 @@ $text-color: #fff;
   font-size: 16px;
   object-fit: cover;
   border-radius: 8px;
-  background-color: #2b2b2b;
+  background-color: #1a1a1a;
   box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
   height: 200px;
   cursor: pointer;

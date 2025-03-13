@@ -15,22 +15,134 @@
             {{ playerFirst }} {{ playerMiddle }}</p>
         </div>
       </div>
+      <div class="content">
+        <div class="parameters">
+          <h3>Параметры</h3>
+          <div class="parameters__block1">
+            <div class="square">
+              <p>возраст</p>
+              <span>{{ playerAge }}</span>
+            </div>
+            <div class="square">
+              <p>позиция</p>
+              <span>{{ playerPosition }}</span>
+            </div>
+            <div class="square">
+              <p>рост/вес</p>
+              <span>{{ playerParameters }}</span>
+            </div>
+            <div class="square">
+              <p>голы</p>
+              <span>{{ playerGoals }}</span>
+            </div>
+          </div>
+          <div class="parameters__block2">
+            <!-- <apexchart
+              type="radialBar"
+              height="220"
+              :options="chartOptions"
+              :series="chartSeries">
+            </apexchart> -->
+            <apexchart
+              width="100%"
+              height="290"
+              type="radar"
+              :options="chartOptions"
+              :series="chartSeries">
+            </apexchart>
+          </div>
+        </div>
+        <div class="matches">
+
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import VueApexCharts from 'vue3-apexcharts'
 import ButtonUI from '@/components/ButtonUI.vue'
 export default {
   name: 'PlayerView',
   components: {
-    ButtonUI
+    ButtonUI,
+    apexchart: VueApexCharts
   },
   data () {
     return {
       activeTab: 1,
-      showPlayerView: true
+      showPlayerView: true,
+      // chartSeries: [67, 84, 97, 61],
+      // chartOptions: {
+      //   chart: {
+      //     height: 220,
+      //     type: 'radialBar'
+      //   },
+      //   plotOptions: {
+      //     radialBar: {
+      //       track: {
+      //         background: '#141414'
+      //       },
+      //       dataLabels: {
+      //         total: {
+      //           show: true,
+      //           label: 'Рейтинг',
+      //           color: '#DDDDDD'
+      //         },
+      //         name: {
+      //           fontSize: '12px'
+      //         },
+      //         value: {
+      //           fontSize: '12px',
+      //           color: '#DDDDDD'
+      //         }
+      //       }
+      //     }
+      //   },
+      //   stroke: {
+      //     lineCap: 'round'
+      //   },
+      //   labels: ['Скорость', 'Точность', 'Ловкость', 'Сила']
+      // }
+      chartOptions: {
+        chart: {
+          type: 'radar',
+          toolbar: { show: true }
+        },
+        xaxis: {
+          categories: ['Скорость', 'Пас', 'Дриблинг', 'Защита', 'Физика'],
+          labels: {
+            show: true,
+            style: {
+              colors: ['#a8a8a8'],
+              fontSize: '12px',
+              fontFamily: 'Arial'
+            }
+          }
+        },
+        stroke: {
+          show: true,
+          width: 2
+        },
+        fill: {
+          opacity: 0.6
+        },
+        markers: {
+          size: 6,
+          colors: '#13e66e',
+          strokeWidth: 2,
+          shape: 'circle',
+          radius: 2
+        }
+      },
+      chartSeries: [
+        {
+          name: 'Показатели',
+          data: []
+        }
+      ]
     }
   },
   computed: {
@@ -49,6 +161,31 @@ export default {
     },
     playerAvatar () {
       return this.selectedPlayer.avatar
+    },
+    playerAge () {
+      return this.selectedPlayer.age
+    },
+    playerPosition () {
+      return this.selectedPlayer.position
+    },
+    playerGoals () {
+      return this.selectedPlayer.goals
+    },
+    playerParameters () {
+      return this.selectedPlayer.parameters
+    },
+    playerStatic () {
+      // данные playerStats для графика
+      return Object.values(this.playerStats) // Возвращаем массив значений
+    },
+    playerStats () {
+      return this.selectedPlayer.stats || {}
+    }
+  },
+  watch: {
+    playerStatic (newParams) {
+      // Когда параметры изменяются, обновляются данные для графика
+      this.chartSeries[0].data = newParams
     }
   },
   methods: {
@@ -65,6 +202,9 @@ export default {
     } else {
       this.$store.commit('setSelectedPlayer', JSON.parse(savedPlayer))
     }
+
+    // Инициализируем график с данными playerStats при монтировании
+    this.chartSeries[0].data = this.playerStatic
   }
 }
 </script>
@@ -109,9 +249,10 @@ $text-label: #6d6f74;
   &__player{
     position: relative;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 16px;
     width: 100%;
+    height: calc(100vh - 100px);
     padding: 0 16px 16px 16px;
     margin-top: 100px;
 
@@ -149,6 +290,97 @@ $text-label: #6d6f74;
           color: $text-color;
           font-weight: 700;
         }
+      }
+    }
+
+    .content{
+      background-color: #1a1a1a;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+
+      .parameters {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 16px;
+        background-color: #141414;
+        border-radius: 8px;
+
+        h3 {
+          font-size: 20px;
+          color: #fff;
+          font-weight: 700;
+          text-align: left;
+          width: 100%;
+        }
+
+        .parameters__block1,
+        .parameters__block2 {
+          width: 100%;
+          border-radius: 8px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .parameters__block1 {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: repeat(2, 1fr);
+          gap: 16px;
+          height: 100%;
+        }
+
+        .square {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: #1f1f1f;
+          border-radius: 8px;
+          padding: 12px;
+          text-align: center;
+          width: 100%;
+          height: 100%;
+        }
+
+        p{
+          color: #fff;
+          font-size: 16px;
+          font-weight: 300;
+        }
+
+        span {
+          color: #13e66e;
+          font-weight: bold;
+          font-size: 20px;
+          margin-top: 4px;
+        }
+
+        .parameters__block2 {
+          height: 100%;
+        }
+
+        .chart {
+          width: 200px;
+          height: 200px;
+          background-color: lightgray;
+        }
+      }
+
+      .matches{
+        width: 100%;
+        height: 100%;
+        background-color: #141414;
+        padding: 16px;
+        border-radius: 8px;
+        box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
       }
     }
   }
