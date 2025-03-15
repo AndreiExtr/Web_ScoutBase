@@ -30,6 +30,10 @@ export default {
       activeIndex: this.activeTab || 0,
       sections: [
         {
+          icon: require('@/assets/icons/main.svg'),
+          description: 'Главная'
+        },
+        {
           icon: require('@/assets/icons/fire.svg'),
           description: 'Матчи'
         },

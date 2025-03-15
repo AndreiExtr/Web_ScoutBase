@@ -5,12 +5,18 @@ import MatchView from '../views/MatchView.vue'
 import GamerView from '../views/GamerView.vue'
 import FieldView from '../views/FieldView.vue'
 import PlayerView from '../views/PlayerView.vue'
+import MainView from '../views/MainView.vue'
 
 const routes = [
   {
     path: '/',
     name: 'LoginView',
     component: LoginView
+  },
+  {
+    path: '/main',
+    name: 'MainView',
+    component: MainView
   },
   {
     path: '/home',

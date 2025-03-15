@@ -5,7 +5,8 @@
       :type="type"
       :id="id"
       :placeholder="placeholder"
-      v-model="modelValue"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
       class="input-field__input"
     />
   </div>
@@ -18,7 +19,8 @@ export default {
     label: { type: String, required: true },
     type: { type: String, default: 'text' },
     id: { type: String, required: true },
-    placeholder: { type: String, default: '' }
+    placeholder: { type: String, default: '' },
+    modelValue: { type: String, default: '' }
   },
   emits: ['update:modelValue']
 }
