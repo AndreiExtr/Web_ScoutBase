@@ -31,7 +31,7 @@ import GamerCard from '@/components/GamerCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 
 export default {
-  name: 'GamerView',
+  name: 'GamerList',
   components: {
     PaginationUI,
     GamerCard

@@ -29,11 +29,11 @@ export default {
       if (tab === 0) {
         this.$router.push({ name: 'MainView' })
       } else if (tab === 1) {
-        this.$router.push({ name: 'HomeView' })
+        this.$router.push({ name: 'MatchList' })
       } else if (tab === 2) {
-        this.$router.push({ name: 'GamerView' })
+        this.$router.push({ name: 'GamerList' })
       } else if (tab === 3) {
-        this.$router.push({ name: 'FieldView' })
+        this.$router.push({ name: 'FieldList' })
       }
     }
   }

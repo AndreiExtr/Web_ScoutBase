@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import MatchList from '../views/MatchList.vue'
 import LoginView from '../views/LoginView.vue'
 import MatchView from '../views/MatchView.vue'
-import GamerView from '../views/GamerView.vue'
-import FieldView from '../views/FieldView.vue'
+import GamerList from '../views/GamerList.vue'
+import FieldList from '../views/FieldList.vue'
 import PlayerView from '../views/PlayerView.vue'
 import MainView from '../views/MainView.vue'
 
@@ -20,8 +20,8 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'HomeView',
-    component: HomeView
+    name: 'MatchList',
+    component: MatchList
   },
   {
     path: '/match/:matchId',
@@ -30,8 +30,8 @@ const routes = [
   },
   {
     path: '/players',
-    name: 'GamerView',
-    component: GamerView
+    name: 'GamerList',
+    component: GamerList
   },
   {
     path: '/players/:playerId',
@@ -40,8 +40,8 @@ const routes = [
   },
   {
     path: '/fields',
-    name: 'FieldView',
-    component: FieldView
+    name: 'FieldList',
+    component: FieldList
   }
 ]
 

@@ -205,7 +205,7 @@ export default {
   methods: {
     closeGamerView () {
       sessionStorage.removeItem('selectedPlayer')
-      this.$router.push({ name: 'GamerView' })
+      this.$router.push({ name: 'GamerList' })
     },
     setActive (tab) {
       this.activTabs = tab
@@ -215,7 +215,7 @@ export default {
   mounted () {
     const savedPlayer = sessionStorage.getItem('selectedPlayer')
     if (!savedPlayer) {
-      this.$router.push({ name: 'GamerView' })
+      this.$router.push({ name: 'GamerList' })
     } else {
       this.$store.commit('setSelectedPlayer', JSON.parse(savedPlayer))
     }

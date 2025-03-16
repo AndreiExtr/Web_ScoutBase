@@ -71,6 +71,7 @@ export default createStore({
     joinedMatches: []
   },
   getters: {
+    myProfile: (state) => state.myProfile,
     getPlayers: (state) => state.players,
     getMatches: (state) => state.matches,
     selectedMatch: (state) => state.selectedMatch || {
@@ -127,6 +128,14 @@ export default createStore({
         saveState(state)
       }
     },
+    UPDATE_PLAYER_PROFILE (state, updatedProfile) {
+      const playerIndex = state.players.findIndex(player => player.id === updatedProfile.id)
+      if (playerIndex !== -1) {
+        // Обновляем данные игрока
+        state.players[playerIndex] = { ...state.players[playerIndex], ...updatedProfile }
+        saveState(state) // Сохраняем обновленное состояние в localStorage
+      }
+    },
     JOIN_MATCH (state, { matchId, team }) {
       if (!state.joinedMatches.some(m => m.matchId === matchId)) {
         state.joinedMatches.push({ matchId, team })
@@ -144,6 +153,9 @@ export default createStore({
     joinMatch ({ commit }, { matchId, team }) {
       commit('updatePlacesLeft', { matchId, team })
       commit('JOIN_MATCH', { matchId, team })
+    },
+    updatePlayerProfile ({ commit }, updatedProfile) {
+      commit('UPDATE_PLAYER_PROFILE', updatedProfile)
     }
   }
 })

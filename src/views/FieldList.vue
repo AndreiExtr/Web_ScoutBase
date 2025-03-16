@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'FieldView',
+  name: 'FieldList',
   components: {
   }
 }

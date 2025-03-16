@@ -1,19 +1,21 @@
 <template>
-  <div class="main">
-    <div v-if="isPlayer"><!-- Контент для игрока -->
-      <h1>Добро пожаловать, Игрок!</h1>
-      <p>Ваши матчи и статистика</p>
-    </div>
-    <div v-else-if="isOrganizer"><!-- Контент для организатора -->
-      <h1>Добро пожаловать, Организатор!</h1>
-      <p>Управление матчами и игроками</p>
-    </div>
+  <div v-if="isPlayer" class="main-player"><!-- Контент для игрока -->
+    <AccountPlayer />
+  </div>
+  <div v-else-if="isOrganizer"><!-- Контент для организатора -->
+    <h1>Добро пожаловать, Организатор!</h1>
+    <p>Управление матчами и игроками</p>
   </div>
 </template>
 
 <script>
+import AccountPlayer from './AccountPlayer.vue'
+
 export default {
   name: 'MainView',
+  components: {
+    AccountPlayer
+  },
   computed: {
     // Получаем текущую роль из localStorage
     currentRole () {
@@ -37,13 +39,7 @@ $bg-color: #141414;
 $text-color: #fff;
 $text-label: #6d6f74;
 
-.main{
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  margin-left: 200px;
-  width: calc(100% - 200px);
-  gap: 16px;
-  height: 100%;
+.main-player{
+  height: 100vh;
 }
 </style>

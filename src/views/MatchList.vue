@@ -146,10 +146,10 @@ import MatchView from '@/views/MatchView.vue'
 import MatchCard from '@/components/MatchCard.vue'
 import PaginationUI from '@/components/PaginationUI.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
-import GamerView from '@/views/GamerView.vue'
+import GamerView from '@/views/GamerList.vue'
 
 export default {
-  name: 'HomeView',
+  name: 'MatchList',
   components: {
     MatchCard,
     PaginationUI,
