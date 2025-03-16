@@ -1,24 +1,32 @@
 <template>
   <div class="sidebar">
     <h1>SCOUT<span>BASE</span></h1>
-    <SectionMenu
-      v-for="(section, index) in sections"
-      :key="index"
-      :icon="section.icon"
-      :description="section.description"
-      :is-active="activeIndex === index"
-      @click="setActive(index)"
-    />
+    <div class="menu-container">
+      <SectionMenu
+        v-for="(section, index) in sections"
+        :key="index"
+        :icon="section.icon"
+        :description="section.description"
+        :is-active="activeIndex === index"
+        @click="setActive(index)"
+      />
+    </div>
+    <div class="logon-bt">
+      <ButtonUI type="button" text="Выйти" @click="logout" />
+    </div>
   </div>
 </template>
 
 <script>
+import { useRouter } from 'vue-router'
 import SectionMenu from '@/components/SectionMenu.vue'
+import ButtonUI from '@/components/ButtonUI.vue'
 
 export default {
   name: 'SidebarMenu',
   components: {
-    SectionMenu
+    SectionMenu,
+    ButtonUI
   },
   // props — это объект, который используется для определения свойств (или данных), которые компонент может принимать от родительского компонента
   props: {
@@ -48,6 +56,20 @@ export default {
       ]
     }
   },
+  setup () {
+    const router = useRouter() // useRouter для навигации
+
+    const logout = () => {
+      // Очищаются данные из localStorage
+      localStorage.removeItem('activeTab')
+
+      router.push({ name: 'LoginView' })
+    }
+
+    return {
+      logout // Возвращаем метод logout
+    }
+  },
   watch: {
     // Отслеживание изменений activeTab
     activeTab: {
@@ -57,12 +79,6 @@ export default {
       immediate: true // Выполнение сразу при создании компонента
     }
   },
-  // created () {
-  //   const savedIndex = sessionStorage.getItem('activeIndex')
-  //   if (savedIndex !== null) {
-  //     this.activeIndex = parseInt(savedIndex, 10)
-  //   }
-  // },
   // methods выполняются при вызове, например, при клике на элемент или событии
   methods: {
     setActive (index) {
@@ -79,6 +95,9 @@ $primary-color: #13e66e;
 $text-color: #fff;
 $bg-sidebar-color: #141414;
 .sidebar{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 200px;
   background-color: $bg-sidebar-color;
   padding: 24px 0;
@@ -96,6 +115,17 @@ $bg-sidebar-color: #141414;
     span{
       color: $primary-color;
     }
+  }
+
+  .menu-container {
+    flex-grow: 1;
+    width: 100%;
+  }
+
+  .logon-bt {
+    margin-top: auto;
+    padding: 10px 0;
+    width: 120px;
   }
 }
 </style>

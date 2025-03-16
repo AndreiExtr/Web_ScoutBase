@@ -19,11 +19,11 @@ export default {
     currentRole () {
       return localStorage.getItem('currentRole')
     },
-    // Проверяем, авторизован ли пользователь как игрок
+    // Проверка, авторизован ли пользователь как игрок
     isPlayer () {
       return this.currentRole === 'player'
     },
-    // Проверяем, авторизован ли пользователь как организатор
+    // Проверка, авторизован ли пользователь как организатор
     isOrganizer () {
       return this.currentRole === 'organizer'
     }

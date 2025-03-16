@@ -143,15 +143,9 @@ export default {
 
       // Получаем данные пользователей из localStorage
       const users = JSON.parse(localStorage.getItem('users')) || []
-      console.log('Данные из localStorage:', users)
-
-      console.log('Введённые данные:', authEmail.value, authPassword.value)
-      // Ищем пользователя с указанной почтой и ролью
       const user = users.find(
         user => user.email === authEmail.value
       )
-
-      console.log('Найденный пользователь:', user)
 
       if (user) {
         // Проверяем пароль
