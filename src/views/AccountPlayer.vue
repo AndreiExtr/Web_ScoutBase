@@ -6,7 +6,22 @@
         <p><span>{{ playerLast }}</span> <br>
           {{ playerFirst }} {{ playerMiddle }}</p>
       </div>
-      <button @click="toggleEditMode">Редактировать профиль</button>
+      <ButtonUI
+        :icon="require('@/assets/icons/more.svg')"
+        :style="{ width: '40px', position: 'absolute', top: '24px', right: '24px' }"
+        @click="toggleMenu" />
+    </div>
+
+    <!-- Выпадающее меню -->
+    <div v-if="isMenuOpen" class="dropdown-menu">
+      <div class="menu-item edit" @click="editItem">
+        <img :src="require('@/assets/icons/edit.svg')" alt="Редактировать" class="menu-icon">
+        <span>Редактировать</span>
+      </div>
+      <div class="menu-item  delete" @click="deleteItem">
+        <img :src="require('@/assets/icons/trash.svg')" alt="Удалить" class="menu-icon">
+        <span>Удалить</span>
+      </div>
     </div>
 
     <!-- Подложка для затемнения фона -->
@@ -38,7 +53,11 @@
         </label>
         <label>
           Рост/Вес:
-          <input v-model="editForm.parameters" type="text">
+          <input
+            v-model="editForm.parameters"
+            v-mask="'###/###'"
+            type="text"
+            placeholder="___/___">
         </label>
         <label>
           Аватар:
@@ -48,9 +67,10 @@
       </form>
       <div class="edit-bt">
         <button type="submit" @click="saveProfile">СОХРАНИТЬ</button>
-        <button type="button" @click="toggleEditMode">ОТМЕНА</button>
+        <button type="button" @click="editItem">ОТМЕНА</button>
       </div>
     </div>
+    <!-- Форма редактирования -->
 
     <div class="content">
       <div class="parameters">
@@ -86,7 +106,7 @@
       <div class="matches">
         <div class="matches__tabs">
           <a href="#" :class="{ active: activTabs === 0 }" @click.prevent="setActive(0)">История матчей</a>
-          <a href="#" :class="{ active: activTabs === 1 }" @click.prevent="setActive(1)">Достижения</a>
+          <a href="#" :class="{ active: activTabs === 1 }" @click.prevent="setActive(1)">Заявки на матч</a>
         </div>
         <div class="matches__table" v-if="activTabs === 0">
           <table class="match-history">
@@ -118,8 +138,25 @@
             </tfoot>
           </table>
         </div>
-        <div v-if="activTabs === 1">
-          <p>Здесь будут достижения...</p>
+        <div v-if="activTabs === 1" class="matches__list">
+          <div class="rows">
+            <MatchCard
+              v-for="match in myMatches"
+              :key="match.id"
+              :matchId="match.id"
+              :date="match.date"
+              :field="match.field"
+              :price="match.price"
+              :time="match.time"
+              :placesLeft1="match.placesLeft1"
+              :placesLeft2="match.placesLeft2"
+              :location="match.location"
+              :organizer="match.organizer"
+              :placeIcon="placeIcon"
+              :addressIcon="addressIcon"
+              @match-card-click="openMatchView(match)"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -127,16 +164,25 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+import { mask } from 'vue-the-mask'
 import VueApexCharts from 'vue3-apexcharts'
+import MatchCard from '@/components/MatchCard.vue'
+import ButtonUI from '@/components/ButtonUI.vue'
 export default {
+  directives: { mask },
   name: 'AccountPlayer',
   components: {
-    apexchart: VueApexCharts
+    apexchart: VueApexCharts,
+    MatchCard,
+    ButtonUI
   },
   data () {
     return {
-      isEditMode: false, // Режим редактирования
+      placeIcon: require('@/assets/icons/users.svg'),
+      addressIcon: require('@/assets/icons/location.svg'),
+      isEditMode: false,
+      isMenuOpen: false,
       editForm: { // Данные для редактирования
         lastName: '',
         firstName: '',
@@ -199,6 +245,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getMatches', 'getJoinedMatches']),
     playerId () {
       return this.playerProfile.id
     },
@@ -242,6 +289,10 @@ export default {
     totalPoints () {
       const sum = this.playerMatchHistory.reduce((sum, match) => sum + (match.glasses || 0), 0)
       return parseFloat(sum.toFixed(1))
+    },
+    myMatches () {
+      const joinedMatchIds = this.getJoinedMatches.map(m => m.matchId)
+      return this.getMatches.filter(match => joinedMatchIds.includes(match.id))
     }
   },
   watch: {
@@ -251,12 +302,14 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setSelectedMatch']),
     ...mapActions(['updatePlayerProfile']),
     setActive (tab) {
       this.activTabs = tab
       sessionStorage.setItem('activTabs', tab)
     },
-    toggleEditMode () {
+    editItem () {
+      this.isMenuOpen = false // Закрываем меню
       this.isEditMode = !this.isEditMode
       if (this.isEditMode) {
       // Заполняем форму текущими данными
@@ -277,13 +330,34 @@ export default {
     handleFileUpload (event) {
       const file = event.target.files[0] // Получаем выбранный файл
       if (file) {
-        const reader = new FileReader() // Создаем FileReader для чтения файла
+        const reader = new FileReader() // Создается FileReader для чтения файла
         reader.onload = (e) => {
-          // Сохраняем Data URL в editForm.avatar
+          // Сохраняется Data URL в editForm.avatar
           this.editForm.avatar = e.target.result
         }
         reader.readAsDataURL(file) // Читаем файл как Data URL
       }
+    },
+    openMatchView (match) {
+      // Сохранение ID матча и дополнительные данные в sessionStorage
+      sessionStorage.setItem('selectedMatchId', match.id)
+      sessionStorage.setItem('selectedMatch', JSON.stringify(match))
+
+      this.setSelectedMatch(match) // Сохранение выбранного матча в хранилище
+      // Используем replace вместо push
+      this.$router.push({
+        name: 'MatchView',
+        params: { matchId: match.id },
+        query: { from: 'AccountPlayer' } // Указываем, откуда пришли
+      })
+    },
+    toggleMenu () {
+      this.isMenuOpen = !this.isMenuOpen // Переключаем видимость меню
+    },
+    deleteItem () {
+      this.isMenuOpen = false // Закрываем меню
+      // Логика для удаления
+      console.log('Удалить')
     }
   },
   mounted () {
@@ -316,6 +390,7 @@ $text-label: #6d6f74;
     padding: 16px;
 
     .info{
+      position: relative;
       width: 100%;
       min-height: 250px;
       padding: 24px;
@@ -347,6 +422,41 @@ $text-label: #6d6f74;
           font-size: 32px;
           color: $text-color;
           font-weight: 700;
+        }
+      }
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 64px;
+      right: 64px;
+      background-color: $text-color;
+      border-radius: 4px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      overflow: hidden;
+
+      .menu-item {
+        display: flex;
+        align-items: center;
+        padding: 8px 16px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #f5f5f5;
+        }
+
+        .menu-icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+        }
+
+        &.delete {
+          color: #e65613; // Красный цвет для текста
+          .menu-icon {
+            filter: brightness(0) saturate(100%) invert(39%) sepia(95%) saturate(1352%) hue-rotate(344deg) brightness(91%) contrast(91%);
+          }
         }
       }
     }
@@ -530,6 +640,37 @@ $text-label: #6d6f74;
               font-weight: 600;
               background-color: #222;
               color: #13e66e;
+            }
+          }
+        }
+
+        &__list{
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          justify-content: space-between;
+          gap: 16px;
+
+          .rows{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-content: flex-start;
+            flex-flow: wrap;
+            gap: 16px;
+            flex-grow: 1;
+            height: 100%;
+
+            @media (max-width: 1024px) {
+              height: auto;
+            }
+
+            .match-card{
+              flex: 0 0 calc(50% - 12px);
+
+              @media (max-width: 1400px) {
+                flex-basis: calc(100% - 0px);
+              }
             }
           }
         }

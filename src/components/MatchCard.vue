@@ -82,7 +82,7 @@ $text-color: #fff;
     right: 0;
     transform: translate(0%, -50%);
     width: 350px;
-    height: auto;
+    height: 100%;
 
     mask-image: url('@/assets/icons/rectangle.svg');
     mask-repeat: no-repeat;

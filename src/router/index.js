@@ -6,12 +6,18 @@ import GamerList from '../views/GamerList.vue'
 import FieldList from '../views/FieldList.vue'
 import PlayerView from '../views/PlayerView.vue'
 import MainView from '../views/MainView.vue'
+import AccountPlayer from '../views/AccountPlayer.vue'
 
 const routes = [
   {
     path: '/',
     name: 'LoginView',
     component: LoginView
+  },
+  {
+    path: '/account-player',
+    name: 'AccountPlayer',
+    component: AccountPlayer
   },
   {
     path: '/main',

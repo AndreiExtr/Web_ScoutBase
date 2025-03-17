@@ -212,7 +212,15 @@ export default {
     closeMatchView () {
       // Удаление данных о текущем матче из sessionStorage
       sessionStorage.removeItem('selectedMatch')
-      this.$router.push({ name: 'MatchList' })
+      // Получаем информацию о предыдущей странице из query
+      const from = this.$route.query.from
+
+      // Возврат на предыдущую страницу
+      if (from === 'AccountPlayer') {
+        this.$router.push({ name: 'AccountPlayer' })
+      } else {
+        this.$router.push({ name: 'MatchList' })
+      }
     },
     openModal (cell) {
       if (this.userHasJoined || cell.player) return // Если место уже занято или пользователь уже выбрал место — не открывается модалка
