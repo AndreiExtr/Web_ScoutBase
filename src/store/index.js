@@ -101,6 +101,14 @@ export default createStore({
     getJoinedMatches: (state) => state.joinedMatches
   },
   mutations: {
+    ADD_PLAYER (state, player) {
+      state.players.push(player)
+      saveState(state)
+    },
+    REMOVE_PLAYER (state, playerId) {
+      state.players = state.players.filter(p => p.id !== playerId)
+      saveState(state)
+    },
     SET_PLAYERS (state, players) {
       state.players = players
       saveState(state)
@@ -144,6 +152,12 @@ export default createStore({
     }
   },
   actions: {
+    addPlayer ({ commit }, player) {
+      commit('ADD_PLAYER', player)
+    },
+    removePlayer ({ commit }, playerId) {
+      commit('REMOVE_PLAYER', playerId)
+    },
     loadMatches ({ commit }, matches) {
       commit('SET_MATCHES', matches)
     },

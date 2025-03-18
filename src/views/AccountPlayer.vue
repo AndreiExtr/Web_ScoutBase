@@ -6,10 +6,13 @@
         <p><span>{{ playerLast }}</span> <br>
           {{ playerFirst }} {{ playerMiddle }}</p>
       </div>
-      <ButtonUI
-        :icon="require('@/assets/icons/more.svg')"
-        :style="{ width: '40px', position: 'absolute', top: '24px', right: '24px' }"
-        @click="toggleMenu" />
+      <div class="actions">
+        <button type="add" @click="addToPlayerList">{{ isPlayerAdded ? 'СКРЫТЬ ПРОФИЛЬ' : 'ПРИСОЕДИНИТЬСЯ К ИГРОКАМ' }}</button>
+        <ButtonUI
+          :icon="require('@/assets/icons/more.svg')"
+          :style="{ width: '40px' }"
+          @click="toggleMenu" />
+      </div>
     </div>
 
     <!-- Выпадающее меню -->
@@ -18,7 +21,7 @@
         <img :src="require('@/assets/icons/edit.svg')" alt="Редактировать" class="menu-icon">
         <span>Редактировать</span>
       </div>
-      <div class="menu-item  delete" @click="deleteItem">
+      <div class="menu-item delete" @click="deleteItem">
         <img :src="require('@/assets/icons/trash.svg')" alt="Удалить" class="menu-icon">
         <span>Удалить</span>
       </div>
@@ -181,8 +184,10 @@ export default {
     return {
       placeIcon: require('@/assets/icons/users.svg'),
       addressIcon: require('@/assets/icons/location.svg'),
+      isPlayerAdded: false,
       isEditMode: false,
       isMenuOpen: false,
+      defaultAvatar: require('@/assets/img/player/default.png'),
       editForm: { // Данные для редактирования
         lastName: '',
         firstName: '',
@@ -193,12 +198,12 @@ export default {
         avatar: ''
       },
       playerProfile: {
-        lastName: 'Иванов',
-        firstName: 'Иван',
-        middleName: 'Иванович',
-        age: 25,
-        position: 'Нападающий',
-        parameters: '180/75',
+        lastName: '<фамилия>',
+        firstName: '<имя>',
+        middleName: '<отчество>',
+        age: 0,
+        position: 'не выбран',
+        parameters: 'не выбран',
         avatar: '',
         stats: { speed: 100, pass: 70, dribbling: 90, defense: 11, fitness: 85 },
         matchHistory: [
@@ -259,7 +264,7 @@ export default {
       return this.playerProfile.middleName
     },
     playerAvatar () {
-      return this.playerProfile.avatar
+      return this.playerProfile.avatar || this.defaultAvatar
     },
     playerAge () {
       return this.playerProfile.age
@@ -304,6 +309,49 @@ export default {
   methods: {
     ...mapMutations(['setSelectedMatch']),
     ...mapActions(['updatePlayerProfile']),
+    ...mapActions(['addPlayer', 'removePlayer']),
+    addToPlayerList () {
+      const player = {
+        id: this.playerId,
+        lastName: this.playerLast,
+        firstName: this.playerFirst,
+        middleName: this.playerMiddle,
+        age: this.playerAge,
+        goals: this.totalGoals,
+        position: this.playerPosition,
+        parameters: this.playerParameters,
+        avatar: this.playerAvatar,
+        stats: this.playerStats,
+        matchHistory: this.playerMatchHistory
+      }
+
+      if (this.playerProfile.lastName === '<фамилия>' || this.playerProfile.firstName === '<имя>' || this.playerProfile.middleName === '<отчество>' || this.playerProfile.age === 0 || this.playerProfile.position === 'не выбран' || this.playerProfile.parameters === 'не выбран') {
+        this.isPlayerAdded = false
+        alert('Заполните все необходимые данные для публикации профиля')
+        return
+      }
+
+      if (!this.isPlayerAdded) {
+        // Добавляем игрока в список
+        const isPlayerExists = this.$store.getters.getPlayers.some(p => p.id === player.id)
+        if (!isPlayerExists) {
+          this.$store.dispatch('addPlayer', player) // Добавляем игрока через Vuex
+          this.isPlayerAdded = true
+          localStorage.setItem('addProfile', 'true')
+          localStorage.setItem('players', JSON.stringify(this.$store.getters.getPlayers))
+          alert('Вы успешно добавлены в список игроков!')
+        } else {
+          alert('Вы уже в списке игроков!')
+        }
+      } else {
+        // Удаляем игрока из списка
+        this.$store.dispatch('removePlayer', player.id) // Удаляем игрока через Vuex
+        this.isPlayerAdded = false
+        localStorage.setItem('addProfile', 'false')
+        localStorage.setItem('players', JSON.stringify(this.$store.getters.getPlayers))
+        alert('Ваш профиль скрыт из списка игроков.')
+      }
+    },
     setActive (tab) {
       this.activTabs = tab
       sessionStorage.setItem('activTabs', tab)
@@ -318,9 +366,8 @@ export default {
     },
     async saveProfile () {
       try {
-        // Обновляем данные профиля
+        // Обновляются данные профиля
         this.playerProfile = { ...this.editForm }
-        // Сохраняем данные в localStorage
         localStorage.setItem('playerProfile', JSON.stringify(this.playerProfile))
         this.isEditMode = false
       } catch (error) {
@@ -344,7 +391,6 @@ export default {
       sessionStorage.setItem('selectedMatch', JSON.stringify(match))
 
       this.setSelectedMatch(match) // Сохранение выбранного матча в хранилище
-      // Используем replace вместо push
       this.$router.push({
         name: 'MatchView',
         params: { matchId: match.id },
@@ -355,9 +401,7 @@ export default {
       this.isMenuOpen = !this.isMenuOpen // Переключаем видимость меню
     },
     deleteItem () {
-      this.isMenuOpen = false // Закрываем меню
-      // Логика для удаления
-      console.log('Удалить')
+      this.isMenuOpen = false
     }
   },
   mounted () {
@@ -369,6 +413,16 @@ export default {
 
     // Инициализируем график с данными playerStats
     this.chartSeries[0].data = Object.values(this.playerProfile.stats)
+
+    // Проверяем, добавлен ли игрок в список
+    const isPlayerExists = this.$store.getters.getPlayers.some(p => p.id === this.playerId)
+    this.isPlayerAdded = isPlayerExists
+
+    // Загружаем состояние isPlayerAdded из localStorage
+    const addProfile = localStorage.getItem('addProfile')
+    if (addProfile !== null) {
+      this.isPlayerAdded = addProfile === 'true' // Преобразуем строку в булевое значение
+    }
   }
 }
 </script>
@@ -426,10 +480,33 @@ $text-label: #6d6f74;
       }
     }
 
+    .actions{
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      top: 24px;
+      right: 24px;
+      gap: 16px;
+
+      button[type="add"] {
+        border: 1px solid $primary-color;
+        color: $primary-color;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: $primary-color;
+          color: $bg-color;
+        }
+      }
+    }
+
     .dropdown-menu {
       position: absolute;
-      top: 64px;
-      right: 64px;
+      top: 88px;
+      right: 40px;
       background-color: $text-color;
       border-radius: 4px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -526,7 +603,7 @@ $text-label: #6d6f74;
         span {
           color: #13e66e;
           font-weight: bold;
-          font-size: 20px;
+          font-size: 16px;
           margin-top: 4px;
         }
 

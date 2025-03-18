@@ -227,11 +227,28 @@ export default {
       this.selectedCell = cell
       this.showModal = true
     },
+    // openModal (cell) {
+    //   const isPlayerAdded = this.$store.getters.getPlayers.some(p => p.id === this.player.id)
+    //   if (!isPlayerAdded) {
+    //     alert('Чтобы выбрать позицию, добавьте свой профиль в список игроков.')
+    //     return
+    //   }
+
+    //   if (this.userHasJoined || cell.player) return
+    //   this.selectedCell = cell
+    //   this.showModal = true
+    // },
     closeModal () {
       this.showModal = false
       this.selectedCell = {}
     },
     joinPlayer () {
+      // const isPlayerAdded = this.$store.getters.getPlayers.some(p => p.id === this.$store.state.player.id)
+      // if (!isPlayerAdded) {
+      //   alert('Чтобы выбрать позицию, добавьте свой профиль в список игроков.')
+      //   return
+      // }
+
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
 
       // Обновление счетчика через мутацию
