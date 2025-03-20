@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-if="activeTab === 0 && showMatchView">
+  <div class="main" v-if="activeTab === 1 && showMatchView">
     <div class="main__header">
       <ButtonUI
         :icon="require('@/assets/icons/arrow-left.svg')"
@@ -124,7 +124,7 @@ export default {
   data () {
     return {
       joinedMatches: JSON.parse(localStorage.getItem('joinedMatches')) || [],
-      activeTab: 0,
+      activeTab: 1,
       cells: [
         // Игроки 1
         { col: 1, row: 4, img: 'shield1.png', badge: 'ГП', player: false },

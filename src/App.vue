@@ -1,6 +1,6 @@
 <template>
   <SidebarMenu :activeTab="activeTab" @update:activeTab="setActiveTab" />
-  <router-view/>
+  <router-view />
 </template>
 
 <script>
@@ -20,21 +20,20 @@ export default {
     const savedTab = sessionStorage.getItem('activeTab')
     if (savedTab !== null) {
       this.activeTab = parseInt(savedTab)
+    } else {
+      sessionStorage.setItem('activeTab', 0) // По умолчанию вкладка 0
     }
   },
   methods: {
     setActiveTab (tab) {
       this.activeTab = tab
       sessionStorage.setItem('activeTab', tab)
-      if (tab === 0) {
-        this.$router.push({ name: 'MainView' })
-      } else if (tab === 1) {
-        this.$router.push({ name: 'MatchList' })
-      } else if (tab === 2) {
-        this.$router.push({ name: 'GamerList' })
-      } else if (tab === 3) {
-        this.$router.push({ name: 'FieldList' })
-      }
+
+      // Переход на соответствующую страницу
+      if (tab === 0) this.$router.push({ name: 'MainView' })
+      if (tab === 1) this.$router.push({ name: 'MatchList' })
+      if (tab === 2) this.$router.push({ name: 'GamerList' })
+      if (tab === 3) this.$router.push({ name: 'FieldList' })
     }
   }
 }

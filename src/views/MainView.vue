@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import AccountPlayer from './AccountPlayer.vue'
+import AccountPlayer from '@/views/AccountPlayer.vue'
 
 export default {
   name: 'MainView',
@@ -17,7 +17,6 @@ export default {
     AccountPlayer
   },
   computed: {
-    // Получаем текущую роль из localStorage
     currentRole () {
       return localStorage.getItem('currentRole')
     },

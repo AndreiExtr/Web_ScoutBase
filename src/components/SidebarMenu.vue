@@ -30,7 +30,10 @@ export default {
   },
   // props — это объект, который используется для определения свойств (или данных), которые компонент может принимать от родительского компонента
   props: {
-    activeTab: Number
+    activeTab: {
+      type: Number,
+      default: 0 // По умолчанию активная вкладка — "Главная"
+    }
   },
   // data() - метод, который возвращает объект данных
   data () {
@@ -60,23 +63,27 @@ export default {
     const router = useRouter() // useRouter для навигации
 
     const logout = () => {
-      // Очищаются данные из localStorage
+      // Очищаются данные из localStorage и sessionStorage
       localStorage.removeItem('activeTab')
+      localStorage.removeItem('isAuthenticated')
+      localStorage.removeItem('currentRole')
+      sessionStorage.removeItem('activeTab')
+      sessionStorage.removeItem('activTabs')
+      sessionStorage.removeItem('activeTabs')
 
       router.push({ name: 'LoginView' })
     }
 
     return {
-      logout // Возвращаем метод logout
+      logout
     }
   },
   watch: {
-    // Отслеживание изменений activeTab
     activeTab: {
       handler (newTab) {
-        this.activeIndex = newTab // Обновление activeIndex при изменении activeTab
+        this.activeIndex = newTab
       },
-      immediate: true // Выполнение сразу при создании компонента
+      immediate: true
     }
   },
   // methods выполняются при вызове, например, при клике на элемент или событии

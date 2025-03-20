@@ -107,8 +107,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
-    justify-content: space-between;
-    align-content: flex-start;
 
     & > * {
       flex: 1 1 calc(25% - 12px); /* 4 плитки в ряд*/

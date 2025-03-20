@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-if="activeTab === 1 && showPlayerView">
+  <div class="main" v-if="activeTab === 2 && showPlayerView">
     <div class="main__header">
       <ButtonUI
         :icon="require('@/assets/icons/arrow-left.svg')"
@@ -16,11 +16,6 @@
         </div>
       </div>
       <div class="content">
-        <!-- <div class="contacts">
-          <h3>Контакты</h3>
-          <div class="contacts__info">
-          </div>
-        </div> -->
         <div class="parameters">
           <h3>Параметры</h3>
           <div class="parameters__block1">
@@ -108,7 +103,7 @@ export default {
   data () {
     return {
       activTabs: 0,
-      activeTab: 1,
+      activeTab: 2,
       showPlayerView: true,
       chartOptions: {
         chart: {
@@ -182,7 +177,6 @@ export default {
       return this.selectedPlayer.stats || {}
     },
     playerMatchHistory () {
-      console.log('История матчей:', this.selectedPlayer.matchHistory)
       return this.selectedPlayer.matchHistory || []
     },
     totalGoals () {
@@ -210,6 +204,12 @@ export default {
     setActive (tab) {
       this.activTabs = tab
       sessionStorage.setItem('activTabs', tab)
+    }
+  },
+  created () {
+    const savedTab = sessionStorage.getItem('activTabs')
+    if (savedTab !== null) {
+      this.activTabs = parseInt(savedTab) // Восстанавливаем вкладку
     }
   },
   mounted () {

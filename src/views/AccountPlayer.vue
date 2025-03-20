@@ -1,5 +1,7 @@
 <template>
   <div class="player">
+    <!-- Всплывающее сообщение -->
+    <AlertMessage v-if="showAlert" :message="alertMessage" />
     <div class="info">
       <img :src="playerAvatar" alt="Аватар игрока">
       <div class="info__name">
@@ -50,9 +52,32 @@
           Возраст:
           <input v-model="editForm.age" type="number">
         </label>
-        <label>
+        <!-- <label>
           Позиция:
           <input v-model="editForm.position" type="text">
+        </label> -->
+        <!-- <label>
+          Позиция:
+          <select v-model="editForm.position">
+            <option value="ГП">ГП</option>
+            <option value="ЦЛЗ">ЦЛЗ</option>
+            <option value="ЦПЗ">ЦПЗ</option>
+            <option value="ЛП">ЛП</option>
+            <option value="ПП">ПП</option>
+          </select>
+        </label> -->
+        <label>
+          Позиция:
+          <div class="custom-select" @click="toggleDropdown">
+            <div class="selected-option">
+              {{ editForm.position || 'Выберите позицию' }}
+            </div>
+            <ul class="dropdown-list" :class="{'show': isDropdownOpen}">
+              <li v-for="pos in positions" :key="pos" @click="selectPosition(pos)">
+                {{ pos }}
+              </li>
+            </ul>
+          </div>
         </label>
         <label>
           Рост/Вес:
@@ -172,23 +197,29 @@ import { mask } from 'vue-the-mask'
 import VueApexCharts from 'vue3-apexcharts'
 import MatchCard from '@/components/MatchCard.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
 export default {
   directives: { mask },
   name: 'AccountPlayer',
   components: {
     apexchart: VueApexCharts,
     MatchCard,
-    ButtonUI
+    ButtonUI,
+    AlertMessage
   },
   data () {
     return {
       placeIcon: require('@/assets/icons/users.svg'),
       addressIcon: require('@/assets/icons/location.svg'),
+      isDropdownOpen: false,
+      positions: ['ГП', 'ЦЛЗ', 'ЦПЗ', 'ЛЗ', 'ПЗ', 'ППЗ', 'ЛПЗ', 'ЦЛПЗ', 'ЦППЗ', 'ЦНП  '],
       isPlayerAdded: false,
       isEditMode: false,
+      showAlert: false,
+      alertMessage: '',
       isMenuOpen: false,
       defaultAvatar: require('@/assets/img/player/default.png'),
-      editForm: { // Данные для редактирования
+      editForm: {
         lastName: '',
         firstName: '',
         middleName: '',
@@ -212,7 +243,7 @@ export default {
         ]
       },
       activTabs: 0,
-      activeTab: 1,
+      // activeTab: 1,
       showPlayerView: true,
       chartOptions: {
         chart: {
@@ -247,6 +278,12 @@ export default {
           data: []
         }
       ]
+    }
+  },
+  created () {
+    const savedTab = sessionStorage.getItem('activTabs')
+    if (savedTab !== null) {
+      this.activTabs = parseInt(savedTab) // Восстанавливаем вкладку
     }
   },
   computed: {
@@ -311,6 +348,7 @@ export default {
     ...mapActions(['updatePlayerProfile']),
     ...mapActions(['addPlayer', 'removePlayer']),
     addToPlayerList () {
+      // Проверяем, если какое-либо поле пустое, то ставим значение по умолчанию
       const player = {
         id: this.playerId,
         lastName: this.playerLast,
@@ -325,9 +363,15 @@ export default {
         matchHistory: this.playerMatchHistory
       }
 
-      if (this.playerProfile.lastName === '<фамилия>' || this.playerProfile.firstName === '<имя>' || this.playerProfile.middleName === '<отчество>' || this.playerProfile.age === 0 || this.playerProfile.position === 'не выбран' || this.playerProfile.parameters === 'не выбран') {
+      // Проверяем, что все поля заполнены, если нет, то показываем предупреждение
+      if (this.playerProfile.lastName === '<фамилия>' || this.playerProfile.firstName === '<имя>' || this.playerProfile.middleName === '<отчество>' || this.playerProfile.age < 18 || this.playerProfile.position === 'не выбран' || this.playerProfile.parameters === 'не выбран') {
         this.isPlayerAdded = false
-        alert('Заполните все необходимые данные для публикации профиля')
+        this.showAlert = true
+        this.alertMessage = 'Заполните все необходимые данные для публикации профиля'
+
+        setTimeout(() => {
+          this.showAlert = false
+        }, 2000)
         return
       }
 
@@ -339,9 +383,17 @@ export default {
           this.isPlayerAdded = true
           localStorage.setItem('addProfile', 'true')
           localStorage.setItem('players', JSON.stringify(this.$store.getters.getPlayers))
-          alert('Вы успешно добавлены в список игроков!')
+          this.showAlert = true
+          this.alertMessage = 'Вы успешно добавлены в список игроков!'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
         } else {
-          alert('Вы уже в списке игроков!')
+          this.showAlert = true
+          this.alertMessage = 'Вы уже в списке игроков!'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
         }
       } else {
         // Удаляем игрока из списка
@@ -349,8 +401,20 @@ export default {
         this.isPlayerAdded = false
         localStorage.setItem('addProfile', 'false')
         localStorage.setItem('players', JSON.stringify(this.$store.getters.getPlayers))
-        alert('Ваш профиль скрыт из списка игроков.')
+        this.showAlert = true
+        this.alertMessage = 'Ваш профиль скрыт из списка игроков.'
+
+        setTimeout(() => {
+          this.showAlert = false
+        }, 2000)
       }
+    },
+    toggleDropdown () {
+      this.isDropdownOpen = !this.isDropdownOpen
+    },
+    selectPosition (pos) {
+      this.editForm.position = pos
+      this.isDropdownOpen = false
     },
     setActive (tab) {
       this.activTabs = tab
@@ -366,6 +430,51 @@ export default {
     },
     async saveProfile () {
       try {
+        if (this.editForm.age <= 0) {
+          this.showAlert = true
+          this.alertMessage = 'Введите корректный возраст.'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        } else if (this.editForm.age < 18 && this.editForm.age >= 14) {
+          this.showAlert = true
+          this.alertMessage = 'Только с 18 лет можно участвовать в футбольных турнирах.'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        } else if (this.editForm.age < 14) {
+          this.showAlert = true
+          this.alertMessage = 'Возраст должен быть от 14 лет.'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        } else if (this.editForm.age >= 45) {
+          this.showAlert = true
+          this.alertMessage = 'Не пора ли Вам на пенсию? :)'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        }
+
+        if (
+          !this.editForm.lastName ||
+          !this.editForm.firstName ||
+          !this.editForm.middleName ||
+          this.editForm.position === 'не выбран' ||
+          this.editForm.parameters === '___/___' ||
+          !this.editForm.parameters
+        ) {
+          this.showAlert = true
+          this.alertMessage = 'Пожалуйста, заполните все обязательные поля.'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        }
         // Обновляются данные профиля
         this.playerProfile = { ...this.editForm }
         localStorage.setItem('playerProfile', JSON.stringify(this.playerProfile))
@@ -829,8 +938,62 @@ $text-label: #6d6f74;
             border: 1px solid $primary-color;
           }
         }
-      }
 
+        .custom-select {
+          position: relative;
+          width: 100%;
+          margin-top: 5px;
+          background-color: #1F1F1F;
+          border: 1px solid #3a4149;
+          color: #fff;
+          border-radius: 8px;
+          font-size: 14px;
+          cursor: pointer;
+
+          &:focus {
+            border-color: $primary-color;
+          }
+
+          &:hover{
+            border: 1px solid $primary-color;
+          }
+
+          .selected-option {
+            padding: 10px;
+          }
+
+          .dropdown-list {
+            position: absolute;
+            width: 100%;
+            background-color: #1F1F1F;
+            border: 1px solid #3a4149;
+            border-radius: 8px;
+            margin-top: 4px;
+            list-style: none;
+            padding: 0;
+            z-index: 10;
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+
+            &.show {
+              display: block;
+            }
+
+            li {
+              padding: 12px;
+              cursor: pointer;
+              background-color: transparent;
+              border: none;
+              text-align: left;
+
+              &:hover {
+                background-color: #3a4149;
+              }
+            }
+          }
+        }
+      }
       .edit-bt{
         height: 100%;
         display: flex;

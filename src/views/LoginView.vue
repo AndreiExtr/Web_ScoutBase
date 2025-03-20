@@ -153,6 +153,11 @@ export default {
           // Успешная авторизация
           localStorage.setItem('isAuthenticated', true) // Сохраняем флаг авторизации
           localStorage.setItem('currentRole', user.role) // Сохраняем текущую роль
+
+          // Сбрасываем активную вкладку
+          localStorage.removeItem('activeTab')
+          sessionStorage.removeItem('activeTab')
+
           router.push({ name: 'MainView' })
         } else {
           errorPs.value = true
