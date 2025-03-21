@@ -19,7 +19,7 @@
     <PaginationUI
       v-if="totalPages > 1"
       :total-pages="totalPages"
-      :current-page="currentPage"
+      :current-page="pageGamerList"
       @update:currentPage="changePage"
     />
   </div>
@@ -39,14 +39,14 @@ export default {
   data () {
     return {
       showGamerView: false,
-      currentPage: 1,
+      pageGamerList: 1,
       perPage: 16 // Количество карточек на странице
     }
   },
   mounted () {
-    const savedPage = sessionStorage.getItem('currentPage')
+    const savedPage = sessionStorage.getItem('pageGamerList')
     if (savedPage !== null) {
-      this.currentPage = parseInt(savedPage)
+      this.pageGamerList = parseInt(savedPage)
     }
   },
   computed: {
@@ -61,7 +61,7 @@ export default {
       return Math.ceil(this.players.length / this.perPage)
     },
     paginatedPlayers () {
-      const start = (this.currentPage - 1) * this.perPage
+      const start = (this.pageGamerList - 1) * this.perPage
       return this.players.slice(start, start + this.perPage)
     }
   },
@@ -71,8 +71,8 @@ export default {
       this.setSelectedPlayer(player)
     },
     changePage (page) {
-      this.currentPage = page
-      sessionStorage.setItem('currentPage', page)
+      this.pageGamerList = page
+      sessionStorage.setItem('pageGamerList', page)
     },
     setActiveTab (tab) {
       this.$emit('update:activeTab', tab) // Передача события в App.vue

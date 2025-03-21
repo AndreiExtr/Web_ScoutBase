@@ -109,8 +109,8 @@ export default {
   },
   setup () {
     const router = useRouter()
-    const role = ref(null) // По умолчанию роль не выбрана
-    const errorRole = ref(false) // Состояние для отображения ошибки
+    const role = ref(null)
+    const errorRole = ref(false)
     const errorField = ref(false)
     const error = ref(false)
     const errorPs = ref(false)
@@ -141,7 +141,6 @@ export default {
         error.value = true
       }
 
-      // Получаем данные пользователей из localStorage
       const users = JSON.parse(localStorage.getItem('users')) || []
       const user = users.find(
         user => user.email === authEmail.value
@@ -151,14 +150,14 @@ export default {
         // Проверяем пароль
         if (user.password === authPassword.value) {
           // Успешная авторизация
-          localStorage.setItem('isAuthenticated', true) // Сохраняем флаг авторизации
-          localStorage.setItem('currentRole', user.role) // Сохраняем текущую роль
+          localStorage.setItem('isAuthenticated', true)
+          localStorage.setItem('currentRole', user.role)
 
-          // Сбрасываем активную вкладку
           localStorage.removeItem('activeTab')
           sessionStorage.removeItem('activeTab')
 
-          router.push({ name: 'MainView' })
+          // router.push({ name: 'MainView' })
+          window.location.replace('/main')
         } else {
           errorPs.value = true
         }
@@ -176,7 +175,6 @@ export default {
         errorRole.value = true
       }
 
-      // Проверка на заполнение полей
       if (!email.value || !password.value || !confirmPassword.value) {
         errorField.value = true
       }

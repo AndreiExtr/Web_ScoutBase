@@ -3,18 +3,19 @@
     <AccountPlayer />
   </div>
   <div v-else-if="isOrganizer"><!-- Контент для организатора -->
-    <h1>Добро пожаловать, Организатор!</h1>
-    <p>Управление матчами и игроками</p>
+    <AccountOrganizer />
   </div>
 </template>
 
 <script>
 import AccountPlayer from '@/views/AccountPlayer.vue'
+import AccountOrganizer from '@/views/AccountOrganizer.vue'
 
 export default {
   name: 'MainView',
   components: {
-    AccountPlayer
+    AccountPlayer,
+    AccountOrganizer
   },
   computed: {
     currentRole () {

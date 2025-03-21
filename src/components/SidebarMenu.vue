@@ -1,9 +1,9 @@
-<template>
+<!-- <template>
   <div class="sidebar">
     <h1>SCOUT<span>BASE</span></h1>
     <div class="menu-container">
       <SectionMenu
-        v-for="(section, index) in sections"
+        v-for="(section, index) in filteredSections"
         :key="index"
         :icon="section.icon"
         :description="section.description"
@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
+
 import SectionMenu from '@/components/SectionMenu.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
 
@@ -33,6 +34,10 @@ export default {
     activeTab: {
       type: Number,
       default: 0 // По умолчанию активная вкладка — "Главная"
+    },
+    isOrganizer: {
+      type: Boolean,
+      default: false
     }
   },
   // data() - метод, который возвращает объект данных
@@ -60,7 +65,7 @@ export default {
     }
   },
   setup () {
-    const router = useRouter() // useRouter для навигации
+    // const router = useRouter() // useRouter для навигации
 
     const logout = () => {
       // Очищаются данные из localStorage и sessionStorage
@@ -71,7 +76,13 @@ export default {
       sessionStorage.removeItem('activTabs')
       sessionStorage.removeItem('activeTabs')
 
-      router.push({ name: 'LoginView' })
+      // router.push({ name: 'LoginView' })
+      window.location.replace('/')
+
+      // // Перезагружаем страницу через небольшой таймаут
+      // setTimeout(() => {
+      //   window.location.reload()
+      // }, 200)
     }
 
     return {
@@ -92,6 +103,113 @@ export default {
       this.activeIndex = index
       this.$emit('update:activeTab', index)
       localStorage.setItem('activeTab', index)
+    }
+  },
+  computed: {
+    filteredSections () {
+      if (this.isOrganizer) {
+        return this.sections
+      } else {
+        return this.sections.filter(section => section.description !== 'Площадки')
+      }
+    }
+  }
+}
+</script> -->
+<template>
+  <div class="sidebar">
+    <h1>SCOUT<span>BASE</span></h1>
+    <div class="menu-container">
+      <SectionMenu
+        v-for="(section, index) in filteredSections"
+        :key="index"
+        :icon="section.icon"
+        :description="section.description"
+        :is-active="activeIndex === index"
+        @click="setActive(index)"
+      />
+    </div>
+    <div class="logon-bt">
+      <ButtonUI type="button" text="Выйти" @click="logout" />
+    </div>
+  </div>
+</template>
+
+<script>
+import SectionMenu from '@/components/SectionMenu.vue'
+import ButtonUI from '@/components/ButtonUI.vue'
+
+export default {
+  name: 'SidebarMenu',
+  components: {
+    SectionMenu,
+    ButtonUI
+  },
+  props: {
+    activeTab: {
+      type: Number,
+      default: 0
+    },
+    isOrganizer: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data () {
+    return {
+      activeIndex: this.activeTab || 0,
+      sections: [
+        {
+          icon: require('@/assets/icons/main.svg'),
+          description: 'Главная'
+        },
+        {
+          icon: require('@/assets/icons/fire.svg'),
+          description: 'Матчи'
+        },
+        {
+          icon: require('@/assets/icons/users.svg'),
+          description: 'Игроки'
+        },
+        {
+          icon: require('@/assets/icons/location.svg'),
+          description: 'Площадки'
+        }
+      ]
+    }
+  },
+  watch: {
+    activeTab: {
+      handler (newTab) {
+        this.activeIndex = newTab
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    setActive (index) {
+      this.activeIndex = index
+      this.$emit('update:activeTab', index)
+    },
+    logout () {
+      localStorage.removeItem('activeTab')
+      localStorage.removeItem('isAuthenticated')
+      localStorage.removeItem('currentRole')
+      sessionStorage.removeItem('activeTab')
+      sessionStorage.removeItem('activTabs')
+      sessionStorage.removeItem('activeTabs')
+
+      // Перенаправляется на страницу входа и перезагружается
+      window.location.replace('/')
+    }
+  },
+  computed: {
+    filteredSections () {
+      if (this.isOrganizer) {
+        return this.sections
+      } else {
+        return this.sections.filter(section => section.description !== 'Площадки') // Скрывается вкладка "Площадки" для игрока
+      }
     }
   }
 }

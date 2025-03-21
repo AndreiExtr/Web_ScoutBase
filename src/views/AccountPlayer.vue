@@ -1,5 +1,5 @@
 <template>
-  <div class="player">
+  <div class="content-player">
     <!-- Всплывающее сообщение -->
     <AlertMessage v-if="showAlert" :message="alertMessage" />
     <div class="info">
@@ -52,20 +52,6 @@
           Возраст:
           <input v-model="editForm.age" type="number">
         </label>
-        <!-- <label>
-          Позиция:
-          <input v-model="editForm.position" type="text">
-        </label> -->
-        <!-- <label>
-          Позиция:
-          <select v-model="editForm.position">
-            <option value="ГП">ГП</option>
-            <option value="ЦЛЗ">ЦЛЗ</option>
-            <option value="ЦПЗ">ЦПЗ</option>
-            <option value="ЛП">ЛП</option>
-            <option value="ПП">ПП</option>
-          </select>
-        </label> -->
         <label>
           Позиция:
           <div class="custom-select" @click="toggleDropdown">
@@ -212,7 +198,7 @@ export default {
       placeIcon: require('@/assets/icons/users.svg'),
       addressIcon: require('@/assets/icons/location.svg'),
       isDropdownOpen: false,
-      positions: ['ГП', 'ЦЛЗ', 'ЦПЗ', 'ЛЗ', 'ПЗ', 'ППЗ', 'ЛПЗ', 'ЦЛПЗ', 'ЦППЗ', 'ЦНП  '],
+      positions: ['ГП', 'ЦЛЗ', 'ЦПЗ', 'ЛЗ', 'ПЗ', 'ППЗ', 'ЛПЗ', 'ЦЛПЗ', 'ЦППЗ', 'ЦНП'],
       isPlayerAdded: false,
       isEditMode: false,
       showAlert: false,
@@ -541,7 +527,7 @@ $primary-color: #13e66e;
 $bg-color: #141414;
 $text-color: #fff;
 $text-label: #6d6f74;
-.player{
+.content-player{
     position: relative;
     display: flex;
     flex-direction: column;

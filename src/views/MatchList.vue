@@ -69,7 +69,7 @@
         <PaginationUI
           v-if="totalPages(activeTabs) > 1"
           :total-pages="totalPages(activeTabs)"
-          :current-page="currentPage"
+          :current-page="pageMatchList"
           @update:currentPage="changePage"
         />
       </div>
@@ -94,7 +94,7 @@
         <PaginationUI
           v-if="totalPages(1) > 1"
           :total-pages="totalPages(1)"
-          :current-page="currentPage"
+          :current-page="pageMatchList"
           @update:currentPage="changePage"
         />
       </div>
@@ -140,9 +140,9 @@ export default {
     }
 
     // Восстановление текущей страницы из sessionStorage
-    const savedPage = sessionStorage.getItem('currentPage')
+    const savedPage = sessionStorage.getItem('pageMatchList')
     if (savedPage !== null) {
-      this.currentPage = parseInt(savedPage)
+      this.pageMatchList = parseInt(savedPage)
     }
 
     // Загружка данные о ближайшем матче из sessionStorage
@@ -172,7 +172,7 @@ export default {
     return {
       showPlayerView: false,
       activeTabs: 0,
-      currentPage: 1,
+      pageMatchList: 1,
       activeTab: 0,
       matchesPerPage: 8,
       placeIcon: require('@/assets/icons/users.svg'),
@@ -189,9 +189,9 @@ export default {
     },
     setActiveTabs (tab) {
       this.activeTabs = tab
-      this.currentPage = 1
+      this.pageMatchList = 1
       sessionStorage.setItem('activeTabs', tab) // Сохранение вкладки в sessionStorage
-      sessionStorage.setItem('currentPage', 1)
+      sessionStorage.setItem('pageMatchList', 1)
     },
     openMatchView (match) {
       // Сохранение ID матча и дополнительные данные в sessionStorage
@@ -208,8 +208,8 @@ export default {
       this.showMatchView = false
     },
     changePage (page) {
-      this.currentPage = page
-      sessionStorage.setItem('currentPage', page)
+      this.pageMatchList = page
+      sessionStorage.setItem('pageMatchList', page)
     },
     goToMatch (liveMatch) {
       sessionStorage.setItem('selectedMatchId', liveMatch.id)
@@ -240,7 +240,7 @@ export default {
         filteredMatches = this.matches.filter(match => match.status === 'предстоящие')
       }
 
-      const startIndex = (this.currentPage - 1) * this.matchesPerPage
+      const startIndex = (this.pageMatchList - 1) * this.matchesPerPage
       const endIndex = startIndex + this.matchesPerPage
       return filteredMatches.slice(startIndex, endIndex)
     }
