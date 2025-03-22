@@ -88,7 +88,7 @@ $text-color: #fff;
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 350px auto;
-    filter: brightness(40%); /* Затемнение изображения на 20% */
+    filter: brightness(40%);
   }
 
   &:hover{

@@ -1,25 +1,37 @@
 <template>
   <div class="content-list">
     <div class="rows">
-      <FieldCard />
+      <FieldCard
+        v-for="field in fields"
+        :key="field.id"
+        :fieldId="field.id"
+        :fiel="field.fiel"
+        :location="field.location"
+        :status="field.status"
+      />
     </div>
-    <PaginationUI
-      v-if="totalPages > 1"
-      :total-pages="totalPages"
-      :current-page="currentPage"
-      @update:currentPage="changePage"
-    />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
 import FieldCard from '@/components/FieldCard.vue'
-import PaginationUI from '@/components/PaginationUI.vue'
 export default {
   name: 'FieldList',
   components: {
-    PaginationUI,
     FieldCard
+  },
+  computed: {
+    ...mapGetters(['getFields']),
+    fields () {
+      return this.getFields
+    }
+  },
+  methods: {
+    ...mapMutations(['setSelectedField']), // Список площадок из Vuex
+    selectField (field) {
+      this.setSelectedField(field)
+    }
   }
 }
 </script>

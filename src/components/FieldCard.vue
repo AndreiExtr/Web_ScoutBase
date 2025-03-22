@@ -1,15 +1,29 @@
 <template>
   <div class="field-card">
+    <img :src="fiel" alt="Field Image" class="field" />
     <div class="field-card__status">
-      <span class="status-indicator"></span>
-      <p>Свободно</p>
+      <span :class="statusClass"></span>
+      <p>{{ status }}</p>
     </div>
     <div class="field-card__name">
-      <h3>Стадион "Зенит"</h3>
-      <p>Футбольная аллея, 1, Санкт-Петербург</p>
+      <p>
+        <span>{{ location.split(',')[0] }}</span><br>
+        {{ location.split(',').slice(1).join(',') }}
+      </p>
     </div>
     <div class="field-card__badge">
-      dfsfsfd
+      <div class="iconItems">
+        <img :src="require('@/assets/icons/video.svg')" alt="badge-icon"/>
+      </div>
+      <div class="iconItems">
+        <img :src="require('@/assets/icons/wifi.svg')" alt="badge-icon"/>
+      </div>
+      <div class="iconItems">
+        <img :src="require('@/assets/icons/restaurant.svg')" alt="badge-icon"/>
+      </div>
+      <div class="iconItems">
+        <img :src="require('@/assets/icons/parking.svg')" alt="badge-icon"/>
+      </div>
     </div>
   </div>
 </template>
@@ -18,9 +32,22 @@
 export default {
   name: 'FieldCard',
   components: {},
-  props: {},
-  data () {
-    return {}
+  props: {
+    fieldId: Number,
+    location: String,
+    status: String,
+    fiel: {
+      type: String,
+      required: true
+    }
+  },
+  computed: {
+    statusClass () {
+      return {
+        'status-free': this.status === 'свободно',
+        'status-busy': this.status === 'занято'
+      }
+    }
   }
 }
 </script>
@@ -31,6 +58,7 @@ $bg-color: #141414;
 $text-color: #fff;
 $text-label: #6d6f74;
 .field-card{
+  position: relative;
   height: 200px;
   padding: 16px;
   background-color: #1A1A1A;
@@ -41,10 +69,26 @@ $text-label: #6d6f74;
   align-items: flex-start;
   justify-content: space-between;
   cursor: pointer;
+  overflow: hidden;
   gap: 16px;
 
   &:hover{
     box-shadow: 10px 10px 32px rgba(0, 255, 98, 0.089);
+  }
+
+  .field {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(0%, -50%);
+    width: 350px;
+    height: 100%;
+
+    mask-image: url('@/assets/icons/rectangle.svg');
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 350px auto;
+    filter: brightness(40%); /* Затемнение изображения на 20% */
   }
 
   &__status{
@@ -54,12 +98,20 @@ $text-label: #6d6f74;
     gap: 8px;
     color: $text-color;
 
-    .status-indicator {
+    .status-free {
       display: inline-block;
-      width: 10px; // Размер круга
-      height: 10px; // Размер круга
-      background-color: rgb(17, 255, 17); // Цвет круга
-      border-radius: 50%; // Делаем элемент круглым
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: rgb(2, 196, 2);
+    }
+
+    .status-busy {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: red;
     }
   }
 
@@ -70,10 +122,35 @@ $text-label: #6d6f74;
     gap: 4px;
     text-align: left;
     color: $text-color;
+    z-index: 5;
 
-    h3{
-      font-size: 18px;
-      font-weight: 700;
+    p{
+      font-size: 16px;
+      font-weight: 400;
+
+      span{
+        font-size: 18px;
+        font-weight: 700;
+      }
+    }
+  }
+
+  &__badge{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    z-index: 5;
+
+    .iconItems{
+      width: 40px;
+      height: 40px;
+      background-color: #414141;
+      border-radius: 50%;
+      padding: 10px;
+
+      img{
+        filter: brightness(0) invert(1);
+      }
     }
   }
 }

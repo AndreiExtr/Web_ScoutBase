@@ -66,14 +66,34 @@ export default createStore({
       { id: 17, field: require('@/assets/img/field/field1.png'), date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 12, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } },
       { id: 18, field: require('@/assets/img/field/field1.png'), date: 'Вт, 03 июля', time: '10:00 - 11:30', placesLeft1: 12, placesLeft2: 2, location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', price: 1300, status: 'сегодня', organizer: { name: 'Иванов Сергей Петрович', position: 'Главный судья' } }
     ],
+    fields: [
+      { id: 1, fiel: require('@/assets/img/field/field1.png'), location: 'Центральный стадион "Локомотив", ул. Большая Черкизовская, 125, Москва', status: 'свободно' },
+      { id: 2, fiel: require('@/assets/img/field/field2.png'), location: 'Стадион "Динамо", Ленинградский проспект, 36, Москва', status: 'занято' },
+      { id: 3, fiel: require('@/assets/img/field/field3.jpg'), location: 'Стадион "Спартак", Волоколамское шоссе, 69, Москва', status: 'свободно' },
+      { id: 4, fiel: require('@/assets/img/field/field4.jpg'), location: 'Стадион "ЦСКА", Ленинградский проспект, 39, Москва', status: 'свободно' },
+      { id: 5, fiel: require('@/assets/img/field/field5.jpg'), location: 'Стадион "Открытие Банк Арена", Волоколамское шоссе, 69, Москва', status: 'занято' },
+      { id: 6, fiel: require('@/assets/img/field/field6.jpg'), location: 'Стадион "ВТБ Арена", Ленинградский проспект, 36, Москва', status: 'свободно' },
+      { id: 7, fiel: require('@/assets/img/field/field7.jpg'), location: 'Стадион "РЖД Арена", ул. Большая Черкизовская, 125, Москва', status: 'свободно' },
+      { id: 8, fiel: require('@/assets/img/field/field8.jpg'), location: 'Стадион "Лужники", ул. Лужники, 24, Москва', status: 'занято' },
+      { id: 9, fiel: require('@/assets/img/field/field9.jpg'), location: 'Стадион "Олимпийский", проспект Мира, 119, Москва', status: 'свободно' },
+      { id: 10, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' }
+    ],
     selectedMatch: null, // Выбранный матч
     selectedPlayer: null, // Выбранный игрок
+    selectedField: null,
     joinedMatches: []
   },
   getters: {
     myProfile: (state) => state.myProfile,
+    getFields: (state) => state.fields,
     getPlayers: (state) => state.players,
     getMatches: (state) => state.matches,
+    selectedField: (state) => state.selectedField || {
+      id: null,
+      status: '',
+      fiel: '',
+      location: ''
+    },
     selectedMatch: (state) => state.selectedMatch || {
       id: null,
       date: '',
@@ -113,12 +133,19 @@ export default createStore({
       state.players = players
       saveState(state)
     },
+    SET_FIELDS (state, fields) {
+      state.fields = fields
+    },
     SET_MATCHES (state, matches) {
       state.matches = matches
       saveState(state) // Сохранение обновленного состояния в localStorage
     },
     setSelectedMatch (state, match) {
       state.selectedMatch = match // Сохранение выбранного матча
+      saveState(state)
+    },
+    setSelectedField (state, field) {
+      state.selectedField = field // Сохранение выбранной площадки
       saveState(state)
     },
     setSelectedPlayer (state, player) {
@@ -160,6 +187,9 @@ export default createStore({
     },
     loadMatches ({ commit }, matches) {
       commit('SET_MATCHES', matches)
+    },
+    loadFields ({ commit }, fields) {
+      commit('SET_FIELDS', fields)
     },
     loadPlayers ({ commit }, players) {
       commit('SET_PLAYERS', players)
