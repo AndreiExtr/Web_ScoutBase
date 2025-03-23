@@ -214,7 +214,8 @@ export default {
         parameters: '',
         avatar: ''
       },
-      playerProfile: {
+      selectedPlayer: {
+        id: 21,
         lastName: '<фамилия>',
         firstName: '<имя>',
         middleName: '<отчество>',
@@ -222,10 +223,10 @@ export default {
         position: 'не выбран',
         parameters: 'не выбран',
         avatar: '',
-        stats: { speed: 100, pass: 70, dribbling: 90, defense: 11, fitness: 85 },
+        stats: { speed: 0, pass: 0, dribbling: 0, defense: 0, fitness: 0 },
         matchHistory: [
-          { matchDate: '2023-10-01', result: 'Победа', goalsScored: 2, assists: 1, glasses: 8.1 },
-          { matchDate: '2023-10-08', result: 'Ничья', goalsScored: 1, assists: 0, glasses: 5.3 }
+          // { matchDate: '2023-10-01', result: 'Победа', goalsScored: 2, assists: 1, glasses: 8.1 },
+          // { matchDate: '2023-10-08', result: 'Ничья', goalsScored: 1, assists: 0, glasses: 5.3 }
         ]
       },
       activTabs: 0,
@@ -273,40 +274,40 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getMatches', 'getJoinedMatches']),
+    ...mapGetters(['getMatches', 'getJoinedMatches', 'selectedPlayer']),
     playerId () {
-      return this.playerProfile.id
+      return this.selectedPlayer.id
     },
     playerLast () {
-      return this.playerProfile.lastName
+      return this.selectedPlayer.lastName
     },
     playerFirst () {
-      return this.playerProfile.firstName
+      return this.selectedPlayer.firstName
     },
     playerMiddle () {
-      return this.playerProfile.middleName
+      return this.selectedPlayer.middleName
     },
     playerAvatar () {
-      return this.playerProfile.avatar || this.defaultAvatar
+      return this.selectedPlayer.avatar || this.defaultAvatar
     },
     playerAge () {
-      return this.playerProfile.age
+      return this.selectedPlayer.age
     },
     playerPosition () {
-      return this.playerProfile.position
+      return this.selectedPlayer.position
     },
     playerParameters () {
-      return this.playerProfile.parameters
+      return this.selectedPlayer.parameters
     },
     playerStatic () {
       // данные playerStats для графика
       return Object.values(this.playerStats) // Возвращаем массив значений
     },
     playerStats () {
-      return this.playerProfile.stats || {}
+      return this.selectedPlayer.stats || {}
     },
     playerMatchHistory () {
-      return this.playerProfile.matchHistory || []
+      return this.selectedPlayer.matchHistory || []
     },
     totalGoals () {
       return this.playerMatchHistory.reduce((sum, match) => sum + (match.goalsScored || 0), 0)
@@ -331,10 +332,8 @@ export default {
   },
   methods: {
     ...mapMutations(['setSelectedMatch']),
-    ...mapActions(['updatePlayerProfile']),
-    ...mapActions(['addPlayer', 'removePlayer']),
+    ...mapActions(['updateselectedPlayer', 'addPlayer', 'removePlayer']),
     addToPlayerList () {
-      // Проверяем, если какое-либо поле пустое, то ставим значение по умолчанию
       const player = {
         id: this.playerId,
         lastName: this.playerLast,
@@ -350,7 +349,7 @@ export default {
       }
 
       // Проверяем, что все поля заполнены, если нет, то показываем предупреждение
-      if (this.playerProfile.lastName === '<фамилия>' || this.playerProfile.firstName === '<имя>' || this.playerProfile.middleName === '<отчество>' || this.playerProfile.age < 18 || this.playerProfile.position === 'не выбран' || this.playerProfile.parameters === 'не выбран') {
+      if (this.selectedPlayer.lastName === '<фамилия>' || this.selectedPlayer.firstName === '<имя>' || this.selectedPlayer.middleName === '<отчество>' || this.selectedPlayer.age < 18 || this.selectedPlayer.position === 'не выбран' || this.selectedPlayer.parameters === 'не выбран') {
         this.isPlayerAdded = false
         this.showAlert = true
         this.alertMessage = 'Заполните все необходимые данные для публикации профиля'
@@ -411,11 +410,27 @@ export default {
       this.isEditMode = !this.isEditMode
       if (this.isEditMode) {
       // Заполняем форму текущими данными
-        this.editForm = { ...this.playerProfile }
+        this.editForm = { ...this.selectedPlayer }
       }
     },
     async saveProfile () {
       try {
+        if (
+          !this.editForm.lastName ||
+          !this.editForm.firstName ||
+          !this.editForm.middleName ||
+          this.editForm.position === 'не выбран' ||
+          this.editForm.parameters === '___/___' ||
+          !this.editForm.parameters
+        ) {
+          this.showAlert = true
+          this.alertMessage = 'Пожалуйста, заполните все обязательные поля.'
+          setTimeout(() => {
+            this.showAlert = false
+          }, 2000)
+          return
+        }
+
         if (this.editForm.age <= 0) {
           this.showAlert = true
           this.alertMessage = 'Введите корректный возраст.'
@@ -445,25 +460,13 @@ export default {
           }, 2000)
           return
         }
-
-        if (
-          !this.editForm.lastName ||
-          !this.editForm.firstName ||
-          !this.editForm.middleName ||
-          this.editForm.position === 'не выбран' ||
-          this.editForm.parameters === '___/___' ||
-          !this.editForm.parameters
-        ) {
-          this.showAlert = true
-          this.alertMessage = 'Пожалуйста, заполните все обязательные поля.'
-          setTimeout(() => {
-            this.showAlert = false
-          }, 2000)
-          return
-        }
         // Обновляются данные профиля
-        this.playerProfile = { ...this.editForm }
-        localStorage.setItem('playerProfile', JSON.stringify(this.playerProfile))
+        this.selectedPlayer = { ...this.editForm }
+        localStorage.setItem('selectedPlayer', JSON.stringify(this.selectedPlayer))
+
+        // Обновляем состояние Vuex
+        this.$store.dispatch('updatePlayer', this.selectedPlayer)
+
         this.isEditMode = false
       } catch (error) {
         console.error('Ошибка при сохранении профиля:', error)
@@ -501,13 +504,13 @@ export default {
   },
   mounted () {
     // Загружаем данные профиля из localStorage
-    const savedProfile = localStorage.getItem('playerProfile')
+    const savedProfile = localStorage.getItem('selectedPlayer')
     if (savedProfile) {
-      this.playerProfile = JSON.parse(savedProfile)
+      this.selectedPlayer = JSON.parse(savedProfile)
     }
 
     // Инициализируем график с данными playerStats
-    this.chartSeries[0].data = Object.values(this.playerProfile.stats)
+    this.chartSeries[0].data = Object.values(this.selectedPlayer.stats)
 
     // Проверяем, добавлен ли игрок в список
     const isPlayerExists = this.$store.getters.getPlayers.some(p => p.id === this.playerId)

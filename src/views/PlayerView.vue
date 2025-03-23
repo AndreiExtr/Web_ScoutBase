@@ -143,7 +143,7 @@ export default {
   computed: {
     ...mapGetters(['selectedPlayer']),
     playerId () {
-      return this.selectedPlayer.id
+      return this.$route.params.playerId
     },
     playerLast () {
       return this.selectedPlayer.lastName

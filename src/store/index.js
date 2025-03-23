@@ -176,6 +176,12 @@ export default createStore({
         state.joinedMatches.push({ matchId, team })
         saveState(state)
       }
+    },
+    UPDATE_PLAYER (state, updatedPlayer) {
+      const index = state.players.findIndex(p => p.id === updatedPlayer.id)
+      if (index !== -1) {
+        state.players[index] = updatedPlayer // Обновляем данные игрока
+      }
     }
   },
   actions: {
@@ -200,6 +206,9 @@ export default createStore({
     },
     updatePlayerProfile ({ commit }, updatedProfile) {
       commit('UPDATE_PLAYER_PROFILE', updatedProfile)
+    },
+    updatePlayer ({ commit }, player) {
+      commit('UPDATE_PLAYER', player)
     }
   }
 })
