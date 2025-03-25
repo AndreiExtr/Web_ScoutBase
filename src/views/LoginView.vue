@@ -214,7 +214,6 @@ export default {
         })
       }
 
-      // Сохраняем обновлённые данные в localStorage
       localStorage.setItem('users', JSON.stringify(users))
 
       // // Если ошибок нет, сохраняем роль/пароль и переходим на главную страницу

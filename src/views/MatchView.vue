@@ -54,7 +54,7 @@
             <div v-for="(cell, index) in getTeam1Cells"
                 :key="cell.col + '-' + cell.row"
                 class="cell"
-                :class="{ 'disabled-cell': userHasJoined || cell.player }"
+                :class="{ 'disabled-cell': userHasJoined || cell.player || isOrganizer}"
                 :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
 
               <img  v-if="cell.player || index >= matchPlacesLeft1" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
@@ -71,7 +71,7 @@
             <div v-for="(cell, index) in getTeam2Cells"
                 :key="cell.col + '-' + cell.row"
                 class="cell"
-                :class="{ 'disabled-cell': userHasJoined || cell.player }"
+                :class="{ 'disabled-cell': userHasJoined || cell.player || isOrganizer}"
                 :style="`grid-column: ${cell.col}; grid-row: ${cell.row};`">
 
               <img v-if="cell.player || index >= matchPlacesLeft2" alt="player" :src="require(`@/assets/img/${cell.img}`)" />
@@ -110,16 +110,19 @@
         <p class="position">{{ organizerPosition }}</p>
       </div>
     </div>
+    <AlertMessage v-if="showAlert" :message="alertMessage"/>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import ButtonUI from '@/components/ButtonUI.vue'
+import AlertMessage from '@/components/AlertMessage.vue'
 export default {
   name: 'MatchView',
   components: {
-    ButtonUI
+    ButtonUI,
+    AlertMessage
   },
   data () {
     return {
@@ -154,11 +157,16 @@ export default {
       showMatchView: true,
       showModal: false,
       selectedCell: {},
-      userHasJoined: false
+      userHasJoined: false,
+      showAlert: false,
+      alertMessage: ''
     }
   },
   computed: {
-    ...mapGetters(['selectedMatch']),
+    ...mapGetters(['selectedMatch', 'currentUser', 'isPlayerInList']),
+    isOrganizer () {
+      return localStorage.getItem('currentRole') === 'organizer'
+    },
     organizer () {
       return this.selectedMatch.organizer || { name: 'Неизвестный организатор', position: 'Должность не указана' }
     },
@@ -223,32 +231,33 @@ export default {
       }
     },
     openModal (cell) {
-      if (this.userHasJoined || cell.player) return // Если место уже занято или пользователь уже выбрал место — не открывается модалка
+      // if (this.isOrganizer) {
+      //   this.showAlert = true
+      //   this.alertMessage = 'Организатор не может занимать позиции в матче'
+      //   setTimeout(() => {
+      //     this.showAlert = false
+      //   }, 2000)
+      //   return
+      // }
+      // Проверка, добавлен ли игрок в список
+      if (!this.$store.getters.isPlayerInList) {
+        this.showAlert = true
+        this.alertMessage = 'Чтобы выбрать позицию, добавьте свой профиль в список игроков'
+        setTimeout(() => {
+          this.showAlert = false
+        }, 2000)
+        return
+      }
+
+      if (this.userHasJoined || cell.player) return
       this.selectedCell = cell
       this.showModal = true
     },
-    // openModal (cell) {
-    //   const isPlayerAdded = this.$store.getters.getPlayers.some(p => p.id === this.player.id)
-    //   if (!isPlayerAdded) {
-    //     alert('Чтобы выбрать позицию, добавьте свой профиль в список игроков.')
-    //     return
-    //   }
-
-    //   if (this.userHasJoined || cell.player) return
-    //   this.selectedCell = cell
-    //   this.showModal = true
-    // },
     closeModal () {
       this.showModal = false
       this.selectedCell = {}
     },
     joinPlayer () {
-      // const isPlayerAdded = this.$store.getters.getPlayers.some(p => p.id === this.$store.state.player.id)
-      // if (!isPlayerAdded) {
-      //   alert('Чтобы выбрать позицию, добавьте свой профиль в список игроков.')
-      //   return
-      // }
-
       const team = this.selectedCell.img.includes('shield1') ? 1 : 2
 
       // Обновление счетчика через мутацию
@@ -267,6 +276,13 @@ export default {
     }
   },
   mounted () {
+    // Проверка роли пользователя
+    const userData = localStorage.getItem('currentUser')
+    if (userData) {
+      this.$store.commit('setCurrentUser', JSON.parse(userData))
+    }
+    console.log('Текущий пользователь:', this.currentUser)
+
     const savedMatch = sessionStorage.getItem('selectedMatch')
     if (!savedMatch) {
       this.$router.push({ name: 'MatchList' })

@@ -81,9 +81,14 @@ export default createStore({
     selectedMatch: null, // Выбранный матч
     selectedPlayer: null, // Выбранный игрок
     selectedField: null,
-    joinedMatches: []
+    joinedMatches: [],
+    currentPlayer: null
   },
   getters: {
+    currentPlayer: state => state.currentPlayer,
+    isPlayerInList: (state) => {
+      return state.players.some(p => p.id === state.currentPlayer?.id)
+    },
     myProfile: (state) => state.myProfile,
     getFields: (state) => state.fields,
     getPlayers: (state) => state.players,
@@ -121,6 +126,9 @@ export default createStore({
     getJoinedMatches: (state) => state.joinedMatches
   },
   mutations: {
+    setCurrentPlayer (state, player) {
+      state.currentPlayer = player
+    },
     ADD_PLAYER (state, player) {
       state.players.push(player)
       saveState(state)

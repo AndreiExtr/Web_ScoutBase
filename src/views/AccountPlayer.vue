@@ -220,13 +220,14 @@ export default {
         firstName: '<имя>',
         middleName: '<отчество>',
         age: 0,
+        goals: 0,
         position: 'не выбран',
         parameters: 'не выбран',
         avatar: '',
         stats: { speed: 0, pass: 0, dribbling: 0, defense: 0, fitness: 0 },
         matchHistory: [
-          // { matchDate: '2023-10-01', result: 'Победа', goalsScored: 2, assists: 1, glasses: 8.1 },
-          // { matchDate: '2023-10-08', result: 'Ничья', goalsScored: 1, assists: 0, glasses: 5.3 }
+          { matchDate: '2023-10-01', result: 'Победа', goalsScored: 2, assists: 1, glasses: 8.1 },
+          { matchDate: '2023-10-08', result: 'Ничья', goalsScored: 1, assists: 0, glasses: 5.3 }
         ]
       },
       activTabs: 0,
@@ -270,7 +271,7 @@ export default {
   created () {
     const savedTab = sessionStorage.getItem('activTabs')
     if (savedTab !== null) {
-      this.activTabs = parseInt(savedTab) // Восстанавливаем вкладку
+      this.activTabs = parseInt(savedTab)
     }
   },
   computed: {
@@ -289,6 +290,9 @@ export default {
     },
     playerAvatar () {
       return this.selectedPlayer.avatar || this.defaultAvatar
+    },
+    playerGoals () {
+      return this.selectedPlayer.goals
     },
     playerAge () {
       return this.selectedPlayer.age
@@ -507,6 +511,8 @@ export default {
     const savedProfile = localStorage.getItem('selectedPlayer')
     if (savedProfile) {
       this.selectedPlayer = JSON.parse(savedProfile)
+      // Сохранение игрока в store сразу после загрузки
+      this.$store.commit('setCurrentPlayer', this.selectedPlayer)
     }
 
     // Инициализируем график с данными playerStats
