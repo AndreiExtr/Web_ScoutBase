@@ -168,6 +168,13 @@ export default createStore({
         } else if (team === 2 && match.placesLeft2 > 0) {
           match.placesLeft2--
         }
+
+        // Синхронизируем selectedMatch если это тот же матч
+        if (state.selectedMatch && state.selectedMatch.id === matchId) {
+          state.selectedMatch.placesLeft1 = match.placesLeft1
+          state.selectedMatch.placesLeft2 = match.placesLeft2
+        }
+
         saveState(state)
       }
     },

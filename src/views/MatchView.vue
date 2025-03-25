@@ -257,32 +257,28 @@ export default {
       this.showModal = false
       this.selectedCell = {}
     },
-    joinPlayer () {
-      const team = this.selectedCell.img.includes('shield1') ? 1 : 2
+    async joinPlayer () {
+      try {
+        const team = this.selectedCell.img.includes('shield1') ? 1 : 2
+        this.selectedCell.player = true
+        this.userHasJoined = true
 
-      // Обновление счетчика через мутацию
-      this.updatePlacesLeft({ matchId: this.matchId, team })
+        localStorage.setItem(`cellsData_${this.matchId}`, JSON.stringify(this.cells))
+        localStorage.setItem(`userHasJoined_${this.matchId}`, JSON.stringify(this.userHasJoined))
 
-      // Добавление матчи в список joinedMatches
-      this.JOIN_MATCH({ matchId: this.matchId, team })
-
-      this.selectedCell.player = true
-      this.userHasJoined = true
-
-      // Сохранение данных для конкретного матча
-      localStorage.setItem(`cellsData_${this.matchId}`, JSON.stringify(this.cells))
-      localStorage.setItem(`userHasJoined_${this.matchId}`, JSON.stringify(this.userHasJoined))
-      this.closeModal()
+        await this.$store.dispatch('joinMatch', {
+          matchId: this.matchId,
+          team
+        })
+        this.closeModal()
+      } catch (error) {
+        console.error('Ошибка при обновлении матча:', error)
+        this.showAlert = true
+        this.alertMessage = 'Произошла ошибка при сохранении данных'
+      }
     }
   },
   mounted () {
-    // Проверка роли пользователя
-    const userData = localStorage.getItem('currentUser')
-    if (userData) {
-      this.$store.commit('setCurrentUser', JSON.parse(userData))
-    }
-    console.log('Текущий пользователь:', this.currentUser)
-
     const savedMatch = sessionStorage.getItem('selectedMatch')
     if (!savedMatch) {
       this.$router.push({ name: 'MatchList' })
