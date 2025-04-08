@@ -1,31 +1,53 @@
 <template>
   <div class="content-organizer">
-    <div class="info">
-      <img :src="organizerAvatar" alt="Аватар игрока">
-      <div class="info__name">
-        <p><span>Иванов</span> <br>
-          Иван Сергеевич</p>
+    <div class="content-organizer__fields">
+      <div class="tabs">
+        <a href="#" :class="{ active: fieldTabs === 0 }" @click.prevent="setActive(0)">Мои выбранные площадки</a>
+        <a href="#" :class="{ active: fieldTabs === 1 }" @click.prevent="setActive(1)">Записи</a>
       </div>
-      <div class="actions">
-        <ButtonUI
-          :icon="require('@/assets/icons/more.svg')"
-          :style="{ width: '40px' }"
-          @click="toggleMenu" />
+      <div v-if="fieldTabs === 0">
+        <p>Здесь будут выбранные площадки...</p>
       </div>
+      <div v-if="fieldTabs === 1">
+        <p>Здесь будут видеозаписи матчей...</p>
+      </div>
+    </div>
+    <div class="content-organizer__organizator">
+      <img class="organizer__img" alt="" src="@/assets/img/avatar.png">
+      <p><strong style="font-size: 18px;">Организатор:</strong></p>
+      <p v-if="organizerName" style="margin-bottom: 24px;">
+        {{ organizerName.split(' ')[0] }}<br> <!-- Фамилия -->
+        <span>{{ organizerName.split(' ')[1] }} {{ organizerName.split(' ')[2] }}</span><!-- Имя и Отчество -->
+      </p>
+      <p><strong style="font-size: 18px;">Должность:</strong></p>
+      <p class="position">{{ organizerPosition }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import ButtonUI from '@/components/ButtonUI.vue'
+// import ButtonUI from '@/components/ButtonUI.vue'
 export default {
   name: 'AccountOrganizer',
   components: {
-    ButtonUI
   },
   props: {},
   data () {
-    return {}
+    return {
+      fieldTabs: 0
+    }
+  },
+  methods: {
+    setActive (tab) {
+      this.fieldTabs = tab
+      sessionStorage.setItem('fieldTabs', tab)
+    }
+  },
+  created () {
+    const savedTab = sessionStorage.getItem('fieldTabs')
+    if (savedTab !== null) {
+      this.fieldTabs = parseInt(savedTab)
+    }
   }
 }
 </script>
@@ -38,7 +60,7 @@ $text-label: #6d6f74;
 .content-organizer{
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
   width: 100%;
   height: 100vh;
@@ -46,63 +68,64 @@ $text-label: #6d6f74;
   width: calc(100% - 200px);
   padding: 16px;
 
-  .info{
-    position: relative;
-    width: 100%;
-    min-height: 250px;
-    padding: 24px;
-    border-radius: 8px;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("@/assets/img/player/background.png");
-    background-repeat:no-repeat;
-    background-size: cover ;
-    background-position: center;
+  &__fields{
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 24px;
+    flex-direction: column;
+    width: 100%;
+    gap: 16px;
 
-    img{
-      width: 140px;
-      height: 140px;
-      border-radius: 100px;
-      object-fit: cover;
+    .tabs {
+      display: flex;
+      flex-direction: row;
+      gap: 32px;
+
+      a{
+        text-decoration: none;
+        color: #666;
+        font-size: 16px;
+        position: relative;
+
+        &.active {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+
+  &__organizator{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: left;
+    gap: 16px;
+    padding: 16px;
+    z-index: 1;
+    min-width: 260px;
+    height: 400px;
+    border-radius: 8px;
+    box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
+    background-color: #1f1f1f;
+
+    .position{
+      color: #ff6600;
+      text-transform: uppercase;
+    }
+
+    &__img{
+      width: 150px;
+      height: 150px;
+    }
+
+    h1{
+      font-size: 18px;
+      color: $text-color;
+      font-weight: 700;
     }
 
     p{
-      font-size: 20px;
+      font-size: 16px;
       color: $text-color;
-      text-align: left;
-      line-height: 140%;
-
-      span{
-        font-size: 32px;
-        color: $text-color;
-        font-weight: 700;
-      }
-    }
-
-    .actions{
-      position: absolute;
-      display: flex;
-      flex-direction: row;
-      top: 24px;
-      right: 24px;
-      gap: 16px;
-
-      button[type="add"] {
-        border: 1px solid $primary-color;
-        color: $primary-color;
-        padding: 10px 20px;
-        border-radius: 8px;
-        font-size: 14px;
-        cursor: pointer;
-
-        &:hover {
-          background-color: $primary-color;
-          color: $bg-color;
-        }
-      }
+      width: 100%;
     }
   }
 }

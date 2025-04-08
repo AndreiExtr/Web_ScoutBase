@@ -11,20 +11,6 @@
         {{ location.split(',').slice(1).join(',') }}
       </p>
     </div>
-    <div class="field-card__badge">
-      <div class="iconItems">
-        <img :src="require('@/assets/icons/video.svg')" alt="badge-icon"/>
-      </div>
-      <div class="iconItems">
-        <img :src="require('@/assets/icons/wifi.svg')" alt="badge-icon"/>
-      </div>
-      <div class="iconItems">
-        <img :src="require('@/assets/icons/restaurant.svg')" alt="badge-icon"/>
-      </div>
-      <div class="iconItems">
-        <img :src="require('@/assets/icons/parking.svg')" alt="badge-icon"/>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -59,7 +45,7 @@ $text-color: #fff;
 $text-label: #6d6f74;
 .field-card{
   position: relative;
-  height: 200px;
+  height: 160px;
   padding: 16px;
   background-color: #1A1A1A;
   box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
@@ -67,10 +53,10 @@ $text-label: #6d6f74;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-start;
   cursor: pointer;
   overflow: hidden;
-  gap: 16px;
+  gap: 32px;
 
   &:hover{
     box-shadow: 10px 10px 32px rgba(0, 255, 98, 0.089);
@@ -119,10 +105,12 @@ $text-label: #6d6f74;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    justify-content: center;
     gap: 4px;
     text-align: left;
     color: $text-color;
     z-index: 5;
+    height: 100%;
 
     p{
       font-size: 16px;
@@ -131,25 +119,6 @@ $text-label: #6d6f74;
       span{
         font-size: 18px;
         font-weight: 700;
-      }
-    }
-  }
-
-  &__badge{
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    z-index: 5;
-
-    .iconItems{
-      width: 40px;
-      height: 40px;
-      background-color: #414141;
-      border-radius: 50%;
-      padding: 10px;
-
-      img{
-        filter: brightness(0) invert(1);
       }
     }
   }

@@ -1,5 +1,6 @@
 <template>
-  <div class="content-list">
+  <div class="content-fields">
+    <h1>Выберите площадку для матча</h1>
     <div class="rows">
       <FieldCard
         v-for="field in fields"
@@ -37,16 +38,23 @@ export default {
 </script>
 
 <style lang="scss">
-.content-list{
+.content-fields{
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: flex-start;
   height: 100%;
   padding: 16px;
-  gap: 16px;
+  gap: 24px;
   flex-grow: 1;
   margin-left: 200px;
   width: calc(100% - 200px);
+
+  h1{
+    text-align: left;
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
 
   .rows {
     display: flex;

@@ -26,8 +26,8 @@
               <img class="shield-2" alt="" src="@/assets/img/shield2.png">
               <p style="font-size: 24px;">{{ matchPlacesLeft2 }}</p>
             </div>
-            </div>
-            <div class="title-bottom">
+          </div>
+          <div class="title-bottom">
               <p v-if="matchLocation" style="font-size: 16px; font-weight: 400;">
                 {{ matchLocation.split(',')[0] }}<br>
                 {{ matchLocation.split(',').slice(1).join(',') }}
@@ -38,7 +38,7 @@
               <div class="price">
                 <p style="font-size: 32px;font-weight: 700;">{{ matchPrice }} ₽</p>
               </div>
-            </div>
+          </div>
         </div>
         <div class="field">
           <img :src="require('@/assets/icons/gate-left.svg')" class="gate-left" alt="gate-left" />
