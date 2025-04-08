@@ -683,6 +683,11 @@ $text-label: #6d6f74;
           grid-template-rows: repeat(2, 1fr);
           gap: 16px;
           height: 100%;
+
+          @media (max-width: 1300px) {
+            grid-template-columns: repeat(1, 4fr);
+            grid-template-rows: repeat(4, 1fr);
+          }
         }
 
         .square {
@@ -847,9 +852,13 @@ $text-label: #6d6f74;
             }
 
             .match-card{
-              flex: 0 0 calc(50% - 12px);
+              flex: 0 0 calc(33.33333% - 12px);
 
-              @media (max-width: 1400px) {
+              @media (max-width: 1440px) {
+                flex: 0 0 calc(50% - 12px);
+              }
+
+              @media (max-width: 1300px) {
                 flex-basis: calc(100% - 0px);
               }
             }
