@@ -270,7 +270,7 @@ $text-color: #fff;
 
     h1{
       text-align: left;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       color: $text-color;
     }

@@ -11,13 +11,17 @@
         {{ location.split(',').slice(1).join(',') }}
       </p>
     </div>
+    <ButtonUI type="submit" text="Выбрать для матча" />
   </div>
 </template>
 
 <script>
+import ButtonUI from '@/components/ButtonUI.vue'
 export default {
   name: 'FieldCard',
-  components: {},
+  components: {
+    ButtonUI
+  },
   props: {
     fieldId: Number,
     location: String,
@@ -45,7 +49,7 @@ $text-color: #fff;
 $text-label: #6d6f74;
 .field-card{
   position: relative;
-  height: 160px;
+  height: auto;
   padding: 16px;
   background-color: #1A1A1A;
   box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
@@ -75,6 +79,30 @@ $text-label: #6d6f74;
     mask-position: center;
     mask-size: 350px auto;
     filter: brightness(40%); /* Затемнение изображения на 20% */
+  }
+
+  button {
+    width: auto;
+    font-size: 14px;
+    padding: 8px 16px;
+    border: 1px solid #3a4149;
+    border-radius: 8px;
+    background-color: #3a4149;
+    color: $text-color;
+    z-index: 6;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+
+    &:hover {
+      background-color: $primary-color;
+      color: $bg-color;
+    }
+
+    &.active {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: $bg-color;
+    }
   }
 
   &__status{
