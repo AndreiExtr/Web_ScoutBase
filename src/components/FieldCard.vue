@@ -11,7 +11,10 @@
         {{ location.split(',').slice(1).join(',') }}
       </p>
     </div>
-    <ButtonUI type="submit" text="Выбрать для матча" />
+    <ButtonUI
+      type="submit"
+      text="Выбрать для матча"
+      :disabled="status === 'занято'"/>
   </div>
 </template>
 
@@ -58,7 +61,6 @@ $text-label: #6d6f74;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  cursor: pointer;
   overflow: hidden;
   gap: 32px;
 
@@ -102,6 +104,13 @@ $text-label: #6d6f74;
       background-color: $primary-color;
       border-color: $primary-color;
       color: $bg-color;
+    }
+
+    &:disabled {
+      background-color: #2a2a2a;
+      border-color: #555;
+      color: #888;
+      cursor: not-allowed;
     }
   }
 
