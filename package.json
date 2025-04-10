@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "apexcharts": "^4.5.0",
-    "postcss": "^8.5.3",
+    "postcss": "^8.4.31",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue-the-mask": "^0.11.1",
@@ -28,6 +28,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-vue": "^8.0.3",
+    "postcss": "^8.4.31",
     "gh-pages": "^6.3.0",
     "sass": "^1.32.7",
     "sass-loader": "^12.0.0",
