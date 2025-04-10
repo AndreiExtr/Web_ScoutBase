@@ -97,7 +97,7 @@
 
 <script>
 import { ref } from 'vue'
-// import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import InputField from '@/components/InputField.vue'
 import ButtonUI from '@/components/ButtonUI.vue'
 
@@ -108,7 +108,7 @@ export default {
     ButtonUI
   },
   setup () {
-    // const router = useRouter()
+    const router = useRouter()
     const role = ref(null)
     const errorRole = ref(false)
     const errorField = ref(false)
@@ -156,8 +156,8 @@ export default {
           localStorage.removeItem('activeTab')
           sessionStorage.removeItem('activeTab')
 
-          // router.push({ name: 'MainView' })
-          window.location.replace('/main')
+          router.push({ name: 'MainView' })
+          // window.location.replace('/main')
         } else {
           errorPs.value = true
         }
@@ -218,8 +218,8 @@ export default {
 
       // // Если ошибок нет, сохраняем роль/пароль и переходим на главную страницу
       localStorage.setItem('currentRole', role.value)
-      // router.push({ name: 'MainView' })
-      window.location.replace('/main')
+      router.push({ name: 'MainView' })
+      // window.location.replace('/main')
     }
 
     return {

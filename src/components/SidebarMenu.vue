@@ -82,7 +82,8 @@ export default {
       sessionStorage.removeItem('activeTabs')
 
       // Перенаправляется на страницу входа и перезагружается
-      window.location.replace('/')
+      this.$router.push({ name: 'LoginView' })
+      // window.location.replace('/')
     }
   },
   computed: {
