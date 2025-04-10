@@ -2,7 +2,7 @@
   <div class="content-organizer">
     <div class="content-organizer__fields">
       <div class="tabs">
-        <a href="#" :class="{ active: fieldTabs === 0 }" @click.prevent="setActive(0)">Мои выбранные площадки</a>
+        <a href="#" :class="{ active: fieldTabs === 0 }" @click.prevent="setActive(0)">Площадки для матча</a>
         <a href="#" :class="{ active: fieldTabs === 1 }" @click.prevent="setActive(1)">Записи</a>
       </div>
       <div v-if="fieldTabs === 0">

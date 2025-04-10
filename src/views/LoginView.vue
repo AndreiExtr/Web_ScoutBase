@@ -77,7 +77,7 @@
               </button>
               <button
                 type="button"
-                :class="{ active: role === 'organizer' }"
+                :class="{ disabled: role === 'organizer' }"
                 @click="role = 'organizer'"
               >
                 ОРГАНИЗАТОР
@@ -379,6 +379,13 @@ $text-label: #6d6f74;
             gap: 16px;
             margin-top: 8px;
             width: 100%;
+
+            .bt:disabled {
+              background-color: #2a2a2a;
+              border-color: #555;
+              color: #888;
+              cursor: not-allowed;
+            }
 
             button {
               width: 100%;
