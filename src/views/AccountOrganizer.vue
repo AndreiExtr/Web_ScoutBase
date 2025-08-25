@@ -103,7 +103,7 @@ $text-label: #6d6f74;
     min-width: 260px;
     height: 400px;
     border-radius: 8px;
-    box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.315);
+    box-shadow: 10px 10px 32px rgba(0, 0, 0, 0.316);
     background-color: #1f1f1f;
 
     .position{

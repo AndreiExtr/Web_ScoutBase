@@ -78,10 +78,10 @@ export default createStore({
       { id: 9, fiel: require('@/assets/img/field/field9.jpg'), location: 'Стадион "Олимпийский", проспект Мира, 119, Москва', status: 'свободно' },
       { id: 10, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
       { id: 11, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
-      { id: 12, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
+      { id: 12, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 2, Краснодар', status: 'свободно' },
       { id: 13, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
       { id: 14, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
-      { id: 15, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
+      { id: 15, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 5, Краснодар', status: 'свободно' },
       { id: 16, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
       { id: 17, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' },
       { id: 18, fiel: require('@/assets/img/field/field10.jpg'), location: 'Стадион "Краснодар", ул. Разведчика Леонова, 1, Краснодар', status: 'свободно' }
