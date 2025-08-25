@@ -304,7 +304,7 @@ export default {
       return this.selectedPlayer.parameters
     },
     playerStatic () {
-      // данные playerStats для графика
+      // данные playerStats для графика визуализации
       return Object.values(this.playerStats) // Возвращаем массив значений
     },
     playerStats () {
