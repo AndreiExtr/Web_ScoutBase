@@ -1,5 +1,5 @@
 .DS_Store
-/src
+echo "src/" >> .gitignore
 node_modules
 /dist
 
